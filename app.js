@@ -19,6 +19,11 @@ const CronJob = require('cron').CronJob;
 
 
 const UserModel = require('./models/users');
+const postModel = require("./models/posts");
+const savedPosts = require("./models/savedPosts");
+const statisticsModel = require("./models/statistics");
+
+
 
 console.log(process.env.connection)
 mongoose.connect(process.env.connection)
@@ -27,6 +32,7 @@ mongoose.connect(process.env.connection)
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var postsRouter = require('./routes/posts');
+const statistics = require('./models/statistics');
 
 
 var app = express();
@@ -163,73 +169,29 @@ passport.deserializeUser(function(user, done){
 
 
 
+new CronJob('*/60 * * * * *', async () => {
+  // updateCollections().then((function(result) {
+  //   console.log(result) // "Some User token"
+  // }))
 
+  const count =  await postModel.countDocuments({
+    createdOn:{
+      $gte: moment().subtract(1, 'minute').toDate(),
+      $lte: moment().toDate()
+    }
+  })
+  const countSaved =  await savedPosts.countDocuments({
+    createdOn:{
+    $gte: moment().subtract(1, 'minute').toDate(),
+    $lte: moment().toDate()
+  }})
 
-
-
-const updateCollections = async ()=>{
-  const usersCount = await UserModel.aggregate([
-    {
-      $match:{ isDeleted : false}
-    },
-    {
-      $lookup: {
-        from: "savedPosts",
-        localField: "_id",
-        foreignField: "savedBy",  
-        let: { isDeleted: false },
-        pipeline: [
-          { $match: { $expr: { $eq: ["$isDeleted", "$$isDeleted"] } } },
-        ],
-        as: "saved",
-      },
-    },
-    {
-      $lookup: {
-        from: "posts",
-        localField: "_id",
-        foreignField: "userId",
-        let: { isDeleted: false },
-        pipeline: [
-          { $match: { $expr: { $eq: ["$isDeleted", "$$isDeleted"] } } },
-        ],
-        as: "data",
-      },
-    },
-    {
-      $project: {
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        gender: 1,
-        createdOn: 1,
-        profilePic: 1,
-        fullName: {$concat: ["$firstName"," ","$lastName"]},
-        totalsavedPosts: { $size: "$saved" },
-        totaluploadedPosts: { $size: "$data" },
-
-      },
-    },
-   
-  ]);
-
-  return  usersCount
-}
-console.log(updateCollections());
-
-// new CronJob('0 0 * * *', async () => {
-//   await updateCollections()
-// }, null, true, 'America/Los_Angeles');
-
-
-
-
-
-
-
-
-
-
+  const create = await statisticsModel.create({
+    totaluploadedPosts: count,
+    totalsavedPosts: countSaved
+  })
+  console.log(create, countSaved);
+}, null, true, );
 
 
 //common middleware

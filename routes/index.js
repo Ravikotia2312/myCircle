@@ -293,7 +293,7 @@ router.get("/filter", async function (req, res, next) {
       $project: { 
         postName: 1,
         description: 1,
-        postImg: 1,
+        postImg: 1, 
         userId: 1,
         createdOn: 1,
         data: 1,

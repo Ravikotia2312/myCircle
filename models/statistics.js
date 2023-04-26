@@ -12,10 +12,12 @@ const statisticsSchema = new mongoose.Schema({
    
     totalsavedPosts:{
         type:String,
+        required: true
     },
     
     totaluploadedPosts:{
         type:String,
+        required: true
     },
    
     isDeleted: {
