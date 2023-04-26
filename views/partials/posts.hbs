@@ -1,0 +1,118 @@
+          
+{{#if data}}
+          
+          {{#each data}}
+
+<div class="postBody col-sm-6 col-lg-4">
+  <div class="card card-sm card-link-pop" >
+    <a href="#" class="d-block"><img
+        src="/images/{{postImg}}"
+        style="height: 300px;"
+        class="card-img-top"
+      /></a>
+    <div class="card-body">
+      <div class="d-flex align-items-center">
+
+        <div>
+          <span
+            class="avatar me-3 rounded"
+            style="background-image: url(/uploads/{{data.profilePic}})"
+          ></span>
+          <div><b>{{data.firstName}}  {{data.lastName}} </b></div><br>
+          
+          <b>Title</b>
+          <div>{{postName}}</div>
+          <b>Description</b>
+          <div>{{description}}</div>
+          <b>posted On</b>
+          <div>{{Date createdOn "MMMM Do YYYY"}}</div>
+
+        </div>
+        <div class="ms-auto">
+
+          {{#if (checkMath  data._id '!=' ../_id )}}
+          <a href="javascript:void(0)" class="text-muted" id="savePost" data-id="{{data._id}}" data-post="{{_id}}">
+            <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+            {{#if savedposts}}
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-down-lines-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M9 8l-.117 .007a1 1 0 0 0 -.883 .993v1.999l-2.586 .001a2 2 0 0 0 -1.414 3.414l6.586 6.586a2 2 0 0 0 2.828 0l6.586 -6.586a2 2 0 0 0 .434 -2.18l-.068 -.145a2 2 0 0 0 -1.78 -1.089l-2.586 -.001v-1.999a1 1 0 0 0 -1 -1h-6z" stroke-width="0" fill="currentColor"></path>
+   <path d="M15 2a1 1 0 0 1 .117 1.993l-.117 .007h-6a1 1 0 0 1 -.117 -1.993l.117 -.007h6z" stroke-width="0" fill="currentColor"></path>
+   <path d="M15 5a1 1 0 0 1 .117 1.993l-.117 .007h-6a1 1 0 0 1 -.117 -1.993l.117 -.007h6z" stroke-width="0" fill="currentColor"></path>
+</svg>
+            {{else}}
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-down-line" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M15 12h3.586a1 1 0 0 1 .707 1.707l-6.586 6.586a1 1 0 0 1 -1.414 0l-6.586 -6.586a1 1 0 0 1 .707 -1.707h3.586v-6h6v6z"></path>
+   <path d="M15 3h-6"></path>
+</svg>
+            {{/if}}
+            {{#if savedposts}}
+            Unsave
+            {{else}} 
+            Save
+            {{/if}}
+          </a>  
+          {{/if}}
+          {{#if (checkMath  data._id '==' ../_id )}}
+          <a href="javascript:void(0)" class="text-muted" id="editpost" 
+          data-id="{{_id}}"> 
+                          
+            <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-settings-filled"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M14.647 4.081a.724 .724 0 0 0 1.08 .448c2.439 -1.485 5.23 1.305 3.745 3.744a.724 .724 0 0 0 .447 1.08c2.775 .673 2.775 4.62 0 5.294a.724 .724 0 0 0 -.448 1.08c1.485 2.439 -1.305 5.23 -3.744 3.745a.724 .724 0 0 0 -1.08 .447c-.673 2.775 -4.62 2.775 -5.294 0a.724 .724 0 0 0 -1.08 -.448c-2.439 1.485 -5.23 -1.305 -3.745 -3.744a.724 .724 0 0 0 -.447 -1.08c-2.775 -.673 -2.775 -4.62 0 -5.294a.724 .724 0 0 0 .448 -1.08c-1.485 -2.439 1.305 -5.23 3.744 -3.745a.722 .722 0 0 0 1.08 -.447c.673 -2.775 4.62 -2.775 5.294 0zm-2.647 4.919a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"
+                stroke-width="0"
+                fill="currentColor"
+              ></path>
+            </svg>
+            Edit 
+          </a>
+
+          <a href="javascript:void(0)" class="text-muted" id="archievePost" 
+          data-id="{{_id}}"> 
+                          
+            <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-badge-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M16.486 3.143l-4.486 2.69l-4.486 -2.69a1 1 0 0 0 -1.514 .857v13a1 1 0 0 0 .486 .857l5 3a1 1 0 0 0 1.028 0l5 -3a1 1 0 0 0 .486 -.857v-13a1 1 0 0 0 -1.514 -.857z" stroke-width="0" fill="currentColor"></path>
+</svg>
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M14.647 4.081a.724 .724 0 0 0 1.08 .448c2.439 -1.485 5.23 1.305 3.745 3.744a.724 .724 0 0 0 .447 1.08c2.775 .673 2.775 4.62 0 5.294a.724 .724 0 0 0 -.448 1.08c1.485 2.439 -1.305 5.23 -3.744 3.745a.724 .724 0 0 0 -1.08 .447c-.673 2.775 -4.62 2.775 -5.294 0a.724 .724 0 0 0 -1.08 -.448c-2.439 1.485 -5.23 -1.305 -3.745 -3.744a.724 .724 0 0 0 -.447 -1.08c-2.775 -.673 -2.775 -4.62 0 -5.294a.724 .724 0 0 0 .448 -1.08c-1.485 -2.439 1.305 -5.23 3.744 -3.745a.722 .722 0 0 0 1.08 -.447c.673 -2.775 4.62 -2.775 5.294 0zm-2.647 4.919a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"
+                stroke-width="0"
+                fill="currentColor"
+              ></path>
+            </svg>
+            Archieve 
+          </a>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          {{/each }}          
+{{else}}
+<h1 >No Posts found</h1>
+{{/if}}
+{{#section scripts}}
+<script src="./javascripts/postSave.js"></script>
+<script src="./javascripts/tabler.min.js?1674944402" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{{/section }}
+
+

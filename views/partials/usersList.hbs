@@ -1,0 +1,93 @@
+<h1>Users</h1>
+<li class="nav-item dropdown">
+  <button class="btn btn-primary dropdown-toggle"
+    class="nav-link dropdown-toggle"
+    href="#navbar-base"
+    data-bs-toggle="dropdown"
+    data-bs-auto-close="outside"
+    role="button"
+    aria-expanded="false"
+  >
+    <span
+      class="nav-link-icon d-md-none d-lg-inline-block"
+    ><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-selector" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M8 9l4 -4l4 4"></path>
+   <path d="M16 15l-4 4l-4 -4"></path>
+</svg>
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path
+          d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"
+        ></path>
+        <path d="M6 8h.01"></path>
+        <path d="M9 8h.01"></path>
+      </svg>
+    </span>
+    <span class="nav-link-title">
+      SortBy
+    </span>
+  </button>
+  <div class="dropdown-menu">
+    <div class="dropdown-menu-columns">
+      <div class="dropdown-menu-column">
+        <a
+          class="dropdown-item"
+          href="javascript:void(0)"
+          id="registerdateSort"
+          data-id="sortbyRegistration"
+        >
+          <b>Registration Date</b>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</li>
+<div class="row g-2">
+<div class="col">
+<input type="text" class="form-control" placeholder="Search for users" id="usersearchValue">
+  </div>
+  <div class="col-auto">
+  <a href="javascript:void(0)" class="btn btn-icon" aria-label="Button" id="userSearch">
+ <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+ <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+</a>
+</div>  
+</div>
+
+{{#each usersData}}
+  <div class="col-md-6 col-xl-3" id="usersPartial">
+    <div class="card card-link-pop">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <span
+            class="avatar avatar-xl rounded"
+            style="background-image: url(/uploads/{{profilePic}})"
+          ></span>
+        </div>
+        {{!-- {{fullName}} --}}
+        <div class="card-title mb-1"> {{firstName}} {{lastName}} </div>
+        <div class="text-muted"><b>Total Posts:</b>{{totaluploadedPosts}} </div>
+        <div class="text-muted"><b>Total Saved Posts:</b>
+          {{totalsavedPosts}}</div>
+        <div class="text-muted"><b>Email:</b> {{email}}</div>
+      </div>
+      <span class="card-btn" id="registration">Registered On:
+        {{Date createdOn "MMMM Do YYYY"}}</span>
+    </div>
+  </div>
+{{/each}}
+
+  <div class="d-flex">
+                <ul class="pagination ms-auto">
+                  {{#if pageArray}}
+                  {{!-- {{#each pageArray}}
+                  <li class="page-item"><a class="page-link" href="/users/userslist?page={{this}}">{{this}}</a></li>
+                  {{/each}}
+                   --}}
+              
+                  {{#each pageArray}}
+                  <li class="page-item"><a class="user-filter page-link" data-id="{{this}}">{{this}}</a></li>
+                  {{/each}} 
+                  {{/if}}

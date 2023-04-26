@@ -1,0 +1,22 @@
+
+{{> posts}}
+   <div class="d-flex">
+                <ul class="pagination ms-auto">
+                  {{#if pageArray}}
+                  {{#each pageArray}}
+                  <li class="page-item"><a class="page-link" href="/timeline?page={{this}}">{{this}}</a></li>
+                  {{/each}}
+                  
+                  {{else}} 
+                  {{#each pageArrays}}
+                  <li class="page-item"><a class="common-filter page-link" data-id="{{this}}">{{this}}</a></li>
+                  {{/each}} 
+                  {{/if}}
+
+{{#section "script"}}
+
+  <script src="./javascripts/tabler.min.js?1674944402" defer></script>
+  <script src="./javascripts/demo.min.js?1674944402" defer></script>
+  {{! <script src="./javascripts/timeline.js"></script> }}
+
+{{/section}}

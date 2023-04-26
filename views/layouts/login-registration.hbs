@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    {{{_sections.style}}}
+</head>
+ {{#if flash}}
+    <h1 style="text-align: center; color:red">{{flash.message}}</h1>
+    {{/if}}
+<body>
+    
+    {{{body}}}
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+    {{{_sections.script}}}
+</body>
+
+    {{> saveError}}
+    {{> saveSuccess}}
+    {{> info}}
+</html> 

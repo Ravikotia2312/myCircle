@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+ 
+     <link href="./stylesheets/tabler.min.css?1674944402" rel="stylesheet"/>
+      <link href="./stylesheets/tabler-flags.min.css?1674944402" rel="stylesheet"/>
+      <link href="./stylesheets/tabler-payments.min.css?1674944402" rel="stylesheet"/>
+      <link href="./stylesheets/tabler-vendors.min.css?1674944402" rel="stylesheet"/>
+      <link href="./stylesheets/demo.min.css?1674944402" rel="stylesheet"/>
+      <link href="./stylesheets/createPost.css" rel="stylesheet"/>
+
+ <style>
+        @import url('https://rsms.me/inter/inter.css');
+        :root {
+          --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+        body {
+          font-feature-settings: "cv03", "cv04", "cv11";
+        }
+      </style>
+     
+</head>
+<head>
+    <div class="sticky-top p-0">
+    <header class="navbar navbar-expand-md navbar-light d-print-none sticky-top p-0" >
+        <div class="container-xl">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar-menu"
+            aria-controls="navbar-menu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1
+            class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3"
+          >
+            <a href=".">
+              <img
+                src="./images/myCircle.png"
+          
+                alt="MyCircle"
+                class="navbar-brand-image"
+              />
+            </a>
+          </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item d-none d-md-flex me-3">
+              <div class="btn-list">
+                <a href="/logout" class="btn bg-primary text-bg-light"  rel="noreferrer">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-user-x"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                    <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5"></path>
+                    <path d="M22 22l-5 -5"></path>
+                    <path d="M17 22l5 -5"></path>
+                  </svg>
+                  Logout
+                </a>
+              </div>
+            </div>
+            
+            <div class="d-none d-md-flex">
+              <div class="nav-item dropdown d-none d-md-flex me-3">
+
+                <div
+                  class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card"
+                >
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Last updates</h3>
+                    </div>
+                    <div
+                      class="list-group list-group-flush list-group-hoverable"
+                    >
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col-auto"><span
+                              class="status-dot status-dot-animated bg-red d-block"
+                            ></span></div>
+                          <div class="col text-truncate">
+                            <a href="#" class="text-body d-block">Example 1</a>
+                            <div class="d-block text-muted text-truncate mt-n1">
+                              Change deprecated html tags to text decoration
+                              classes (#29604)
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <a href="#" class="list-group-item-actions">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon text-muted"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ><path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                ></path><path
+                                  d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"
+                                ></path></svg>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col-auto"><span
+                              class="status-dot d-block"
+                            ></span></div>
+                          <div class="col text-truncate">
+                            <a href="#" class="text-body d-block">Example 2</a>
+                            <div class="d-block text-muted text-truncate mt-n1">
+                              justify-content:between ⇒
+                              justify-content:space-between (#29734)
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <a href="#" class="list-group-item-actions show">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon text-yellow"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ><path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                ></path><path
+                                  d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"
+                                ></path></svg>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col-auto"><span
+                              class="status-dot d-block"
+                            ></span></div>
+                          <div class="col text-truncate">
+                            <a href="#" class="text-body d-block">Example 3</a>
+                            <div class="d-block text-muted text-truncate mt-n1">
+                              Update change-version.js (#29736)
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <a href="#" class="list-group-item-actions">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon text-muted"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ><path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                ></path><path
+                                  d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"
+                                ></path></svg>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col-auto"><span
+                              class="status-dot status-dot-animated bg-green d-block"
+                            ></span></div>
+                          <div class="col text-truncate">
+                            <a href="#" class="text-body d-block">Example 4</a>
+                            <div class="d-block text-muted text-truncate mt-n1">
+                              Regenerate package-lock.json (#29730)
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <a href="#" class="list-group-item-actions">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon text-muted"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ><path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                ></path><path
+                                  d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"
+                                ></path></svg>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link d-flex lh-1 text-reset p-0"
+                data-bs-toggle="dropdown"
+                aria-label="Open user menu"
+              >
+                <span
+                  class="avatar avatar-sm"
+                  style='background-image: url(/uploads/{{profile}})'
+                ></span>
+                
+                <div class="d-none d-xl-block ps-2">
+
+                  <div>{{firstName}} {{lastName}} </div>
+                  <div class="mt-1 small text-muted">{{email}}</div>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="./account" class="dropdown-item">Profile</a>
+                <a href="#" class="dropdown-item">Feedback</a>
+                <div class="dropdown-divider"></div>
+                <a href="./logout" class="dropdown-item">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <header class="navbar-expand-md">
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <div class="navbar navbar-light">
+            <div class="container-xl">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="./">
+                    <span
+                      class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ><path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        ></path><path d="M5 12l-2 0l9 -9l9 9l-2 0"></path><path
+                          d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"
+                        ></path><path
+                          d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"
+                        ></path></svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Dashboard
+                    </span>
+                  </a>
+                  
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/timeline">
+                    <span
+                      class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-carousel-horizontal" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M7 5m0 1a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1z"></path>
+   <path d="M22 17h-1a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h1"></path>
+   <path d="M2 17h1a1 1 0 0 0 1 -1v-8a1 1 0 0 0 -1 -1h-1"></path>
+</svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Timeline
+                    </span>
+                  </a>
+                  
+                </li>
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#navbar-base"
+                    data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
+                    role="button"
+                    aria-expanded="false"
+                  >
+                    <span
+                      class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-app-window"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        ></path>
+                        <path
+                          d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"
+                        ></path>
+                        <path d="M6 8h.01"></path>
+                        <path d="M9 8h.01"></path>
+                      </svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Activity
+                    </span>
+                  </a>
+                  <div class="dropdown-menu">
+                    <div class="dropdown-menu-columns">
+                      <div class="dropdown-menu-column">
+                        <a
+                          class="dropdown-item"
+                          href="javascript:void(0)"
+                          id="create"
+                          data-bs-target="#create-post-modal"
+                          data-bs-toggle="modal"
+                          data-bs-backdrop="static"
+                          data-bs-keyboard="false"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-location-filled"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path
+                              stroke="none"
+                              d="M0 0h24v24H0z"
+                              fill="none"
+                            ></path>
+                            <path
+                              d="M20.891 2.006l.106 -.006l.13 .008l.09 .016l.123 .035l.107 .046l.1 .057l.09 .067l.082 .075l.052 .059l.082 .116l.052 .096c.047 .1 .077 .206 .09 .316l.005 .106c0 .075 -.008 .149 -.024 .22l-.035 .123l-6.532 18.077a1.55 1.55 0 0 1 -1.409 .903a1.547 1.547 0 0 1 -1.329 -.747l-.065 -.127l-3.352 -6.702l-6.67 -3.336a1.55 1.55 0 0 1 -.898 -1.259l-.006 -.149c0 -.56 .301 -1.072 .841 -1.37l.14 -.07l18.017 -6.506l.106 -.03l.108 -.018z"
+                              stroke-width="0"
+                              fill="currentColor"
+                            ></path></svg>
+                          <b>Create Post</b>
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                          id="savedPosts">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-bookmark"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path
+                              stroke="none"
+                              d="M0 0h24v24H0z"
+                              fill="none"
+                            ></path>
+                            <path
+                              d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"
+                            ></path>
+                          </svg>
+                         <b>Show Saved Posts</b> 
+                        </a>
+                           <a class="dropdown-item" href="javascript:void(0)"
+                          id="users">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                          <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                          <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
+                          </svg>
+                            <path
+                              stroke="none"
+                              d="M0 0h24v24H0z"
+                              fill="none"
+                            ></path>
+                            <path
+                              d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"
+                            ></path>
+                          </svg>
+                         <b>Users</b> 
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+<div class="d-flex">
+  <div>
+<select class="form-select common-filter"  id="filter">
+{{!-- <option selected > Filter </option selected> --}}
+                        <option value="all"><b>Show All Posts</b></option>
+                        <option value="mine"><b>Show Mine Posts</b></option>
+                        <option value="others"><b>Show others Posts</b></option>
+                </select>
+                </div>
+                
+                <div>
+                <select class="form-select  ms-3 common-filter"  id="sort">
+                        <option value="title"><b>Title</b></option>
+                        <option value="dateTime"><b>Date and Time</b></option>
+                </select>
+                </div>
+</div>
+              <div class="row g-2">
+              <div class="col">
+             <input type="text" class="form-control" placeholder="Search for posts"  id="search">
+            </div>
+            <div class="col-auto">
+            <button href="javascript:void(0)" class="btn btn-icon common-filter" aria-label="Button" id="searchButton">
+           <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+          </button>
+          </div>
+          </div>
+            </div>
+          </div>      
+        </div>
+      </header>
+      </div>
+      <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              
+              <!-- Page title actions -->
+              <div class="col-auto ms-auto d-print-none">
+                <div class="d-flex">
+                  <div class="me-3">
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+{{!-- </head> --}}
+<body>
+  <div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards" id="main-row-div">
+    {{{body}}}
+             </div>
+            {{!--  <div class="d-flex">
+                <ul class="pagination ms-auto">
+                
+                  {{#each pageArray}}
+                  <li class="page-item"><a class="page-link" href="/timeline?page={{this}}">{{this}}</a></li>
+                  {{/each}} --}}
+                  
+                    
+                  
+                </ul>
+              </div>
+          </div>
+          <footer class="footer footer-transparent d-print-none">
+            <div class="container-xl">
+              <div class="row text-center align-items-center flex-row-reverse">
+                <div class="col-lg-auto ms-lg-auto">
+                  <ul class="list-inline list-inline-dots mb-0">
+                    <li class="list-inline-item"><a href="./docs/" class="link-secondary">Documentation</a></li>
+                    <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
+                    <li class="list-inline-item"><a href="https://github.com/tabler/tabler"  class="link-secondary" rel="noopener">Source code</a></li>
+                    <li class="list-inline-item">
+                      <a href="https://github.com/sponsors/codecalm"  class="link-secondary" rel="noopener">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                        Sponsor
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                  <ul class="list-inline list-inline-dots mb-0">
+                    <li class="list-inline-item">
+                      Copyright &copy; 2023
+                      <a href="." class="link-secondary">Tabler</a>.
+                      All rights reserved.
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="./changelog.html" class="link-secondary" rel="noopener">
+                        v1.0.0-beta17
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      {{!-- </div> --}}
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>  
+    {{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="./javascripts/postSave.js"></script>
+    <script src="./javascripts/posts.js"></script>
+    <script src="./javascripts/tabler.min.js?1674944402" defer></script>  
+    <script src="./javascripts/tabler.min.js?1674944402" defer></script>  
+    <script src="/javascripts/common-functions.js"></script>
+    <script src="./javascripts/timeline.js"></script>
+    <script src="./javascripts/account.js"  ></script>
+    <script src="./javascripts/createPost.js"></script>
+
+
+    {{{_sections.script}}}
+</body>
+{{> createPost}}
+    {{> editPost}}
+
+    {{> saveError}}
+    {{> saveSuccess}} 
+    {{> info}}
+</html> 
