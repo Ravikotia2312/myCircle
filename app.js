@@ -81,13 +81,13 @@ fs.mkdir(path.join(__dirname, 'public/images'), (err) => {
     if (err) {
         return console.error(err);
     }
-    console.log('Directory created successfully!');
+    console.log('initialized images Directory  successfully!');
 });
 fs.mkdir(path.join(__dirname, 'public/uploads'), (err) => {
   if (err) {
       return console.error(err);
   }
-  console.log('Directory created successfully!');
+  console.log('initialized uploads Directory  successfully!');
 });
 
 app.use(logger("dev"));
