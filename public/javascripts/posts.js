@@ -1,5 +1,4 @@
-$(document).ready(function () {
-console.log("hey");
+$(document).ready(function () { //creating posts
 console.log($("form#createPosts").length);
   $("form#createPosts").validate({
     rules: {
@@ -36,7 +35,6 @@ console.log($("form#createPosts").length);
         return null;
       }
     console.log("reached");
-    // form = document.getElementById("createPosts");
     const formData = new FormData($(form)[0]);
 
       $.ajax({
@@ -48,6 +46,7 @@ console.log($("form#createPosts").length);
         success: function (res) {
           console.log(res);
           flashMe(res)
+          $("#create-post-modal").modal('toggle');
         },
         error: function (error) {
           console.log(error);

@@ -372,10 +372,8 @@
                           class="dropdown-item"
                           href="javascript:void(0)"
                           id="create"
-                          data-bs-target="#create-post-modal"
-                          data-bs-toggle="modal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
+                          {{!-- data-bs-target="#create-post-modal"
+                          data-bs-toggle="modal" --}}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -445,6 +443,26 @@
                           </svg>
                          <b>Users</b> 
                         </a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                          id="report">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-align-box-bottom-center" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                           <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
+                           <path d="M9 15v2"></path>
+                          <path d="M12 11v6"></path>
+                         <path d="M15 13v4"></path>
+                        </svg>
+                            <path
+                              stroke="none"
+                              d="M0 0h24v24H0z"
+                              fill="none"
+                            ></path>
+                            <path
+                              d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"
+                            ></path>
+                          </svg>
+                         <b>Report</b> 
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -513,9 +531,6 @@
                   {{#each pageArray}}
                   <li class="page-item"><a class="page-link" href="/timeline?page={{this}}">{{this}}</a></li>
                   {{/each}} --}}
-                  
-                    
-                  
                 </ul>
               </div>
           </div>
@@ -567,8 +582,7 @@
     <script src="./javascripts/timeline.js"></script>
     <script src="./javascripts/account.js"  ></script>
     <script src="./javascripts/createPost.js"></script>
-
-
+    
     {{{_sections.script}}}
 </body>
 {{> createPost}}
@@ -576,5 +590,4 @@
 
     {{> saveError}}
     {{> saveSuccess}} 
-    {{> info}}
 </html> 

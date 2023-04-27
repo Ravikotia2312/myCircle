@@ -1,0 +1,23 @@
+<table class="table mt-5 bg-light" id="nonDeleted">
+  <thead>
+    <tr>
+      <th scope="col">createdOn</th>
+      <th scope="col">totaluploadedPosts</th>
+      <th scope="col">totalSavedPosts</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+     
+    {{#each data}}
+    <tr>
+      <th scope="row">{{Date createdOn "MMMM Do YYYY, h:mm:ss a" }}</th>
+      <td>{{totaluploadedPosts}}</td>
+      <td>{{totalsavedPosts}}</td>
+    </tr>
+    {{/each}}
+
+
+  </tbody>
+ 
+</table>

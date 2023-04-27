@@ -17,19 +17,20 @@ $(document).ready(function () {
       },
       email: {
         required: true,
-        remote: "/email-validate"
+        remote: "/email-validate",
+        email:true,
       },
       gender: {
         required: true,
       },
-
       password: {
         required: true,
-        equalTo: "#pwcheck"
+        pwcheck: true,
+        minlength: 8
       },
       confirmPassword: {
         required: true,
-        equalTo: "#pwcheck"
+        equalTo: "#password"  
 
       },
     },
@@ -44,14 +45,23 @@ $(document).ready(function () {
 
       email: {
         required: "Enter your Email",
+        email: "please enter a valid email",
         remote: "Email already taken"
       },
 
       gender: {
         required: "Select Gender",
+        pwcheck: "enter valid password"
       },
-      Password: { required: "Enter your Password" },
-      confirmPassword: { required: "confirm password" },
+      password: { 
+      required: "Enter your Password",
+      pwcheck:"enter a strong password",
+      minlength:"must be atleast 8 characters"
+     },
+      confirmPassword: {
+         required: "confirm password" ,
+          equalTo:"enter a valid password"
+    },
     },
 
     submitHandler: function () {

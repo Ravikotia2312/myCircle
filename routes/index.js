@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const md5 = require("md5");
 const passport = require("passport");
 const savedPosts = require("../models/savedPosts");
+const statisticsModel = require("../models/statistics");
+
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /* GET home page. */
@@ -58,9 +60,9 @@ router.get("/login", function (req, res, next) {
 });
 
 router.get("/sign-up", function (req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect("/users/dashboard");
-  }
+  // if (req.isAuthenticated()) {
+  //   return res.redirect("/users/dashboard");
+  // }
   res.render("./authenticationProcess/sign-up", {
     title: "sign-up",
     layout: "login-registration",
@@ -69,7 +71,7 @@ router.get("/sign-up", function (req, res, next) {
 
 router.get("/timeline", async function (req, res, next) {
   console.log("isAuhthenticated ===========>", req.isAuthenticated());
-  console.log(req.user._id);
+  // console.log(req.user._id);
   let limit = 15; 
   let page = req.query.page ? req.query.page : 1;
   let skip = (limit * (page - 1 ))
@@ -116,7 +118,7 @@ router.get("/timeline", async function (req, res, next) {
         $unwind: "$data",
       },
       {
-        $sort:{postName :1}
+        $sort:{createdOn :-1}
       },
 
       {
@@ -415,6 +417,16 @@ router.get("/dashboardSave", function (req, res, next) {
     layout: dashboard,
   });
 });
+
+router.get("/report", async function (req, res, next) {
+  const data = await statisticsModel.find({
+  }).lean()
+  res.render("./partials/report", {
+    layout: "blank",
+    data:data
+  });
+});
+
 
 module.exports = router;
     

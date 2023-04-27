@@ -1,63 +1,64 @@
 $(document).ready(function () {
-  console.log("hey");
+  //editing posts
   console.log($("form#editPosts").length);
-    $("form#editPosts").validate({
-      rules: {
-        name: {
-          required: true,
-          maxlength:30
-        },
-        image: {
-          required: true,
-        },
-        description: {
-          required: true,
-          maxlength:300
-        } 
+  $("form#editPosts").validate({
+    rules: {
+      name: {
+        required: true,
+        maxlength: 30,
       },
-      messages: {
-        name: {
-          required: "A post Must Have name",
-          maxlength: 'postname should not exceed 30 characters'
-        },
-  
-        image: {
-          required: "select an image to upload",
-        },
-  
-        description: {
-          required: "a post must have it's description",
-          maxlength: 'description must be of 300 characters'
-        },
+      image: {
+        required: true,
       },
-      submitHandler: function (form) {
-        console.log("aaaaa");
-        if(!$(form).valid()){
-          return null;
-        }
-      console.log("reached");
-      // form = document.getElementById("createPosts");
-      const formData = new FormData($(form)[0]);
-  
-        $.ajax({
-          url: "posts/edit",
-          type: "put",
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (res) {
-            console.log(res);
-            flashMe(res)
-          },
-          error: function (error) {
-            console.log(error);
-          },
-        });
-        return false;
+      description: {
+        required: true,
+        maxlength: 300,
       },
-    });
-  });
+    },
+    messages: {
+      name: {
+        required: "A post Must Have name",
+        maxlength: "postname should not exceed 30 characters",
+      },
 
+      image: {
+        required: "select an image to upload",
+      },
+
+      description: {
+        required: "a post must have it's description",
+        maxlength: "description must be of 300 characters",
+      },
+    },
+    submitHandler: function (form) {
+      console.log("aaaaa");
+      if (!$(form).valid()) {
+        return null;
+      }
+      console.log("reached");
+      const formData = new FormData($(form)[0]);
+
+      $.ajax({
+        url: "posts/postsedit",
+        type: "put",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (res) {
+          console.log(res);
+          flashMe(res);
+          $('#edit-post-modal').modal('hide');
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+      return false;
+    },
+  });
+});
+
+//archieving posts
 $(document).on("click", "#archievePost", function () {
   console.log("clicked");
   let archieve = $(this);
@@ -75,27 +76,24 @@ $(document).on("click", "#archievePost", function () {
 });
 
 function getUrl() {
-
-  let url = "/filter"
-  const sort = $("#sort").val()
-  const filter = $("#filter").val()
-  const search = $("#search").val()
-  if(filter){
-    url += `?filter=${filter}`
+  let url = "/filter";
+  const sort = $("#sort").val();
+  const filter = $("#filter").val();
+  const search = $("#search").val();
+  if (filter) {
+    url += `?filter=${filter}`;
   }
-  if(sort){ 
-  url += `&sort=${sort}`
+  if (sort) {
+    url += `&sort=${sort}`;
   }
-  if(search){
-    url += `&search=${search}`
+  if (search) {
+    url += `&search=${search}`;
   }
-    return url
+  return url;
 }
 
-
+// filtering  posts
 $(document).on("change", ".common-filter", function () {
-
-  // filtering  posts
   console.log(getUrl());
   console.log($(this).val());
 
@@ -111,9 +109,8 @@ $(document).on("change", ".common-filter", function () {
   });
 });
 
-
+// filtering  posts
 $(document).on("click", ".common-filter", function () {
-  // filtering  posts
   console.log(getUrl());
   console.log($("#search").val());
   searchValue = $("#search").val();
@@ -129,18 +126,17 @@ $(document).on("click", ".common-filter", function () {
   });
 });
 
+// filtering  posts
 $(document).on("click", ".common-filter", function () {
-  // filtering  posts
   console.log(getUrl());
   console.log($(this).data("id"));
-  let value = $(this).data("id")
-  if(value == undefined)
-  {
-    value = 1
+  let value = $(this).data("id");
+  if (value == undefined) {
+    value = 1;
   }
-  let url = getUrl()
-  url += `&page=${value}`
-  console.log(url); 
+  let url = getUrl();
+  url += `&page=${value}`;
+  console.log(url);
   $.ajax({
     url: url,
     type: "GET",
@@ -153,19 +149,16 @@ $(document).on("click", ".common-filter", function () {
   });
 });
 
-
+// filtering  posts
 $(document).on("click", ".user-filter", function () {
-  // filtering  posts
-  // console.log(getUrl());
   console.log($(this).data("id"));
-  let value = $(this).data("id")
-  if(value == undefined)
-  {
-    value = 1
+  let value = $(this).data("id");
+  if (value == undefined) {
+    value = 1;
   }
-  let url = "/users/userslist"
-  url += `?page=${value}`
-  console.log(url); 
+  let url = "/users/userslist";
+  url += `?page=${value}`;
+  console.log(url);
   $.ajax({
     url: url,
     type: "GET",
@@ -178,17 +171,8 @@ $(document).on("click", ".user-filter", function () {
   });
 });
 
-
-
-
-
-
-
-
-
-
+// saved  posts
 $(document).on("click", "#savedPosts", function () {
-  // saved  posts
   console.log("clicked savedPosts");
   $.ajax({
     url: `/posts/saved-posts`,
@@ -202,15 +186,14 @@ $(document).on("click", "#savedPosts", function () {
   });
 });
 
+// getting users list
 $(document).on("click", "#users", function () {
-  // getting users list
   console.log("clicked users");
   $.ajax({
     url: `/users/userslist`,
     type: "GET",
     success: function (res) {
       $("#main-row-div").html(res);
-      // console.log(res);
     },
     error: function (error) {
       console.log(error);
@@ -218,8 +201,28 @@ $(document).on("click", "#users", function () {
   });
 });
 
+//opening create post modal
+$(document).on("click", "#create", function () {
+  $("#create-post-modal").modal("show");
+});
+
+// getting users list
+$(document).on("click", "#report", function () {
+  console.log("clicked report");
+  $.ajax({
+    url: `/report`,
+    type: "GET",
+    success: function (res) {
+      $("#main-row-div").html(res);
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+});
+
+//sorting posts with title
 $(document).on("click", ".postSort", function () {
-  //sorting posts with title
   console.log("clicked titleSort");
   const titlesort = $(this).data("id");
   $.ajax({
@@ -227,7 +230,6 @@ $(document).on("click", ".postSort", function () {
     type: "GET",
     success: function (res) {
       $("#main-row-div").html(res);
-      // console.log(res);
     },
     error: function (error) {
       console.log(error);
@@ -235,8 +237,8 @@ $(document).on("click", ".postSort", function () {
   });
 });
 
+// sorting customers with registration date
 $(document).on("click", "#registerdateSort", function () {
-  // sorting customers with registration date
   console.log("clicked registerdateSort");
   const registrationsort = $(this).data("id");
   console.log(registrationsort);
@@ -246,16 +248,14 @@ $(document).on("click", "#registerdateSort", function () {
     type: "GET",
     success: function (res) {
       $("#main-row-div").html(res);
-      // console.log(res);
     },
     error: function (error) {
       console.log(error);
     },
   });
 });
-
+// user search
 $(document).on("click", "#userSearch", function () {
-  // sorting customers with registration date
   console.log("clicked userSearch");
   console.log($("#usersearchValue").val());
 
@@ -265,7 +265,6 @@ $(document).on("click", "#userSearch", function () {
     url: `/users/userslist?search=${userSearch}`,
     type: "GET",
     success: function (res) {
-      //  $("#usersPartial").html(res)
       $("#main-row-div").html(res);
     },
     error: function (error) {

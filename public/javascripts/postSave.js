@@ -1,4 +1,4 @@
-$(document).on("click", "#savePost", function () {
+$(document).on("click", "#savePost", function () { //saving posts
   const createdBy = $(this).data("id");
   const postId = $(this).data("post");
   $.ajax({
@@ -15,7 +15,7 @@ $(document).on("click", "#savePost", function () {
   });
 });
 
-$(document).on("click", "#editpost", function () {
+$(document).on("click", "#editpost", function () { //editing posts
   const postId = $(this).data("id");
   console.log(postId);
   $.ajax({

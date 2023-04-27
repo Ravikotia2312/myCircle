@@ -40,7 +40,9 @@ router.post("/create", upload.single("image"), async function (req, res, next) {
     console.log(error);
   }
 
-  res.send();
+  res.send({
+    type: "success",
+  });
 });
 
 router.get("/posts", async function (req, res, next) {
@@ -81,9 +83,11 @@ router.post("/savedPosts", async function (req, res, next) {
   });
 });
 
-router.put("/postsedit", upload.single("file"), async function (req, res, next) {
+router.put(
+  "/postsedit",
+  upload.single("file"),
+  async function (req, res, next) {
     try {
-
       if (req.file) {
         const updatingPost = await postModel.updateOne(
           { _id: req.body.custId },
