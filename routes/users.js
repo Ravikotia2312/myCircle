@@ -14,7 +14,6 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, req.user._id + path.extname(file.originalname));
     //Appending extension
-    console.log(req.user._id + path.extname(file.originalname));
   },
 });
 const upload = multer({ storage: storage });
@@ -23,11 +22,8 @@ const upload = multer({ storage: storage });
 
 router.put("/edit", upload.single("file"), async function (req, res, next) {
   //editing user from the account section of profile
-  console.log("hitted ");
   try {
-    console.log(req.file);
     const file = req.file;
-    console.log(file);
     if (file) {
       const profile = file.filename;
       if (profile) {
@@ -41,7 +37,6 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
       }
     }
 
-    console.log(req.body);
 
     const { firstName, lastName, email } = req.body;
 
@@ -54,26 +49,22 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
     req.user.firstName = req.body.firstName;
     req.user.email = req.body.email;
     req.user.lastName = req.body.lastName;
-    console.log(req.user, edit);
+    res.send({
+      type: "success",
+    });
   } catch (error) {
     console.log(error);
   }
 
-  res.send({
-    type: "success",
-  });
+ 
 });
 
 router.get("/userslist", async function (req, res, next) {
   //editing user from the account section of profile
-  console.log("hitted  userslist");
-  console.log(req.query.search);
   try {
     let limit = 4; 
     let page = req.query.page ? req.query.page : 1;
-    console.log(page);
     let skip = (limit * (page - 1 ))
-    console.log(skip);
 
 
     let obj = {
@@ -202,15 +193,12 @@ router.get("/userslist", async function (req, res, next) {
     ]);
 
     let totalPost = usersCount.length;
-    console.log(totalPost);
     let pageCount = (Math.round(totalPost / limit))
-    console.log(pageCount);
     let pageArray = []; 
   for(let i=1; i <= pageCount; i++)
 {
   pageArray.push(i)
 }
-    // console.log(usersData);
     res.render("./partials/usersList", {
       layout: "blank",
       usersData: usersData,
@@ -221,7 +209,6 @@ router.get("/userslist", async function (req, res, next) {
     console.log(error);
   }
 
-  // res.send({type:"success"});
 });
 
 module.exports = router;

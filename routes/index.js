@@ -41,7 +41,6 @@ router.get("/", async function (req, res, next) {
     },
   ]);
 
-  // console.log(data);
   res.render("dashboard", {
     title: "dashboard",
     layout: "dashboard",
@@ -60,9 +59,7 @@ router.get("/login", function (req, res, next) {
 });
 
 router.get("/sign-up", function (req, res, next) {
-  // if (req.isAuthenticated()) {
-  //   return res.redirect("/users/dashboard");
-  // }
+  
   res.render("./authenticationProcess/sign-up", {
     title: "sign-up",
     layout: "login-registration",
@@ -71,7 +68,6 @@ router.get("/sign-up", function (req, res, next) {
 
 router.get("/timeline", async function (req, res, next) {
   console.log("isAuhthenticated ===========>", req.isAuthenticated());
-  // console.log(req.user._id);
   let limit = 15; 
   let page = req.query.page ? req.query.page : 1;
   let skip = (limit * (page - 1 ))
@@ -93,7 +89,6 @@ router.get("/timeline", async function (req, res, next) {
           from: "savedPosts",
           localField: "_id",
           foreignField: "postId",
-          // let: { savedBy: new ObjectId(req.user._id) },
           pipeline: [
             { $match: 
               { $expr:
@@ -133,19 +128,15 @@ router.get("/timeline", async function (req, res, next) {
         },
       },
     ]);
-    console.log(data.length , "data.length ");
 
 
     let totalPost = await postModel.countDocuments({isDeleted : false});
-    console.log(totalPost);
     let pageCount = (Math.round(totalPost / limit))+1
-    console.log(pageCount);
     let pageArray = []; 
     for(let i=1; i <= pageCount; i++)
   {
     pageArray.push(i)
   }
-  console.log(pageArray, "pageArray");
     return res.render("./timeline", { data: data, 
       pageArray : pageArray 
     });
@@ -155,12 +146,9 @@ router.get("/timeline", async function (req, res, next) {
 });
 
 router.get("/filter", async function (req, res, next) {
-  console.log(req.query);
     let limit = 6; 
     let page = req.query.page ? req.query.page : 1;
-    console.log(page);
     let skip = (limit * (page - 1 ))
-    console.log(skip);
   let obj = {
     isDeleted: false,
   };
@@ -203,7 +191,6 @@ router.get("/filter", async function (req, res, next) {
       ],
     };
   }
-  console.log(obj);
   const data = await postModel.aggregate([
     {
       $match: obj,
@@ -306,25 +293,19 @@ router.get("/filter", async function (req, res, next) {
       $sort:sortObj
     },
   ]);  
-  console.log(data.length , "data.length ");
 
   let totalPost = totalCount.length;
-  console.log(totalPost);
   let pageCount = (Math.round(totalPost / limit))
-  console.log(pageCount);
   let pageArray = []; 
   for(let i=1; i <= pageCount; i++)
 {
   pageArray.push(i)
 }
-console.log(pageArray);
   return res.render("./timeline", { data: data, layout: "blank", pageArrays : pageArray });
 });
 
 router.post("/login", async function (req, res, next) {
   passport.authenticate("local", function (err, user, info) {
-    console.log(req.body);
-    console.log("authenticating");
     if (err) {
       return next(err);
     }
@@ -334,7 +315,6 @@ router.post("/login", async function (req, res, next) {
     }
 
     req.login(user, function (err) {
-      // console.log(user._id);
       if (err) {
         console.log(err);
         return next(err);
@@ -345,7 +325,6 @@ router.post("/login", async function (req, res, next) {
 });
 
 router.post("/register-post", async function (req, res, next) {
-  console.log(req.body);
   try {
     const { firstName, lastName, email, gender, password, confirmPassword } =
       req.body;
@@ -375,17 +354,14 @@ router.post("/register-post", async function (req, res, next) {
 router.get("/email-validate", async function (req, res, next) {
   try {
     const check = await UserModel.countDocuments({ email: req.query.email });
-    console.log(check);
     const emailCheck = check ? false : true;
     res.send(emailCheck);
   } catch (error) {
-    console.log(error);
   }
 });
 
 router.get("/logout", async function (req, res, next) {
   req.logout();
-  // req.session = null
   res.redirect("/dashboard");
 });
 
@@ -402,7 +378,6 @@ router.get("/editpost", async function (req, res, next) {
   const getPost = await postModel.findOne({
     _id: new mongoose.Types.ObjectId(req.query.value),
   });
-  // console.log(getPost);
 
   res.send({
     name: getPost.postName,

@@ -20,14 +20,13 @@ const UserModel = require("./models/users");
 const postModel = require("./models/posts");
 const savedPosts = require("./models/savedPosts");
 const statisticsModel = require("./models/statistics");
-
+  
 console.log(process.env.connection);
 mongoose.connect(process.env.connection).then(() => console.log("Connected!"));
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
-const statistics = require("./models/statistics");
 
 var app = express();
 

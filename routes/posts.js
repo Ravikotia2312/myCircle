@@ -16,7 +16,6 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + req.user._id + path.extname(file.originalname));
     //Appending extension
-    console.log(req.user._id + "_" + path.extname(file.originalname));
   },
 });
 const upload = multer({ storage: storage });
@@ -24,29 +23,28 @@ const upload = multer({ storage: storage });
 /* GET users listing. */
 
 router.post("/create", upload.single("image"), async function (req, res, next) {
-  console.log("here");
   try {
-    console.log(req.file.filename);
 
-    // if(req.file)
     const create = await postModel.create({
       postName: req.body.name,
       description: req.body.description,
       postImg: req.file.filename,
       userId: req.user._id,
     });
-    console.log(create);
+    res.send({
+      type: "success",
+    });
   } catch (error) {
     console.log(error);
+    res.send({
+      type: "error",
+    });
   }
 
-  res.send({
-    type: "success",
-  });
+  
 });
 
 router.get("/posts", async function (req, res, next) {
-  console.log(data);
   return res.render("./partials/posts", {
     layout: blank,
     data: data,
@@ -55,7 +53,6 @@ router.get("/posts", async function (req, res, next) {
 
 router.post("/savedPosts", async function (req, res, next) {
   try {
-    console.log(req.body);
     const existsCheck = await savedPostsModel.exists({
       postId: new ObjectId(req.body.postId),
       savedBy: req.user._id,
@@ -65,7 +62,6 @@ router.post("/savedPosts", async function (req, res, next) {
         postId: new ObjectId(req.body.postId),
         savedBy: req.user._id,
       });
-      console.log(deletingExisting);
     } else {
       const savingPosts = await savedPostsModel.create({
         postId: req.body.postId,
@@ -73,14 +69,17 @@ router.post("/savedPosts", async function (req, res, next) {
         savedBy: req.user._id,
       });
 
-      console.log(savingPosts);
     }
+    res.send({
+      type: "success",
+    });
   } catch (error) {
     console.log(error);
+    res.send({
+      type: "error",
+    });
   }
-  res.send({
-    type: "success",
-  });
+ 
 });
 
 router.put(
@@ -98,7 +97,6 @@ router.put(
           }
         );
 
-        console.log(updatingPost);
       }
 
       const updatingPostData = await postModel.updateOne(
@@ -109,15 +107,16 @@ router.put(
         }
       );
 
-      console.log(updatingPostData);
-
-      console.log(req.file);
+      res.send({
+        type: "success",
+      });
     } catch (error) {
       console.log(error);
+      res.send({
+        type: "error",
+      });
     }
-    res.send({
-      type: "success",
-    });
+   
   }
 );
 
@@ -175,7 +174,6 @@ router.get("/saved-posts", async function (req, res, next) {
 
 router.delete("/:postsDelete", async function (req, res, next) {
   try {
-    console.log(req.params);
 
     const deletingPost = await postModel.updateOne(
       {
@@ -186,16 +184,16 @@ router.delete("/:postsDelete", async function (req, res, next) {
         isDeleted: true,
       }
     );
-    console.log(deletingPost);
+    res.send({
+      type: "success",
+    });
   } catch (error) {
     console.log(error);
     res.send({
       type: "error",
     });
   }
-  res.send({
-    type: "success",
-  });
+  
 });
 
 module.exports = router;

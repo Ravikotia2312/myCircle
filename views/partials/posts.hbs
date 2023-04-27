@@ -3,14 +3,14 @@
           
           {{#each data}}
 
-<div class="postBody col-sm-6 col-lg-4">
+<div class="postBody col-sm-6 col-lg-4 ">
   <div class="card card-sm card-link-pop" >
     <a href="#" class="d-block"><img
         src="/images/{{postImg}}"
         style="height: 300px;"
         class="card-img-top"
       /></a>
-    <div class="card-body">
+    <div class="card-body bg-dark text-light">
       <div class="d-flex align-items-center">
 
         <div>
@@ -28,7 +28,7 @@
           <div>{{Date createdOn "MMMM Do YYYY"}}</div>
 
         </div>
-        <div class="ms-auto">
+        <div class="ms-auto ">
 
           {{#if (checkMath  data._id '!=' ../_id )}}
           <a href="javascript:void(0)" class="text-muted" id="savePost" data-id="{{data._id}}" data-post="{{_id}}">
