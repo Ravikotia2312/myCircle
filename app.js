@@ -15,12 +15,14 @@ const mb5 = require("md5");
 const flash = require("connect-flash");
 const moment = require("moment");
 const CronJob = require("cron").CronJob;
+const fs = require('fs');
+
 
 const UserModel = require("./models/users");
 const postModel = require("./models/posts");
 const savedPosts = require("./models/savedPosts");
 const statisticsModel = require("./models/statistics");
-  
+
 console.log(process.env.connection);
 mongoose.connect(process.env.connection).then(() => console.log("Connected!"));
 
@@ -72,6 +74,21 @@ const hbs = expHbs.create({
 app.set("views", path.join(__dirname, "views"));
 app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
+
+
+   
+fs.mkdir(path.join(__dirname, 'public/images'), (err) => {
+    if (err) {
+        return console.error(err);
+    }
+    console.log('Directory created successfully!');
+});
+fs.mkdir(path.join(__dirname, 'public/uploads'), (err) => {
+  if (err) {
+      return console.error(err);
+  }
+  console.log('Directory created successfully!');
+});
 
 app.use(logger("dev"));
 app.use(express.json());
