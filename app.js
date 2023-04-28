@@ -15,8 +15,7 @@ const mb5 = require("md5");
 const flash = require("connect-flash");
 const moment = require("moment");
 const CronJob = require("cron").CronJob;
-const fs = require('fs');
-
+const fs = require("fs");
 
 const UserModel = require("./models/users");
 const postModel = require("./models/posts");
@@ -66,7 +65,7 @@ const hbs = expHbs.create({
     },
     Date: function (createdOn, format) {
       // var mmt = moment(createdOn);
-   
+
       // return mmt.format(format);
 
       var mmt = moment(createdOn).fromNow();
@@ -79,17 +78,17 @@ app.set("views", path.join(__dirname, "views"));
 app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 
-fs.mkdir(path.join(__dirname, 'public/images'), (err) => {
-    if (err) {
-        return console.error(err);
-    }
-    console.log('initialized images Directory  successfully!');
-});
-fs.mkdir(path.join(__dirname, 'public/uploads'), (err) => {
+fs.mkdir(path.join(__dirname, "public/images"), (err) => {
   if (err) {
-      return console.error(err);
+    return console.error(err);
   }
-  console.log('initialized uploads Directory  successfully!');
+  console.log("initialized images Directory  successfully!");
+});
+fs.mkdir(path.join(__dirname, "public/uploads"), (err) => {
+  if (err) {
+    return console.error(err);
+  }
+  console.log("initialized uploads Directory  successfully!");
 });
 
 app.use(logger("dev"));
