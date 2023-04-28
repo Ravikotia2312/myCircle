@@ -206,7 +206,6 @@ $(document).on("click", "#create", function () {
   $("#create-post-modal").modal("show");
 });
 
-// getting users list
 $(document).on("click", "#report", function () {
   console.log("clicked report");
   $.ajax({
@@ -214,6 +213,7 @@ $(document).on("click", "#report", function () {
     type: "GET",
     success: function (res) {
       $("#main-row-div").html(res);
+
     },
     error: function (error) {
       console.log(error);

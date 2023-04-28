@@ -45,7 +45,7 @@
   </div>
 </li>
 <div class="row g-2">
-<div class="col">
+<div class="col-2 ">
 <input type="text" class="form-control" placeholder="Search for users" id="usersearchValue">
   </div>
   <div class="col-auto">
@@ -59,7 +59,7 @@
 {{#each usersData}}
   <div class="col-md-6 col-xl-3" id="usersPartial">
     <div class="card card-link-pop">
-      <div class="card-body text-center">
+      <div class="card-body bg-dark text-light text-center">
         <div class="mb-3">
           <span
             class="avatar avatar-xl rounded"
@@ -68,12 +68,12 @@
         </div>
         {{!-- {{fullName}} --}}
         <div class="card-title mb-1"> {{firstName}} {{lastName}} </div>
-        <div class="text-muted"><b>Total Posts:</b>{{totaluploadedPosts}} </div>
-        <div class="text-muted"><b>Total Saved Posts:</b>
+        <div class="text-light"><b>Total Posts:</b>{{totaluploadedPosts}} </div>
+        <div class="text-light"><b>Total Saved Posts:</b>
           {{totalsavedPosts}}</div>
-        <div class="text-muted"><b>Email:</b> {{email}}</div>
+        <div class="text-light"><b>Email:</b> {{email}}</div>
       </div>
-      <span class="card-btn" id="registration">Registered On:
+      <span class="card-btn" id="registration">Registered :
         {{Date createdOn "MMMM Do YYYY"}}</span>
     </div>
   </div>

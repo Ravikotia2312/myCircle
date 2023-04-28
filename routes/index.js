@@ -7,6 +7,8 @@ const md5 = require("md5");
 const passport = require("passport");
 const savedPosts = require("../models/savedPosts");
 const statisticsModel = require("../models/statistics");
+const moment = require("moment");
+
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -394,14 +396,39 @@ router.get("/dashboardSave", function (req, res, next) {
 });
 
 router.get("/report", async function (req, res, next) {
-  const data = await statisticsModel.find({
-  }).lean()
-  res.render("./partials/report", {
-    layout: "blank",
-    data:data
-  });
-});
 
+  try {
+    const statistics = await statisticsModel.aggregate([{
+      $project :{
+      totaluploadedPosts : 1,
+      totalsavedPosts : 1,
+      createdOn : 1,
+      _id : 0}  
+    }])
+    // console.log(data[0]);
+    let array = []
+    let dataArray = []
+    let savedArray = []
+    for(let value of statistics)
+    {
+       savedArray.push(value.totalsavedPosts)
+       dataArray.push(moment(value.createdOn).format('DD_MM_YYYY_hh_mm'))
+       array.push(value.totaluploadedPosts)
+
+    }
+  console.log(savedArray);
+    res.render("./partials/report", {
+      layout: "blank",
+      data:array,
+      dates : dataArray,
+      saved: savedArray
+    });
+  } catch (error) {
+    console.log(error);
+  }
+ 
+
+});
 
 module.exports = router;
     

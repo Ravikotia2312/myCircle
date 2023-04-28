@@ -1,23 +1,29 @@
-<table class="table mt-5 bg-light" id="nonDeleted">
-  <thead>
-    <tr>
-      <th scope="col">createdOn</th>
-      <th scope="col">totaluploadedPosts</th>
-      <th scope="col">totalSavedPosts</th>
-     
-    </tr>
-  </thead>
-  <tbody>
-     
-    {{#each data}}
-    <tr>
-      <th scope="row">{{Date createdOn "MMMM Do YYYY, h:mm:ss a" }}</th>
-      <td>{{totaluploadedPosts}}</td>
-      <td>{{totalsavedPosts}}</td>
-    </tr>
-    {{/each}}
 
 
-  </tbody>
- 
-</table>
+<canvas id="myChart" style="width:1000%;max-width:110%"></canvas>
+
+<script>
+  {{log saved }}
+const xValues = [{{data}}];
+const yValues = [{{dates}}];
+const savedArray = [{{saved}}]
+new Chart("myChart", {
+    type: "line",
+    data: {
+      labels: yValues,
+      datasets: [{
+        label: "Total Uploaded Posts per 1/2 hour",
+        backgroundColor:"rgba(0, 0, 102,1.0)",
+        borderColor: "rgba(0,0,255,0.1)",
+        data: xValues
+      },
+      {
+        label: "Total Saved Posts per 1/2 hour",
+        backgroundColor:"rgba(245, 0, 0, 1.0)",
+        borderColor: "rgba(0,0,255,0.1)",
+        data:savedArray
+      }]
+    },
+    
+  });</script>
+   

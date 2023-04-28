@@ -23,15 +23,15 @@
           <b>Title</b>
           <div>{{postName}}</div>
           <b>Description</b>
-          <div>{{description}}</div>
-          <b>posted On</b>
+          <div>{{description}}</div><br>  
+          {{!-- <b>posted On</b> --}}
           <div>{{Date createdOn "MMMM Do YYYY"}}</div>
 
         </div>
         <div class="ms-auto text-light">
 
           {{#if (checkMath  data._id '!=' ../_id )}}
-          <a href="javascript:void(0)" class="text-muted" id="savePost" data-id="{{data._id}}" data-post="{{_id}}">
+          <a href="javascript:void(0)" class="text-light" id="savePost" data-id="{{data._id}}" data-post="{{_id}}">
             <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
             {{#if savedposts}}
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-down-lines-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -55,7 +55,7 @@
           </a>  
           {{/if}}
           {{#if (checkMath  data._id '==' ../_id )}}
-          <a href="javascript:void(0)" class="text-muted" id="editpost" 
+          <a href="javascript:void(0)" class="text-light" id="editpost" 
           data-id="{{_id}}"> 
                           
             <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
@@ -81,7 +81,7 @@
             Edit 
           </a>
 
-          <a href="javascript:void(0)" class="text-muted" id="archievePost" 
+          <a href="javascript:void(0)" class="text-light" id="archievePost" 
           data-id="{{_id}}"> 
                           
             <!-- Download SVG icon from http://tabler-icons.io/i/eye -->

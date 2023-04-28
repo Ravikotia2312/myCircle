@@ -23,8 +23,11 @@ const upload = multer({ storage: storage });
 /* GET users listing. */
 
 router.post("/create", upload.single("image"), async function (req, res, next) {
+  req.body.name = req.body.name.trim();
+  req.body.description = req.body.description.trim();
+  req.file.filename = req.file.filename.trim();
+  req.user._id = req.user._id.trim();
   try {
-
     const create = await postModel.create({
       postName: req.body.name,
       description: req.body.description,
@@ -40,8 +43,6 @@ router.post("/create", upload.single("image"), async function (req, res, next) {
       type: "error",
     });
   }
-
-  
 });
 
 router.get("/posts", async function (req, res, next) {
@@ -68,7 +69,6 @@ router.post("/savedPosts", async function (req, res, next) {
         createdBy: req.body.createdBy,
         savedBy: req.user._id,
       });
-
     }
     res.send({
       type: "success",
@@ -79,7 +79,6 @@ router.post("/savedPosts", async function (req, res, next) {
       type: "error",
     });
   }
- 
 });
 
 router.put(
@@ -87,6 +86,9 @@ router.put(
   upload.single("file"),
   async function (req, res, next) {
     try {
+      req.body.name = req.body.name.trim();
+      req.body.description = req.body.description.trim();
+      req.file.filename = req.file.filename.trim();
       if (req.file) {
         const updatingPost = await postModel.updateOne(
           { _id: req.body.custId },
@@ -96,7 +98,6 @@ router.put(
             postImg: req.file.filename,
           }
         );
-
       }
 
       const updatingPostData = await postModel.updateOne(
@@ -116,7 +117,6 @@ router.put(
         type: "error",
       });
     }
-   
   }
 );
 
@@ -174,7 +174,6 @@ router.get("/saved-posts", async function (req, res, next) {
 
 router.delete("/:postsDelete", async function (req, res, next) {
   try {
-
     const deletingPost = await postModel.updateOne(
       {
         _id: req.params.postsDelete,
@@ -193,7 +192,6 @@ router.delete("/:postsDelete", async function (req, res, next) {
       type: "error",
     });
   }
-  
 });
 
 module.exports = router;

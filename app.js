@@ -65,8 +65,12 @@ const hbs = expHbs.create({
       }
     },
     Date: function (createdOn, format) {
-      var mmt = moment(createdOn);
-      return mmt.format(format);
+      // var mmt = moment(createdOn);
+   
+      // return mmt.format(format);
+
+      var mmt = moment(createdOn).fromNow();
+      return mmt;
     },
   },
 });
@@ -75,8 +79,6 @@ app.set("views", path.join(__dirname, "views"));
 app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 
-
-   
 fs.mkdir(path.join(__dirname, 'public/images'), (err) => {
     if (err) {
         return console.error(err);
