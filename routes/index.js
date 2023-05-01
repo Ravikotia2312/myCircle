@@ -9,7 +9,6 @@ const savedPosts = require("../models/savedPosts");
 const statisticsModel = require("../models/statistics");
 const moment = require("moment");
 
-
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /* GET home page. */
@@ -169,7 +168,6 @@ router.get("/filter", async function (req, res, next) {
       createdOn : -1
     }
   };
-
   if (req.query.filter == "mine") {
     obj.userId = new ObjectId(req.user._id);
   } else if (req.query.filter == "others") {
@@ -188,7 +186,7 @@ router.get("/filter", async function (req, res, next) {
            { description: 
             { $regex:
               req.query.search, $options: "i" 
-            } 
+            }   
           },
       ],
     };
@@ -412,11 +410,12 @@ router.get("/report", async function (req, res, next) {
     for(let value of statistics)
     {
        savedArray.push(value.totalsavedPosts)
-       dataArray.push(moment(value.createdOn).format('DD_MM_YYYY_hh_mm'))
+       dataArray.push(moment(value.createdOn).format('YYYY_MM_DD_hh_mm'))
+      // dataArray.push(value.createdOn)
        array.push(value.totaluploadedPosts)
 
     }
-  console.log(savedArray);
+  console.log(dataArray);
     res.render("./partials/report", {
       layout: "blank",
       data:array,
@@ -426,8 +425,6 @@ router.get("/report", async function (req, res, next) {
   } catch (error) {
     console.log(error);
   }
- 
-
 });
 
 module.exports = router;

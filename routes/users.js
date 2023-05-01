@@ -37,7 +37,6 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
       }
     }
 
-
     const { firstName, lastName, email } = req.body;
 
     const edit = await UserModel.updateOne(
@@ -55,17 +54,14 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
   } catch (error) {
     console.log(error);
   }
-
- 
 });
 
 router.get("/userslist", async function (req, res, next) {
   //editing user from the account section of profile
   try {
-    let limit = 4; 
+    let limit = 4;
     let page = req.query.page ? req.query.page : 1;
-    let skip = (limit * (page - 1 ))
-
+    let skip = limit * (page - 1);
 
     let obj = {
       isDeleted: false,
@@ -75,7 +71,6 @@ router.get("/userslist", async function (req, res, next) {
     if (req.query.sort == "sortbyRegistration") {
       sortingOrder = -1;
     }
-
 
     if (req.query.search) {
       obj = {
@@ -96,10 +91,10 @@ router.get("/userslist", async function (req, res, next) {
         $match: obj,
       },
       {
-        $skip : skip
+        $skip: skip,
       },
       {
-        $limit : limit
+        $limit: limit,
       },
       {
         $lookup: {
@@ -133,17 +128,15 @@ router.get("/userslist", async function (req, res, next) {
           gender: 1,
           createdOn: 1,
           profilePic: 1,
-          fullName: {$concat: ["$firstName"," ","$lastName"]},
+          fullName: { $concat: ["$firstName", " ", "$lastName"] },
           totalsavedPosts: { $size: "$saved" },
           totaluploadedPosts: { $size: "$data" },
-
         },
       },
       {
         $sort: { createdOn: sortingOrder },
       },
     ]);
-    
 
     const usersCount = await UserModel.aggregate([
       {
@@ -181,10 +174,9 @@ router.get("/userslist", async function (req, res, next) {
           gender: 1,
           createdOn: 1,
           profilePic: 1,
-          fullName: {$concat: ["$firstName"," ","$lastName"]},
+          fullName: { $concat: ["$firstName", " ", "$lastName"] },
           totalsavedPosts: { $size: "$saved" },
           totaluploadedPosts: { $size: "$data" },
-
         },
       },
       {
@@ -193,22 +185,19 @@ router.get("/userslist", async function (req, res, next) {
     ]);
 
     let totalPost = usersCount.length;
-    let pageCount = (Math.round(totalPost / limit))
-    let pageArray = []; 
-  for(let i=1; i <= pageCount; i++)
-{
-  pageArray.push(i)
-}
+    let pageCount = Math.round(totalPost / limit);
+    let pageArray = [];
+    for (let i = 1; i <= pageCount; i++) {
+      pageArray.push(i);
+    }
     res.render("./partials/usersList", {
       layout: "blank",
       usersData: usersData,
-      pageArray:pageArray
-
+      pageArray: pageArray,
     });
   } catch (error) {
     console.log(error);
   }
-
 });
 
 module.exports = router;

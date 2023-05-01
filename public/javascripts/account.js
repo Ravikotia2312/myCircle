@@ -7,9 +7,6 @@ $(document).ready(function () {
       lastName: {
         required: true,
       },
-      email: {
-        required: true,
-      },
     },
     messages: {
       firstName: {
@@ -19,17 +16,11 @@ $(document).ready(function () {
       lastName: {
         required: "Last Name cannot be blank",
       },
-
-      email: {
-        required: "Enter your Email",
-      },
     },
 
     submitHandler: function (form) {
       form = document.getElementById("usereditForm");
       const formData = new FormData($(form)[0]);
-      console.log(formData);
-      console.log("clicked===========");
       $.ajax({
         url: "users/edit",
         type: "PUT",

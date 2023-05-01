@@ -9,6 +9,8 @@ const savedPosts = require("../models/savedPosts");
 const { log, Console } = require("console");
 const ObjectId = require("mongoose").Types.ObjectId;
 
+// maxSize = 1 * 1000 * 1000;
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/images");
@@ -17,10 +19,17 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + "-" + req.user._id + path.extname(file.originalname));
     //Appending extension
   },
+  onFileUploadStart: function(file, req, res){
+    if(req.files.file.length > maxSize) {
+      return false;
+    }
+  },
 });
-const upload = multer({ storage: storage });
-
-/* GET users listing. */
+const upload = multer(
+  { storage: storage,
+    // limits: { fileSize: maxSize } 
+  });
+/* GET users listing.*/
 
 router.post("/create", upload.single("image"), async function (req, res, next) {
   req.body.name = req.body.name.trim();
@@ -28,6 +37,7 @@ router.post("/create", upload.single("image"), async function (req, res, next) {
   req.file.filename = req.file.filename.trim();
   req.user._id = req.user._id.trim();
   try {
+    
     const create = await postModel.create({
       postName: req.body.name,
       description: req.body.description,

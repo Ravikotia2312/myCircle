@@ -22,20 +22,20 @@
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label">Name</label>
-            <input type="text" class="form-control" name="name" />
+            <input type="text" class="form-control " name="name" />
           </div>
 
           <div class="image-preview-container">
             <div class="preview">
               <img id="preview-selected-image" src="/images/" />
             </div>
-            <label for="image-upload" class="form-label">Upload Image</label><br
+            <label for="image-upload" class="form-label bg-dark">Upload Image</label><br
             />
             <input
               type="file"
               id="image-upload"
               accept="image/*"
-              class="btn btn-primary ms-auto"
+              class="btn btn-dark ms-auto"
               onchange="previewImage(event);"
               class="btn"
               name="image"
@@ -77,7 +77,7 @@
             Cancel    
           </a>
             
-          <button class="btn btn-primary ms-auto" type="submit" id="submit" >
+          <button class="btn btn-dark ms-auto" type="submit" id="submit" >
             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -36,7 +36,6 @@ console.log($("form#createPosts").length);
       }
     console.log("reached");
     const formData = new FormData($(form)[0]);
-
       $.ajax({
         url: "posts/create",
         type: "POST",

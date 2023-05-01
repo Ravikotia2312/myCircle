@@ -65,7 +65,6 @@ $(document).ready(function () {
     },
 
     submitHandler: function () {
-      // console.log("+++++++++++++++");
       $.ajax({
         url: "/register-post",
         type: "POST",
