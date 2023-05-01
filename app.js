@@ -65,7 +65,7 @@ const hbs = expHbs.create({
     },
     Date: function (createdOn, format) {
       // var mmt = moment(createdOn);
-      // return mmt.format(format); 
+      // return mmt.format(format);
 
       var mmt = moment(createdOn).fromNow();
       return mmt;
@@ -147,7 +147,7 @@ passport.use(
           password: 1,
           gender: 1,
           confirmPassword: 1,
-          profilePic: 1
+          profilePic: 1,
           // checking if details entered are valid or not
         }
       )

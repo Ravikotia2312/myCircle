@@ -415,7 +415,6 @@ router.get("/report", async function (req, res, next) {
        array.push(value.totaluploadedPosts)
 
     }
-  console.log(dataArray);
     res.render("./partials/report", {
       layout: "blank",
       data:array,
