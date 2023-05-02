@@ -254,6 +254,7 @@ $(document).on("click", "#registerdateSort", function () {
     },
   });
 });
+
 // user search
 $(document).on("click", "#userSearch", function () {
   console.log("clicked userSearch");
@@ -271,4 +272,22 @@ $(document).on("click", "#userSearch", function () {
       console.log(error);
     },
   });
+});
+
+$(document).on("hover", ".count", function () {
+
+  console.log("hovered");
+  // $("#details").()
+  // const userSearch = $("#usersearchValue").val();
+
+  // $.ajax({
+  //   url: `/users/userslist?search=${userSearch}`,
+  //   type: "GET",
+  //   success: function (res) {
+  //     $("#main-row-div").html(res);
+  //   },
+  //   error: function (error) {
+  //     console.log(error);
+  //   },
+  // });
 });

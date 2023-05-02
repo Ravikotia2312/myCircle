@@ -28,6 +28,7 @@ mongoose.connect(process.env.connection).then(() => console.log("Connected!"));
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
+const { log } = require("console");
 
 var app = express();
 
@@ -52,6 +53,7 @@ const hbs = expHbs.create({
       return new Handlebars.SafeString(str);
     },
     checkMath: function (val1, comparision, val2) {
+        console.log(val1, val2);
       switch (comparision) {
         case "==":
           return val1 == val2 ? true : false;

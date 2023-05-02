@@ -15,10 +15,9 @@ const ObjectId = require("mongoose").Types.ObjectId;
 router.get("/", async function (req, res, next) {
   const data = await postModel.aggregate([
     {
-        $match : 
-        {
-          isDeleted:false
-        }
+      $match: {
+        isDeleted: false,
+      },
     },
     {
       $lookup: {
@@ -60,7 +59,6 @@ router.get("/login", function (req, res, next) {
 });
 
 router.get("/sign-up", function (req, res, next) {
-  
   res.render("./authenticationProcess/sign-up", {
     title: "sign-up",
     layout: "login-registration",
@@ -69,9 +67,9 @@ router.get("/sign-up", function (req, res, next) {
 
 router.get("/timeline", async function (req, res, next) {
   console.log("isAuhthenticated ===========>", req.isAuthenticated());
-  let limit = 15; 
+  let limit = 15;
   let page = req.query.page ? req.query.page : 1;
-  let skip = (limit * (page - 1 ))
+  let skip = limit * (page - 1);
   if (req.isAuthenticated()) {
     const data = await postModel.aggregate([
       {
@@ -80,10 +78,10 @@ router.get("/timeline", async function (req, res, next) {
         },
       },
       {
-          $skip : skip
+        $skip: skip,
       },
       {
-        $limit : limit
+        $limit: limit,
       },
       {
         $lookup: {
@@ -91,15 +89,48 @@ router.get("/timeline", async function (req, res, next) {
           localField: "_id",
           foreignField: "postId",
           pipeline: [
-            { $match: 
-              { $expr:
-                { $eq: 
-                  ["$savedBy", new ObjectId(req.user._id)]
-                 } 
-                } 
-              }
-            ],
+            {
+              $match: {
+                $expr: { $eq: ["$savedBy", new ObjectId(req.user._id)] },
+              },
+            },
+          ],
           as: "savedposts",
+        },
+      },
+      {
+        $lookup: {
+          from: "savedPosts",
+          localField: "_id",
+          foreignField: "postId",
+
+          pipeline: [
+            {
+              $lookup: {
+                from: "users",
+                localField: "savedBy",
+                foreignField: "_id",
+                as: "usersData",
+              },
+            },
+            {
+              $group: {
+                _id: "$savedBy",
+                name: { 
+                  $push: "$usersData.firstName"
+               },
+                lastname : { 
+                $push: "$usersData.lastName"
+               }
+              },
+            },
+            
+            {
+              $unwind: "$name",
+            },
+            
+          ],
+          as: "postSaved",
         },
       },
       {
@@ -114,11 +145,10 @@ router.get("/timeline", async function (req, res, next) {
         $unwind: "$data",
       },
       {
-        $sort:{createdOn :-1}
+        $sort: { createdOn: -1 },
       },
-
       {
-        $project: { 
+        $project: {
           postName: 1,
           description: 1,
           postImg: 1,
@@ -126,68 +156,69 @@ router.get("/timeline", async function (req, res, next) {
           createdOn: 1,
           data: 1,
           savedposts: 1,
+          postId: 1,
+          postSaved : 1,
+          count: {
+            $size: {
+              $ifNull: ["$postSaved", []],
+            },
+          },
         },
       },
     ]);
 
+    const total = await postModel.countDocuments({isDeleted: false})
 
-    let totalPost = await postModel.countDocuments({isDeleted : false});
-    let pageCount = (Math.round(totalPost / limit))+1
-    let pageArray = []; 
-    for(let i=1; i <= pageCount; i++)
-  {
-    pageArray.push(i)
-  }
-    return res.render("./timeline", { data: data, 
-      pageArray : pageArray 
-    });
+    console.log(data);
+    let totalPost = await postModel.countDocuments({ isDeleted: false });
+    let pageCount = Math.round(totalPost / limit) + 1;
+    let pageArray = [];
+    for (let i = 1; i <= pageCount; i++) {
+      pageArray.push(i);
+    }
+    return res.render("./timeline", { data: data, pageArray: pageArray, total: total });
   }
 
   return res.redirect("/dashboard");
 });
 
 router.get("/filter", async function (req, res, next) {
-    let limit = 6; 
-    let page = req.query.page ? req.query.page : 1;
-    let skip = (limit * (page - 1 ))
+  let limit = 6;
+  let page = req.query.page ? req.query.page : 1;
+  let skip = limit * (page - 1);
   let obj = {
     isDeleted: false,
   };
   let sortObj = {
-    postName : 1
+    postName: 1,
   };
-  if(req.query.sort === "title")
-  {
-     sortObj = {
-      postName : -1
-    }
-  };
-  if(req.query.sort === "dateTime")
-  {
-     sortObj = {
-      createdOn : -1
-    }
-  };
+  if (req.query.sort === "title") {
+    sortObj = {
+      postName: -1,
+    };
+  }
+  if (req.query.sort === "dateTime") {
+    sortObj = {
+      createdOn: -1,
+    };
+  }
   if (req.query.filter == "mine") {
     obj.userId = new ObjectId(req.user._id);
   } else if (req.query.filter == "others") {
     obj.userId = {
       $ne: new ObjectId(req.user._id),
     };
-  } if (req.query.search) { 
+  }
+  if (req.query.search) {
     obj = {
       $or: [
-        { 
-          postName: 
-          { 
-            $regex: req.query.search, $options: "i" 
-          }
-           }, 
-           { description: 
-            { $regex:
-              req.query.search, $options: "i" 
-            }   
+        {
+          postName: {
+            $regex: req.query.search,
+            $options: "i",
           },
+        },
+        { description: { $regex: req.query.search, $options: "i" } },
       ],
     };
   }
@@ -196,10 +227,10 @@ router.get("/filter", async function (req, res, next) {
       $match: obj,
     },
     {
-      $skip : skip
+      $skip: skip,
     },
     {
-      $limit : limit
+      $limit: limit,
     },
     {
       $lookup: {
@@ -207,15 +238,7 @@ router.get("/filter", async function (req, res, next) {
         localField: "_id",
         foreignField: "postId",
         let: { savedBy: new ObjectId(req.user._id) },
-        pipeline: [
-          { $match: 
-            { $expr:
-              { $eq: 
-                ["$savedBy", "$$savedBy"]
-               } 
-              } 
-            }
-          ],
+        pipeline: [{ $match: { $expr: { $eq: ["$savedBy", "$$savedBy"] } } }],
         as: "savedposts",
       },
     },
@@ -229,9 +252,9 @@ router.get("/filter", async function (req, res, next) {
     },
     {
       $unwind: "$data",
-    },  
+    },
     {
-      $project: { 
+      $project: {
         postName: 1,
         description: 1,
         postImg: 1,
@@ -242,9 +265,9 @@ router.get("/filter", async function (req, res, next) {
       },
     },
     {
-      $sort:sortObj
+      $sort: sortObj,
     },
-  ]); 
+  ]);
   const totalCount = await postModel.aggregate([
     {
       $match: obj,
@@ -255,15 +278,7 @@ router.get("/filter", async function (req, res, next) {
         localField: "_id",
         foreignField: "postId",
         let: { savedBy: new ObjectId(req.user._id) },
-        pipeline: [
-          { $match: 
-            { $expr:
-              { $eq: 
-                ["$savedBy", "$$savedBy"]
-               } 
-              } 
-            }
-          ],
+        pipeline: [{ $match: { $expr: { $eq: ["$savedBy", "$$savedBy"] } } }],
         as: "savedposts",
       },
     },
@@ -277,12 +292,12 @@ router.get("/filter", async function (req, res, next) {
     },
     {
       $unwind: "$data",
-    },  
+    },
     {
-      $project: { 
+      $project: {
         postName: 1,
         description: 1,
-        postImg: 1, 
+        postImg: 1,
         userId: 1,
         createdOn: 1,
         data: 1,
@@ -290,18 +305,21 @@ router.get("/filter", async function (req, res, next) {
       },
     },
     {
-      $sort:sortObj
+      $sort: sortObj,
     },
-  ]);  
+  ]);
 
   let totalPost = totalCount.length;
-  let pageCount = (Math.round(totalPost / limit))
-  let pageArray = []; 
-  for(let i=1; i <= pageCount; i++)
-{
-  pageArray.push(i)
-}
-  return res.render("./timeline", { data: data, layout: "blank", pageArrays : pageArray });
+  let pageCount = Math.round(totalPost / limit);
+  let pageArray = [];
+  for (let i = 1; i <= pageCount; i++) {
+    pageArray.push(i);
+  }
+  return res.render("./timeline", {
+    data: data,
+    layout: "blank",
+    pageArrays: pageArray,
+  });
 });
 
 router.post("/login", async function (req, res, next) {
@@ -356,8 +374,7 @@ router.get("/email-validate", async function (req, res, next) {
     const check = await UserModel.countDocuments({ email: req.query.email });
     const emailCheck = check ? false : true;
     res.send(emailCheck);
-  } catch (error) {
-  }
+  } catch (error) {}
 });
 
 router.get("/logout", async function (req, res, next) {
@@ -394,32 +411,21 @@ router.get("/dashboardSave", function (req, res, next) {
 });
 
 router.get("/report", async function (req, res, next) {
-
   try {
-    const statistics = await statisticsModel.aggregate([{
-      $project :{
-      totaluploadedPosts : 1,
-      totalsavedPosts : 1,
-      createdOn : 1,
-      _id : 0}  
-    }])
-    // console.log(data[0]);
-    let array = []
-    let dataArray = []
-    let savedArray = []
-    for(let value of statistics)
-    {
-       savedArray.push(value.totalsavedPosts)
-       dataArray.push(moment(value.createdOn).format('YYYY_MM_DD_hh_mm'))
-      // dataArray.push(value.createdOn)
-       array.push(value.totaluploadedPosts)
-
+    const statistics = await statisticsModel.find({});
+    let array = [];
+    let dataArray = [];
+    let savedArray = [];
+    for (let value of statistics) {
+      savedArray.push(value.totalsavedPosts);
+      dataArray.push(moment(value.createdOn).format("YYYY_MM_DD_hh_mm"));
+      array.push(value.totaluploadedPosts);
     }
     res.render("./partials/report", {
       layout: "blank",
-      data:array,
-      dates : dataArray,
-      saved: savedArray
+      data: array,
+      dates: dataArray,
+      saved: savedArray,
     });
   } catch (error) {
     console.log(error);
@@ -427,4 +433,3 @@ router.get("/report", async function (req, res, next) {
 });
 
 module.exports = router;
-    

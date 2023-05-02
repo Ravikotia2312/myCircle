@@ -1,8 +1,13 @@
           
+         <h2>Posts</h2>
+        <h2>{{total}} Posts</h2>
 {{#if data}}
           
           {{#each data}}
-
+          
+          {{#each postSaved}}
+         {{log name}}
+         {{/each}}
 <div class="postBody col-sm-6 col-lg-4 ">
   <div class="card card-sm card-link-pop" >
     <a href="#" class="d-block"><img
@@ -25,8 +30,12 @@
           <b>Description</b>
           <div>{{description}}</div><br>  
           {{!-- <b>posted On</b> --}}
+     
+           {{#each postSaved}}
+          <span class="count"> Saved by {{name}} {{lastname}} and {{../count}}</span>
+          {{/each}}
+        
           <div>{{Date createdOn "MMMM Do YYYY"}}</div>
-
         </div>
         <div class="ms-auto text-light">
 
