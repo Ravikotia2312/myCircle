@@ -8,6 +8,8 @@ const passport = require("passport");
 const savedPosts = require("../models/savedPosts");
 const statisticsModel = require("../models/statistics");
 const moment = require("moment");
+var nodemailer = require('nodemailer');
+
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -346,6 +348,29 @@ router.post("/register-post", async function (req, res, next) {
   try {
     const { firstName, lastName, email, gender, password, confirmPassword } =
       req.body;
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'mycircle10001@gmail.com',
+    pass: 'rhpsngylpltgqwxc'
+  }
+});
+
+var mailOptions = {
+  from: 'mycircle10001@gmail.com',
+  to: email,
+  subject: 'Welcome!!!',
+  text: 'Welcome to Mycircle'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
     if (password == confirmPassword) {
       await UserModel.create({
         firstName: firstName,
