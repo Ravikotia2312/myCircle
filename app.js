@@ -53,7 +53,7 @@ const hbs = expHbs.create({
       return new Handlebars.SafeString(str);
     },
     checkMath: function (val1, comparision, val2) {
-        console.log(val1, val2);
+
       switch (comparision) {
         case "==":
           return val1 == val2 ? true : false;

@@ -6,6 +6,8 @@ const savedPostsModel = require("../models/savedPosts");
 const multer = require("multer");
 const path = require("path");
 const savedPosts = require("../models/savedPosts");
+const commenstsModel = require("../models/comments");
+
 const { log, Console } = require("console");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -19,16 +21,16 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + "-" + req.user._id + path.extname(file.originalname));
     //Appending extension
   },
-  onFileUploadStart: function(file, req, res){
-    if(req.files.file.length > maxSize) {
+  onFileUploadStart: function (file, req, res) {
+    if (req.files.file.length > maxSize) {
       return false;
     }
   },
 });
-const upload = multer(
-  { storage: storage,
-    // limits: { fileSize: maxSize } 
-  });
+const upload = multer({
+  storage: storage,
+  // limits: { fileSize: maxSize }
+});
 /* GET users listing.*/
 
 router.post("/create", upload.single("image"), async function (req, res, next) {
@@ -37,7 +39,6 @@ router.post("/create", upload.single("image"), async function (req, res, next) {
   req.file.filename = req.file.filename.trim();
   req.user._id = req.user._id.trim();
   try {
-    
     const create = await postModel.create({
       postName: req.body.name,
       description: req.body.description,
@@ -203,5 +204,67 @@ router.delete("/:postsDelete", async function (req, res, next) {
     });
   }
 });
+
+//posts/123/saved-by
+router.get("/:postId/saved-by", async function (req, res, next) {
+  try {
+    console.log(req.params.postId);
+
+    const data = await savedPostsModel.aggregate([
+      {
+        $match: { postId: new ObjectId(req.params.postId) },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "savedBy",
+          foreignField: "_id",
+
+          as: "userdata",
+        },
+      },
+      {
+        $unwind: "$userdata",
+      },
+      {
+        $project: {
+          userdata: 1,
+        },
+      },
+    ]);
+
+    res.render("partials/info", { userdata: data, layout: "blank" });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+router.get("/:postId/image-zoom-out", async function (req, res, next) {
+  try {
+    
+    console.log(req.params.postId, "req.params.postId");
+    const imageSearch = await postModel.findOne({_id : new ObjectId(req.params.postId)})
+    const path = imageSearch.postImg
+   res.render("partials/imagePop", { path: path, layout: "blank" });
+    // res.send({type : "success"})
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/:postId/create-comment", async function (req, res, next) {
+  try {
+    
+    console.log(req.params.postId);
+    res.send({type : "success"})
+    res.render("partials/imagePop", { path: path, layout: "blank" });
+   
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 
 module.exports = router;

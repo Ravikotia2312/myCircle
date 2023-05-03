@@ -47,7 +47,7 @@ $(document).ready(function () {
         success: function (res) {
           console.log(res);
           flashMe(res);
-          $('#edit-post-modal').modal('hide');
+          $("#edit-post-modal").modal("hide");
         },
         error: function (error) {
           console.log(error);
@@ -213,7 +213,6 @@ $(document).on("click", "#report", function () {
     type: "GET",
     success: function (res) {
       $("#main-row-div").html(res);
-
     },
     error: function (error) {
       console.log(error);
@@ -270,24 +269,57 @@ $(document).on("click", "#userSearch", function () {
     },
     error: function (error) {
       console.log(error);
-    },
+    },  
   });
 });
 
-$(document).on("hover", ".count", function () {
+$(document).on("click", ".count", function () {
 
-  console.log("hovered");
-  // $("#details").()
-  // const userSearch = $("#usersearchValue").val();
 
-  // $.ajax({
-  //   url: `/users/userslist?search=${userSearch}`,
-  //   type: "GET",
-  //   success: function (res) {
-  //     $("#main-row-div").html(res);
-  //   },
-  //   error: function (error) {
-  //     console.log(error);
-  //   },
-  // });
+  $.ajax({
+    url: `posts/${$(this).data("id")}/saved-by`,
+    type: "GET",
+    success: function (res) {
+
+      $("div #modal-scrollable").replaceWith(res);
+      $("#modal-scrollable").modal("show");
+   
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  }); 
+});
+
+$(document).on("dblclick", ".imagePop", function () {
+  $.ajax({
+    url: `posts/${$(this).data("id")}/image-zoom-out`,
+    type: "GET",
+    success: function (res) {
+      $("div #modal-team").replaceWith(res);
+      $("#modal-team").modal("show");
+   
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  }); 
+});
+
+$(document).on("click", ".comment", function () {
+  console.log("comment");
+  console.log($(this).data("id"));
+  $.ajax({
+    url: `posts/${$(this).data("id")}/create-comment`,
+    type: "post",
+    success: function (res) {
+      console.log(res);
+      // $("div #modal-team").replaceWith(res);
+      // $("#modal-team").modal("show");
+   
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  }); 
 });

@@ -4,17 +4,16 @@
 {{#if data}}
           
           {{#each data}}
+
           
-          {{#each postSaved}}
-         {{log name}}
-         {{/each}}
 <div class="postBody col-sm-6 col-lg-4 ">
   <div class="card card-sm card-link-pop" >
-    <a href="#" class="d-block"><img
+    <a href="javascript:void(0)" class="d-block"><img
         src="/images/{{postImg}}"
         style="height: 300px;"
-        class="card-img-top"
-      /></a>
+        class="imagePop card-img-top"
+        data-id="{{_id}}"
+      /></a> 
     <div class="card-body bg-dark text-light">
       <div class="d-flex align-items-center">
 
@@ -31,9 +30,7 @@
           <div>{{description}}</div><br>  
           {{!-- <b>posted On</b> --}}
      
-           {{#each postSaved}}
-          <span class="count"> Saved by {{name}} {{lastname}} and {{../count}}</span>
-          {{/each}}
+          <span class="count" data-id="{{_id}}"> Saved by {{count}}</span>
         
           <div>{{Date createdOn "MMMM Do YYYY"}}</div>
         </div>
@@ -107,7 +104,27 @@
             </svg>
             Archieve 
           </a>
+          
           {{/if}}
+    
+          <a href="javascript:void(0)" class="comment text-light" id="comment" 
+          data-id="{{_id}}"> 
+                          
+            <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle-2-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M5.821 4.91c3.898 -2.765 9.469 -2.539 13.073 .536c3.667 3.127 4.168 8.238 1.152 11.897c-2.842 3.447 -7.965 4.583 -12.231 2.805l-.232 -.101l-4.375 .931l-.075 .013l-.11 .009l-.113 -.004l-.044 -.005l-.11 -.02l-.105 -.034l-.1 -.044l-.076 -.042l-.108 -.077l-.081 -.074l-.073 -.083l-.053 -.075l-.065 -.115l-.042 -.106l-.031 -.113l-.013 -.075l-.009 -.11l.004 -.113l.005 -.044l.02 -.11l.022 -.072l1.15 -3.451l-.022 -.036c-2.21 -3.747 -1.209 -8.392 2.411 -11.118l.23 -.168z" stroke-width="0" fill="currentColor"></path>
+</svg>
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M14.647 4.081a.724 .724 0 0 0 1.08 .448c2.439 -1.485 5.23 1.305 3.745 3.744a.724 .724 0 0 0 .447 1.08c2.775 .673 2.775 4.62 0 5.294a.724 .724 0 0 0 -.448 1.08c1.485 2.439 -1.305 5.23 -3.744 3.745a.724 .724 0 0 0 -1.08 .447c-.673 2.775 -4.62 2.775 -5.294 0a.724 .724 0 0 0 -1.08 -.448c-2.439 1.485 -5.23 -1.305 -3.745 -3.744a.724 .724 0 0 0 -.447 -1.08c-2.775 -.673 -2.775 -4.62 0 -5.294a.724 .724 0 0 0 .448 -1.08c-1.485 -2.439 1.305 -5.23 3.744 -3.745a.722 .722 0 0 0 1.08 -.447c.673 -2.775 4.62 -2.775 5.294 0zm-2.647 4.919a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"
+                stroke-width="0"
+                fill="currentColor"
+              ></path>
+            </svg>
+            Comment
+          </a>
+          
         </div>
       </div>
     </div>
@@ -125,3 +142,4 @@
 {{/section }}
 
 
+{{!-- {{> info}} --}}

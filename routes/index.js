@@ -107,6 +107,7 @@ router.get("/timeline", async function (req, res, next) {
           foreignField: "postId",
 
           pipeline: [
+           
             {
               $lookup: {
                 from: "users",
@@ -126,7 +127,6 @@ router.get("/timeline", async function (req, res, next) {
                }
               },
             },
-            
             {
               $unwind: "$name",
             },
@@ -149,6 +149,7 @@ router.get("/timeline", async function (req, res, next) {
       {
         $sort: { createdOn: -1 },
       },
+      
       {
         $project: {
           postName: 1,
@@ -162,7 +163,7 @@ router.get("/timeline", async function (req, res, next) {
           postSaved : 1,
           count: {
             $size: {
-              $ifNull: ["$postSaved", []],
+              $ifNull: ["$postSaved", []],  
             },
           },
         },
@@ -171,7 +172,7 @@ router.get("/timeline", async function (req, res, next) {
 
     const total = await postModel.countDocuments({isDeleted: false})
 
-    console.log(data);
+    
     let totalPost = await postModel.countDocuments({ isDeleted: false });
     let pageCount = Math.round(totalPost / limit) + 1;
     let pageArray = [];
@@ -360,7 +361,7 @@ var transporter = nodemailer.createTransport({
 var mailOptions = {
   from: 'mycircle10001@gmail.com',
   to: email,
-  subject: 'Welcome!!!',
+  subject: `Welcome!!!`,
   text: 'Welcome to Mycircle'
 };
 
