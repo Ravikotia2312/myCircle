@@ -1,0 +1,18 @@
+{{#each commentData}}
+
+  <div class=" ">
+    <div
+      class="avatar avatar-sm"
+      style="background-image: url(/uploads/{{data.userdata.profilePic}})"
+    ></div>
+    <div><h3>{{data.userdata.firstName}}
+        {{data.userdata.lastName}}</h3></div>
+    <span><h4>{{Date
+          data.createdOn
+          "MMMM Do YYYY"
+        }}</h4></span>
+
+  </div><br />
+  <div class="ms-5"><h4>{{data.comment}}</h4></div>
+<hr style="border-width: 5px;">
+{{/each}}

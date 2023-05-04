@@ -56,6 +56,41 @@ $(document).ready(function () {
       return false;
     },
   });
+
+  $("form#comment-form").validate({
+    rules: {
+      comment: {
+        required: true,
+        maxlength:300
+      },
+    },
+    messages: {
+      comment: {
+        required: "comment field cannot be empty",
+        maxlength: 'maxlength 300 allowed'
+      },
+    },
+    submitHandler: function (form) {
+      console.log("++++++++++++++++reached++++++++++++++++");
+        var $form = $(form)
+      // const value = $("#comment-input").val();
+      $.ajax({
+        url: `posts/${$('#PostId-comment').val()}/create-comment`,
+        type: "POST",
+        data: $form.serialize(),
+      
+        success: function (res) {
+          console.log(res);
+          flashMe(res)
+           $("#modal-scrollable-comment").modal('toggle');
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+      return false;
+    },
+  });
 });
 
 //archieving posts
@@ -309,17 +344,21 @@ $(document).on("dblclick", ".imagePop", function () {
 $(document).on("click", ".comment", function () {
   console.log("comment");
   console.log($(this).data("id"));
+  $("#comment-form #PostId-comment").replaceWith(`<input type="hidden" id="PostId-comment" name="PostId-comment" value="${$(this).data("id")}"></input>`)
+  
+
   $.ajax({
-    url: `posts/${$(this).data("id")}/create-comment`,
-    type: "post",
+    url: `posts/comments-data?postId=${$(this).data("id")}`,
+    type: "GET",
     success: function (res) {
       console.log(res);
-      // $("div #modal-team").replaceWith(res);
-      // $("#modal-team").modal("show");
-   
+      // $("div #modal-scrollable-comment").replaceWith(res);
+      $("#comment-list").html(res)
+      $("#modal-scrollable-comment").modal("show");  
     },
     error: function (error) {
       console.log(error);
     },
-  }); 
+  });
 });
+ 

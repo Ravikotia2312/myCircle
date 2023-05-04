@@ -239,14 +239,14 @@ router.get("/:postId/saved-by", async function (req, res, next) {
   }
 });
 
-
 router.get("/:postId/image-zoom-out", async function (req, res, next) {
   try {
-    
     console.log(req.params.postId, "req.params.postId");
-    const imageSearch = await postModel.findOne({_id : new ObjectId(req.params.postId)})
-    const path = imageSearch.postImg
-   res.render("partials/imagePop", { path: path, layout: "blank" });
+    const imageSearch = await postModel.findOne({
+      _id: new ObjectId(req.params.postId),
+    });
+    const path = imageSearch.postImg;
+    res.render("partials/imagePop", { path: path, layout: "blank" });
     // res.send({type : "success"})
   } catch (err) {
     console.log(err);
@@ -255,16 +255,71 @@ router.get("/:postId/image-zoom-out", async function (req, res, next) {
 
 router.post("/:postId/create-comment", async function (req, res, next) {
   try {
-    
     console.log(req.params.postId);
-    res.send({type : "success"})
-    res.render("partials/imagePop", { path: path, layout: "blank" });
-   
+    console.log(req.body.comment);
+    console.log(req.user._id);
+
+    const creatingComment = await commenstsModel.create({
+      commentOn: req.params.postId,
+      commentBy: req.user._id,
+      comment: req.body.comment,
+    });
+
+    console.log(creatingComment);
+
+    res.send({ type: "success" });
   } catch (err) {
     console.log(err);
   }
 });
 
+router.get("/comments-data", async function (req, res, next) {
+  try {
 
+    console.log(req.query,"+++++++++++++++++++++++++++");
+    const commentData = await postModel.aggregate([
+      {
+        $match: { 
+          isDeleted: false,
+          _id : new ObjectId(req.query.postId)
+         },
+      },
+      {
+        $lookup: {
+          from: "comments",
+          localField: "_id",
+          foreignField: "commentOn",
+          pipeline: [
+            {
+              $lookup: {
+                from: "users",
+                localField: "commentBy",
+                foreignField: "_id",
+                as: "userdata",
+              },
+            },
+            {
+                $unwind: { path: "$userdata", preserveNullAndEmptyArrays: true }
+           }
+          ],
+          as: "data",
+        },
+      },
+      {
+        $unwind: "$data",
+      },
+      {
+        $project: {
+          data: 1,
+        },
+      },
+    ]);
 
+    console.log(commentData);
+    
+    res.render("partials/commentsList", { commentData: commentData, layout: "blank" });
+  } catch (err) {
+    console.log(err);
+  }
+});
 module.exports = router;

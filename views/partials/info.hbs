@@ -1,26 +1,42 @@
-   
+  <div
+    class="modal modal-blur fade"
+    id="modal-scrollable"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+      role="document"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Saved By</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
 
-<div class="modal modal-blur fade" id="modal-scrollable" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Saved By</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            
-            {{#if userdata}}
+          {{#if userdata}}
             {{#each userdata}}
-            <h3>{{userdata.firstName}} {{userdata.lastName}}</h3>   
+              <h3>{{userdata.firstName}} {{userdata.lastName}}</h3>
             {{/each}}
-            {{else}}
+          {{else}}
             <h3>No saves yet</h3>
-            {{/if}}  
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-            {{!-- <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button> --}}
-          </div>
+          {{/if}}
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn me-auto"
+            data-bs-dismiss="modal"
+          >Close</button>
+          {{! <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button> }}
         </div>
       </div>
     </div>
+  </div>

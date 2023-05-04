@@ -1,0 +1,64 @@
+{{!-- {{log commentData}} --}}
+
+<div
+  class="modal modal-blur fade"
+  id="modal-scrollable-comment"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+  {{!-- style="width:500px" --}}
+>
+
+  <div
+    
+    class="modal-dialog modal-dialog-centered "
+    role="document"
+  >
+    <form id="comment-form" method="post">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comments</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Comment</label>
+            <input
+              type="text"
+              class="form-control"
+              name="comment"
+              placeholder="Enter Comment"
+              id="comment-input"
+              value=""
+            />
+            <input
+              type="hidden"
+              id="PostId-comment"
+              name="PostId-comment"
+              value=""
+            />
+          </div>
+          <h3>Comments</h3>
+          <div class="modal-body" id="comment-list" style="overflow:scroll; width:500px; height: 300px;">
+
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn me-auto"
+              data-bs-dismiss="modal"
+            >Close</button>
+            <button type="submit" class="btn btn-primary" id="comment-submit">Add Comment</button>
+          </div>
+
+        </form>
+      
+      </div>
+    </div>
+  </div>
+</div>
