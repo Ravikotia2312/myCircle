@@ -30,11 +30,10 @@ $(document).ready(function () {
         enctype: "multipart/form-data",
         success: function (res) {
         toastr.success("Profile successfully edited");
-        console.log(toastr);
         },
         error: function (error) {
           console.log(error);
-        },
+        },  
       });
     },
   });

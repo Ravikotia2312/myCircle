@@ -16,6 +16,7 @@ $(document).on("click", "#savePost", function () {
     },
   });
 });
+
 //bringing data for editing a post from database
 $(document).on("click", "#editpost", function () { //editing posts
   const postId = $(this).data("id");

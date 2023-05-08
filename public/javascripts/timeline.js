@@ -211,7 +211,6 @@ $(document).on("click", ".user-filter", function () {
 $(document).on("click", "#savedPosts", function () {
   console.log("clicked savedPosts");    
 
- 
 
   $.ajax({
     url: `/posts/saved-posts`,
