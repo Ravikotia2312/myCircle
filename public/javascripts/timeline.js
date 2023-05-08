@@ -46,7 +46,8 @@ $(document).ready(function () {
         contentType: false,
         success: function (res) {
           console.log(res);
-          flashMe(res);
+          // flashMe(res);
+          toastr.success("post edited successfully")
           $("#edit-post-modal").modal("hide");
         },
         error: function (error) {
@@ -81,8 +82,8 @@ $(document).ready(function () {
       
         success: function (res) {
           console.log(res);
-          flashMe(res)
-           $("#modal-scrollable-comment").modal('toggle');
+          $("#modal-scrollable-comment").modal('toggle');
+          toastr.success("comment successfully added")
         },
         error: function (error) {
           console.log(error);
@@ -102,7 +103,7 @@ $(document).on("click", "#archievePost", function () {
     type: "DELETE",
     success: function (res) {
       archieve.closest(".postBody").remove();
-      flashMe(res);
+      toastr.error("post Archieved")
     },
     error: function (error) {
       console.log(error);
@@ -208,7 +209,10 @@ $(document).on("click", ".user-filter", function () {
 
 // saved  posts
 $(document).on("click", "#savedPosts", function () {
-  console.log("clicked savedPosts");
+  console.log("clicked savedPosts");    
+
+ 
+
   $.ajax({
     url: `/posts/saved-posts`,
     type: "GET",
@@ -224,6 +228,7 @@ $(document).on("click", "#savedPosts", function () {
 // getting users list
 $(document).on("click", "#users", function () {
   console.log("clicked users");
+
   $.ajax({
     url: `/users/userslist`,
     type: "GET",

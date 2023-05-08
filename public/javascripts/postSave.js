@@ -10,7 +10,8 @@ $(document).on("click", "#savePost", function () {
       postId,
     },
     success: function (res) {
-      flashMe(res);
+      
+      toastr.success("Success")
       console.log(res);
     },
   });

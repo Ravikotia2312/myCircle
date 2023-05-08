@@ -1,4 +1,20 @@
 $(document).ready(function () { //creating posts
+  toastr.options = {
+    'closeButton': true,
+    'debug': false,
+    'newestOnTop': false,
+    'progressBar': false,
+    'positionClass': 'toast-top-right',
+    'preventDuplicates': false,
+    'showDuration': '1000',
+    'hideDuration': '1000',
+    'timeOut': '5000',
+    'extendedTimeOut': '1000',
+    'showEasing': 'swing',
+    'hideEasing': 'linear',
+    'showMethod': 'fadeIn',
+    'hideMethod': 'fadeOut',
+  }
 console.log($("form#createPosts").length);
   $("form#createPosts").validate({
     rules: {
@@ -30,11 +46,9 @@ console.log($("form#createPosts").length);
       },
     },
     submitHandler: function (form) {
-      console.log("aaaaa");
       if(!$(form).valid()){
         return null;
       }
-    console.log("reached");
     const formData = new FormData($(form)[0]);
       $.ajax({
         url: "posts/create",
@@ -44,7 +58,7 @@ console.log($("form#createPosts").length);
         contentType: false,
         success: function (res) {
           console.log(res);
-          flashMe(res)
+          toastr.success('post successfully created');
           $("#create-post-modal").modal('toggle');
         },
         error: function (error) {

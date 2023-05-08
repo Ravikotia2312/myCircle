@@ -99,8 +99,8 @@ router.put(
     try {
       req.body.name = req.body.name.trim();
       req.body.description = req.body.description.trim();
-      req.file.filename = req.file.filename.trim();
       if (req.file) {
+        req.file.filename = req.file.filename.trim();
         const updatingPost = await postModel.updateOne(
           { _id: req.body.custId },
           {

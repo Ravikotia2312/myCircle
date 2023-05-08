@@ -24,12 +24,13 @@ $(document).ready(function () {
       $.ajax({
         url: "users/edit",
         type: "PUT",
-        data: formData,
+        data: formData, 
         processData: false,
         contentType: false,
         enctype: "multipart/form-data",
         success: function (res) {
-          location.href = "/timeline";
+        toastr.success("Profile successfully edited");
+        console.log(toastr);
         },
         error: function (error) {
           console.log(error);

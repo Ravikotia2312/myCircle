@@ -37,16 +37,16 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
       }
     }
 
-    const { firstName, lastName, email } = req.body;
+    const { firstName, lastName} = req.body;
 
     const edit = await UserModel.updateOne(
       {
         _id: req.user._id,
       },
-      { firstName, lastName, email }
+      { firstName, lastName,  }
     );
     req.user.firstName = req.body.firstName;
-    req.user.email = req.body.email;
+
     req.user.lastName = req.body.lastName;
     res.send({
       type: "success",

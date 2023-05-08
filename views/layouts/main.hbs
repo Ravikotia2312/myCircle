@@ -11,7 +11,9 @@
       <link href="./stylesheets/tabler-vendors.min.css?1674944402" rel="stylesheet"/>
       <link href="./stylesheets/demo.min.css?1674944402" rel="stylesheet"/>
       <link href="./stylesheets/createPost.css" rel="stylesheet"/>
-
+      <link href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"/>
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+ 
  <style>
         @import url('https://rsms.me/inter/inter.css');
         :root {
@@ -161,9 +163,9 @@
                                 ></path><path
                                   d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"
                                 ></path></svg>
-                            </a>
-                          </div>
-                        </div>
+                            </a>$.toast({
+    content: "I'm a toaster!"
+  })
                       </div>
                       <div class="list-group-item">
                         <div class="row align-items-center">
@@ -487,7 +489,7 @@
 </div>
               <div class="row g-2">
               <div class="col">
-             <input type="text" class="form-control" placeholder="Search for posts"  id="search">
+             <input type="text" class="form-control text-dark" placeholder="Search for posts"  id="search">
             </div>
             <div class="col-auto">
             <button href="javascript:void(0)" class="btn btn-icon common-filter" aria-label="Button" id="searchButton">
@@ -559,7 +561,7 @@
                       All rights reserved.
                     </li>
                     <li class="list-inline-item">
-                      <a href="./changelog.html" class="link-secondary" rel="noopener">
+                      <a href="./changelog.html" class="link-secondary" rel="noopener"> 
                         v1.0.0-beta17
                       </a>
                     </li>
@@ -570,22 +572,22 @@
           </footer>
         </div>
       {{!-- </div> --}}
+    {{!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script> --}}
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>  
     <script
     src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </script>
-    {{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="./javascripts/postSave.js"></script>
     <script src="./javascripts/posts.js"></script>
-    <script src="./javascripts/tabler.min.js?1674944402" defer></script>  
+    <script src="./javascripts/tabler.min.js?1674944402" defer></script>    
     <script src="./javascripts/tabler.min.js?1674944402" defer></script>  
     <script src="/javascripts/common-functions.js"></script>
-    <script src="./javascripts/timeline.js"></script>
+    <script src="./javascripts/timeline.js"></script> 
     <script src="./javascripts/account.js"  ></script>
     <script src="./javascripts/createPost.js"></script>
-    
     {{{_sections.script}}}
 </body>
 {{> comments}}
