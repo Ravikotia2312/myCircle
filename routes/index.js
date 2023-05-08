@@ -362,7 +362,8 @@ var mailOptions = {
   from: 'mycircle10001@gmail.com',
   to: email,
   subject: `Welcome!!!`,
-  text: 'Welcome to Mycircle'
+  text: 'Welcome to Mycircle',
+  html: `<a href="/localhost">Verify Email.</a>`
 };
 
 transporter.sendMail(mailOptions, function(error, info){

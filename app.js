@@ -15,7 +15,11 @@ const mb5 = require("md5");
 const flash = require("connect-flash");
 const moment = require("moment");
 const CronJob = require("cron").CronJob;
-const fs = require("fs");
+const fs = require("fs");   
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
+// const app = express();
 
 const UserModel = require("./models/users");
 const postModel = require("./models/posts");
@@ -31,6 +35,15 @@ var postsRouter = require("./routes/posts");
 const { log } = require("console");
 
 var app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, { /* options */ });
+console.log("+++++++++++++++++++++++++++++");
+
+io.on("connection", (socket) => {
+  socket.emit("hello", "world");
+});
+
+httpServer.listen(4000);
 
 // view engine setup
 const hbs = expHbs.create({
@@ -81,13 +94,13 @@ app.set("view engine", "hbs");
 
 fs.mkdir(path.join(__dirname, "public/images"), (err) => {
   if (err) {
-    return console.error(err);
+    return console.error("images folder already exists");
   }
   console.log("initialized images Directory  successfully!");
 });
 fs.mkdir(path.join(__dirname, "public/uploads"), (err) => {
   if (err) {
-    return console.error(err);
+    return console.error("uploads folder already exists");
   }
   console.log("initialized uploads Directory  successfully!");
 });
@@ -241,7 +254,7 @@ app.use(async function (req, res, next) {
   next();
 });
 
-app.use("/", indexRouter);
+app.use("/", indexRouter);  
 
 app.use(function (req, res, next) {
   console.log(req.isAuthenticated());
