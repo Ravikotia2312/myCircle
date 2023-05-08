@@ -7,7 +7,6 @@ const options = {
       },
 }
 console.log("savedPosts");
-
 const savedPostsSchema = new mongoose.Schema({
     postId:{
         type: mongoose.Schema.Types.ObjectId,

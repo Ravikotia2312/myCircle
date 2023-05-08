@@ -15,7 +15,6 @@ $(document).ready(function () { //creating posts
     'showMethod': 'fadeIn',
     'hideMethod': 'fadeOut',
   }
-console.log($("form#createPosts").length);
   $("form#createPosts").validate({
     rules: {
       name: {

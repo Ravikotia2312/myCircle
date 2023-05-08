@@ -16,10 +16,7 @@ const flash = require("connect-flash");
 const moment = require("moment");
 const CronJob = require("cron").CronJob;
 const fs = require("fs");   
-const { createServer } = require("http");
-const { Server } = require("socket.io");
 
-// const app = express();
 
 const UserModel = require("./models/users");
 const postModel = require("./models/posts");
@@ -37,13 +34,13 @@ const { log } = require("console");
 var app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
-console.log("+++++++++++++++++++++++++++++");
+
 
 io.on("connection", (socket) => {
   socket.emit("hello", "world");
 });
 
-httpServer.listen(4000);
+httpServer.listen();
 
 // view engine setup
 const hbs = expHbs.create({
@@ -274,13 +271,10 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
+  // set locals, only providing error in developmentserver
 });
 
-module.exports = app;
+module.exports = {
+  app,
+  newServer
+};

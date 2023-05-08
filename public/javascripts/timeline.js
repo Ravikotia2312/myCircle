@@ -1,6 +1,5 @@
 $(document).ready(function () {
   //editing posts
-  console.log($("form#editPosts").length);
   $("form#editPosts").validate({
     rules: {
       name: {
@@ -312,6 +311,7 @@ $(document).on("click", "#userSearch", function () {
   });
 });
 
+//saves count
 $(document).on("click", ".count", function () {
 
 
@@ -329,7 +329,7 @@ $(document).on("click", ".count", function () {
     },
   }); 
 });
-
+//image popup
 $(document).on("dblclick", ".imagePop", function () {
   $.ajax({
     url: `posts/${$(this).data("id")}/image-zoom-out`,
@@ -344,7 +344,7 @@ $(document).on("dblclick", ".imagePop", function () {
     },
   }); 
 });
-
+//adding comments
 $(document).on("click", ".comment", function () {
   console.log("comment");
   console.log($(this).data("id"));
@@ -365,9 +365,8 @@ $(document).on("click", ".comment", function () {
     },
   });
 });
- 
-
-const socket = io("http://localhost:4000");
+// "http://localhost:4000"
+const socket = io();
 socket.on("connect", () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
 });
