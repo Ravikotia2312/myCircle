@@ -311,7 +311,7 @@ $(document).on("click", "#userSearch", function () {
   });
 });
 
-//saves count
+//saves count 
 $(document).on("click", ".count", function () {
 
 
@@ -329,6 +329,7 @@ $(document).on("click", ".count", function () {
     },
   }); 
 });
+
 //image popup
 $(document).on("dblclick", ".imagePop", function () {
   $.ajax({
@@ -366,12 +367,13 @@ $(document).on("click", ".comment", function () {
   });
 });
 
-// "http://localhost:4000"
-const socket = io();
-socket.on("connect", () => {
-  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+const socket = io("http://localhost:3000",{
+  query:{
+    "userId": $("#socket-userId").val() 
+  }
 });
 
-socket.on("hello", (arg) => {
-  console.log(arg); // world
-});
+// socket.on("Ravi", (arg) => {
+//   console.log(socket.id);
+//   console.log(arg); // world
+// });

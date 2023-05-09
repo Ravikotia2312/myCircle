@@ -1,7 +1,12 @@
 //saving posts
 $(document).on("click", "#savePost", function () {
+  console.log($(this).data("id"), $("#socket-userId").val());
   const createdBy = $(this).data("id");
   const postId = $(this).data("post");
+
+  
+  // socket.emit("test",createdBy);
+
   $.ajax({
     url: "/posts/savedPosts",
     type: "POST",

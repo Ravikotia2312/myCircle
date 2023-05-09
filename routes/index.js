@@ -179,7 +179,7 @@ router.get("/timeline", async function (req, res, next) {
     for (let i = 1; i <= pageCount; i++) {
       pageArray.push(i);
     }
-    return res.render("timeline", { data: data, pageArray: pageArray, total: total });
+    return res.render("timeline", { data: data, pageArray: pageArray, total: total, local:res.locals._id });
   }
 
   return res.redirect("/dashboard");

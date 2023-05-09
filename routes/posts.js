@@ -73,7 +73,14 @@ router.post("/savedPosts", async function (req, res, next) {
       const deletingExisting = await savedPostsModel.deleteOne({
         postId: new ObjectId(req.body.postId),
         savedBy: req.user._id,
-      });
+      },
+      {
+        
+      }
+      
+      
+      
+      );
     } else {
       const savingPosts = await savedPostsModel.create({
         postId: req.body.postId,
@@ -81,8 +88,11 @@ router.post("/savedPosts", async function (req, res, next) {
         savedBy: req.user._id,
       });
     }
+
+    
     res.send({
       type: "success",
+      
     });
   } catch (error) {
     console.log(error);
