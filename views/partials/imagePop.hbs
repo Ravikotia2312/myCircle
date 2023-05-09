@@ -6,10 +6,14 @@
           </div>
           <div class="modal-body">
             <div class="card card-sm card-link-pop" >
-            <a href="javascript:void(0)" class="d-block"><img
+              {{#if path}}
+            <a href="javascript:void(0)" class="d-block">
+            <img
             src="/images/{{path}}"
             style="height: 600px;"
       /></a>
+              {{/if }}
+
           </div>
           <div class="modal-footer">
           </div>

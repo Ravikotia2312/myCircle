@@ -15,8 +15,9 @@ const mb5 = require("md5");
 const flash = require("connect-flash");
 const moment = require("moment");
 const CronJob = require("cron").CronJob;
-const fs = require("fs");   
+const fs = require("fs");
 
+  
 
 const UserModel = require("./models/users");
 const postModel = require("./models/posts");
@@ -31,16 +32,8 @@ var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
 const { log } = require("console");
 
+
 var app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, { /* options */ });
-
-
-io.on("connection", (socket) => {
-  socket.emit("hello", "world");
-});
-
-httpServer.listen();
 
 // view engine setup
 const hbs = expHbs.create({
@@ -274,7 +267,5 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in developmentserver
 });
 
-module.exports = {
-  app,
-  newServer
-};
+module.exports = app;
+

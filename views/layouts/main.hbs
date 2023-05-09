@@ -13,7 +13,6 @@
       <link href="./stylesheets/createPost.css" rel="stylesheet"/>
       <link href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"/>
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-      <script src="/socket.io/socket.io.js"></script>
  
  <style>
         @import url('https://rsms.me/inter/inter.css');
@@ -66,7 +65,8 @@
                     viewBox="0 0 24 24"
                     stroke-width="2"
                     stroke="currentColor"
-                    fill="none"<script src="/socket.io/socket.io.js"></script>
+                    fill="none"
+                    
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
@@ -142,7 +142,8 @@
                               justify-content:between ⇒
                               justify-content:space-between (#29734)
                             </div>
-                          </div><script src="/socket.io/socket.io.js"></script>
+                          </div>
+                          {{!-- <script src="/socket.io/socket.io.js"></script> --}}
                           <div class="col-auto">
                             <a href="#" class="list-group-item-actions show">
                               <!-- Download SVG icon from http://tabler-icons.io/i/star -->
@@ -590,8 +591,12 @@
     <script src="./javascripts/timeline.js"></script> 
     <script src="./javascripts/account.js"  ></script>
     <script src="./javascripts/createPost.js"></script>
+    {{!-- <script src="/socket.io/socket.io.js"></script> --}}
+
     {{{_sections.script}}}
 </body>
+
+</html> 
 {{> comments}}
 {{> createPost}}
     {{> editPost}}
@@ -599,4 +604,3 @@
     {{> saveSuccess}} 
     {{> info}} 
     {{> imagePop}} 
-</html> 

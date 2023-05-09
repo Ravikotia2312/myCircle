@@ -365,6 +365,7 @@ $(document).on("click", ".comment", function () {
     },
   });
 });
+
 // "http://localhost:4000"
 const socket = io();
 socket.on("connect", () => {
