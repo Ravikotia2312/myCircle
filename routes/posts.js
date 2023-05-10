@@ -65,6 +65,7 @@ router.get("/posts", async function (req, res, next) {
 
 router.post("/savedPosts", async function (req, res, next) {
   try {
+    console.log(req.body.createdBy);
     const existsCheck = await savedPostsModel.exists({
       postId: new ObjectId(req.body.postId),
       savedBy: req.user._id,
@@ -73,27 +74,35 @@ router.post("/savedPosts", async function (req, res, next) {
       const deletingExisting = await savedPostsModel.deleteOne({
         postId: new ObjectId(req.body.postId),
         savedBy: req.user._id,
-      },
-      {
-        
-      }
-      
-      
-      
-      );
+      },);
+
+      const  savedPostCount = await savedPosts.countDocuments({postId: new ObjectId(req.body.postId)})
+      console.log(savedPostCount);
+
+      res.send({
+        type: "success",
+        data : savedPostCount
+      });
+
     } else {
       const savingPosts = await savedPostsModel.create({
         postId: req.body.postId,
         createdBy: req.body.createdBy,
         savedBy: req.user._id,
       });
+
+      io.to(req.body.createdBy).emit("postSave", req.user.firstName)
+      const  savedPostCount = await savedPosts.countDocuments({postId: new ObjectId(req.body.postId)})
+      console.log(savedPostCount);
+
+     return res.send({
+        type: "successSave",
+        data : savedPostCount
+      });
     }
 
     
-    res.send({
-      type: "success",
-      
-    });
+   
   } catch (error) {
     console.log(error);
     res.send({

@@ -377,3 +377,10 @@ const socket = io("http://localhost:3000",{
 //   console.log(socket.id);
 //   console.log(arg); // world
 // });
+
+
+  socket.on("postSave", (arg) => {
+   console.log(socket.id);
+   console.log(arg);
+   toastr.success(arg + ' '+ "saved your post")
+ });

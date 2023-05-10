@@ -8,7 +8,7 @@ module.exports = function (server) {
           // server-side
 
             socket.on("test", (arg) => {
-                   io.to(arg).emit(arg, "Kotia")
+                  
                    console.log(io.to(arg).emit(arg, "Kotia"),"+++++++++++++++++++++++++++++++++++++++++====");
                 console.log(arg, "arg"); // world
             });
