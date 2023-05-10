@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const UserModel = require("../models/users");
 const postModel = require("../models/posts");
+const notificationsModel = require("../models/notifications")
 const savedPostsModel = require("../models/savedPosts");
 const multer = require("multer");
 const path = require("path");
@@ -91,13 +92,25 @@ router.post("/savedPosts", async function (req, res, next) {
         savedBy: req.user._id,
       });
 
-      io.to(req.body.createdBy).emit("postSave", req.user.firstName)
       const  savedPostCount = await savedPosts.countDocuments({postId: new ObjectId(req.body.postId)})
       console.log(savedPostCount);
 
+      const notifications = await notificationsModel.create({
+        postId: req.body.postId,
+        createdBy: req.body.createdBy,
+        savedBy: req.user._id,
+        savedByName : `${req.user.firstName} ${req.user.lastName}`,
+
+      });
+      const notificationsCount = await notificationsModel.countDocuments({isDeleted: false,isSeen: false, createdBy:req.user._id})
+      console.log(notificationsCount, "notificationsCount");
+
+      io.to(req.body.createdBy).emit("postSave", req.user.firstName)
+
      return res.send({
         type: "successSave",
-        data : savedPostCount
+        data : savedPostCount,
+        notificationsCount : notificationsCount
       });
     }
 

@@ -7,6 +7,7 @@ const md5 = require("md5");
 const passport = require("passport");
 const savedPosts = require("../models/savedPosts");
 const statisticsModel = require("../models/statistics");
+const notificationsModel = require("../models/notifications")
 const moment = require("moment");
 var nodemailer = require('nodemailer');
 
@@ -171,6 +172,7 @@ router.get("/timeline", async function (req, res, next) {
     ]);
 
     const total = await postModel.countDocuments({isDeleted: false})
+    const notificationsCount = await notificationsModel.countDocuments({isDeleted: false,isSeen: false, createdBy:req.user._id})
 
     
     let totalPost = await postModel.countDocuments({ isDeleted: false });
@@ -179,7 +181,7 @@ router.get("/timeline", async function (req, res, next) {
     for (let i = 1; i <= pageCount; i++) {
       pageArray.push(i);
     }
-    return res.render("timeline", { data: data, pageArray: pageArray, total: total, local:res.locals._id });
+    return res.render("timeline", { data: data, pageArray: pageArray, total: total, local:res.locals._id, notificationsCount : notificationsCount });
   }
 
   return res.redirect("/dashboard");
