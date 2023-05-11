@@ -408,7 +408,7 @@ $(document).on("click", ".notification-item",function () {
   const id = $(this).data("id");
   $(this).remove()
   $.ajax({
-    url: `posts/${$(this).data("id")}/notification-panel-update`,
+    url: `posts/${id}/notification-panel-update`,
     type: "POST",
     success: function (res) {
       console.log(res);
