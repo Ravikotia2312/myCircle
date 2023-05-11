@@ -66,6 +66,7 @@ router.get("/posts", async function (req, res, next) {
 
 router.post("/savedPosts", async function (req, res, next) {
   try {
+   
     console.log(req.body.createdBy);
     const existsCheck = await savedPostsModel.exists({
       postId: new ObjectId(req.body.postId),
@@ -111,11 +112,21 @@ router.post("/savedPosts", async function (req, res, next) {
         isSeen: false,
         createdBy: new ObjectId(req.body.createdBy),
       });
-     
 
+      const notificationBy = await notificationsModel.findOne({
+        isDeleted: false,
+        isSeen: false,
+        savedBy: new ObjectId(req.user._id),
+      },{
+        savedByName : 1
+      });
+     
+      console.log(notificationBy, "notificationBy");
       io.to(req.body.createdBy).emit("postSave", {
         name: req.user.firstName,
         notificationsCount: notificationsCount,
+        notificationBy : notificationBy
+
       }); //emitting post save event from here
 
       return res.send({
@@ -365,4 +376,30 @@ router.get("/comments-data", async function (req, res, next) {
     console.log(err);
   }
 });
+
+router.post("/:notificationId/notification-panel-update", async function (req, res, next) {
+
+try {
+  console.log(req.params);
+  const updatingNotificationPanel = await notificationsModel.updateOne({_id: new ObjectId(req.params.notificationId),isSeen:false, isDeleted:false},{isSeen:true})
+  console.log(updatingNotificationPanel);
+
+  const notificationsDecreasingCount = await notificationsModel.countDocuments({ createdBy: new ObjectId(req.user._id), isSeen:false, isDeleted:false})
+
+ 
+  io.to(req.user._id).emit("notificationSeen", notificationsDecreasingCount); 
+  console.log(io.to(req.user._id).emit("notificationSeen", notificationsDecreasingCount));
+
+  return res.send({type : "success"})
+} catch (error) {
+  console.log(error);
+  
+}
+
+
+
+
+})
+
+
 module.exports = router;

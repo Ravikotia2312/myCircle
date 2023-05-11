@@ -339,6 +339,7 @@ $(document).on("dblclick", ".imagePop", function () {
     },
   });
 });
+
 //adding comments
 $(document).on("click", ".comment", function () {
   console.log("comment");
@@ -368,7 +369,7 @@ const socket = io("http://localhost:3000", {
   query: {
     userId: $("#socket-userId").val(),
   },
-});
+}); 
 
 socket.on("postSave", (arg) => {
   console.log(socket.id);
@@ -379,9 +380,50 @@ socket.on("postSave", (arg) => {
     `<span class="badge bg-red" id="notifications-badge">${arg.notificationsCount}</span>`
   );
 
-  $("#notification-description").replaceWith(
-    `<div class="d-block text-muted text-truncate mt-n1" id="notification-description">
-   Your Post Was liked by ${arg.name}
-  </div>`
-  );
+  if(arg.notificationsCount <= 5)
+  {
+    $("#notifications-list").append(
+      `<div class="notification-item list-group-item" style="width: 500px;" data-id="${arg.notificationBy._id}">
+      <div class="row align-items-center">
+        <div class="col-auto"><span class="status-dot status-dot-animated bg-red d-block"></span></div>
+        <div class="col text-truncate">
+          <a href="javascript:void(0)" class="text-body d-block" id="notified-by" style="text-decoration: none;"><h4>@${arg.notificationBy.savedByName}</h4></a>
+          <div class="d-block text-mute d text-truncate mt-n1" id="notification-description">
+            Your Post Was Saved by <b>${arg.name}</b> Just Now
+          </div>
+        </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" class="list-group-item-actions">
+            <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>`
+    );
+  }
 });
+
+$(document).on("click", ".notification-item",function () {
+  const id = $(this).data("id");
+  $(this).remove()
+  $.ajax({
+    url: `posts/${$(this).data("id")}/notification-panel-update`,
+    type: "POST",
+    success: function (res) {
+      console.log(res);
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+})
+
+socket.on("notificationSeen", (arg) =>{
+  console.log(arg);
+  console.log(socket.id);
+
+  $("#notifications-badge").replaceWith(
+    `<span class="badge bg-red" id="notifications-badge">${arg}</span>`
+  );
+})

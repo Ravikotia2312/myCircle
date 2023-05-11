@@ -266,16 +266,16 @@
                     <div class="card-header">
                       <h3 class="card-title">Last updates</h3>
                     </div>
-                    <div class="list-group list-group-flush list-group-hoverable">
-
-                      {{#each notificationsName}}
-                      <div class="list-group-item">
+                    <div class="list-group list-group-flush list-group-hoverable" id="notifications-list">
+                      
+                      {{#each notificationDetails}}
+                      <div class="notification-item list-group-item" style="width: 500px;" data-id={{_id}}>
                         <div class="row align-items-center">
-                          <div class="col-auto"><span class="status-dot status-dot-animated bg-red d-block"></span></div>
+                          <div class="col-auto"><span class="status-dot status-dot-animated bg-success d-block"></span></div>
                           <div class="col text-truncate">
-                            <a href="#" class="text-body d-block">@{{savedByName}}</a>
-                            <div class="d-block text-muted text-truncate mt-n1" id="notification-description">
-                              Your Post Was liked by{{}}
+                            <a href="javascript:void(0)" class="text-body d-block" id="notified-by" style="text-decoration: none;"><h4>@{{savedByName}}</h4></a>
+                            <div class="d-block text-mute d text-truncate mt-n1" id="notification-description">
+                              Your Post Was Saved by <b>{{notificationDetailUser.firstName}}</b> {{Date createdOn "MMMM Do YYYY"}} 
                             </div>
                           </div>
                           <div class="col-auto">

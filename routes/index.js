@@ -10,6 +10,7 @@ const statisticsModel = require("../models/statistics");
 const notificationsModel = require("../models/notifications");
 const moment = require("moment");
 var nodemailer = require("nodemailer");
+const users = require("../models/users");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -175,14 +176,34 @@ router.get("/timeline", async function (req, res, next) {
       createdBy: req.user._id,
     });
 
-    const notificationsName = await notificationsModel.find({
-      isDeleted: false,
-      isSeen: false,
-      createdBy: req.user._id,
-    },{
-      savedByName : 1
-    }).lean();
 
+    const notificationDetails = await notificationsModel.aggregate([
+      {
+          $match : {createdBy : new ObjectId(req.user._id),isSeen:false,isDeleted: false}
+      },
+      {
+          $limit : 5
+      },
+      {
+        $lookup: {
+          from: "users",
+          foreignField: "_id",
+          localField: "savedBy",
+          as: "notificationDetailUser",
+        },
+      },
+      {
+        $unwind: "$notificationDetailUser",
+      },
+      {
+        $project: {
+          savedByName: 1,
+          "notificationDetailUser.firstName": 1,
+        },
+      },
+    ]);
+
+    console.log(notificationDetails, "notificationDetails");
 
     let totalPost = await postModel.countDocuments({ isDeleted: false });
     let pageCount = Math.round(totalPost / limit) + 1;
@@ -197,7 +218,7 @@ router.get("/timeline", async function (req, res, next) {
       total: total,
       local: res.locals._id,
       notificationsCount: notificationsCount,
-      notificationsName : notificationsName,
+      notificationDetails: notificationDetails,
     });
   }
 
