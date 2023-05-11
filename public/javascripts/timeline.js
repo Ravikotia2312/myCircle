@@ -46,7 +46,7 @@ $(document).ready(function () {
         success: function (res) {
           console.log(res);
           // flashMe(res);
-          toastr.success("post edited successfully")
+          toastr.success("post edited successfully");
           $("#edit-post-modal").modal("hide");
         },
         error: function (error) {
@@ -61,28 +61,28 @@ $(document).ready(function () {
     rules: {
       comment: {
         required: true,
-        maxlength:300
+        maxlength: 300,
       },
     },
     messages: {
       comment: {
         required: "comment field cannot be empty",
-        maxlength: 'maxlength 300 allowed'
+        maxlength: "maxlength 300 allowed",
       },
     },
     submitHandler: function (form) {
       console.log("++++++++++++++++reached++++++++++++++++");
-        var $form = $(form)
+      var $form = $(form);
       // const value = $("#comment-input").val();
       $.ajax({
-        url: `posts/${$('#PostId-comment').val()}/create-comment`,
+        url: `posts/${$("#PostId-comment").val()}/create-comment`,
         type: "POST",
         data: $form.serialize(),
-      
+
         success: function (res) {
           console.log(res);
-          $("#modal-scrollable-comment").modal('toggle');
-          toastr.success("comment successfully added")
+          $("#modal-scrollable-comment").modal("toggle");
+          toastr.success("comment successfully added");
         },
         error: function (error) {
           console.log(error);
@@ -102,7 +102,7 @@ $(document).on("click", "#archievePost", function () {
     type: "DELETE",
     success: function (res) {
       archieve.closest(".postBody").remove();
-      toastr.error("post Archieved")
+      toastr.error("post Archieved");
     },
     error: function (error) {
       console.log(error);
@@ -208,8 +208,7 @@ $(document).on("click", ".user-filter", function () {
 
 // saved  posts
 $(document).on("click", "#savedPosts", function () {
-  console.log("clicked savedPosts");    
-
+  console.log("clicked savedPosts");
 
   $.ajax({
     url: `/posts/saved-posts`,
@@ -307,27 +306,23 @@ $(document).on("click", "#userSearch", function () {
     },
     error: function (error) {
       console.log(error);
-    },  
+    },
   });
 });
 
-//saves count 
+//saves count
 $(document).on("click", ".count", function () {
-
-
   $.ajax({
     url: `posts/${$(this).data("id")}/saved-by`,
     type: "GET",
     success: function (res) {
-
       $("div #modal-scrollable").replaceWith(res);
       $("#modal-scrollable").modal("show");
-   
     },
     error: function (error) {
       console.log(error);
     },
-  }); 
+  });
 });
 
 //image popup
@@ -338,19 +333,21 @@ $(document).on("dblclick", ".imagePop", function () {
     success: function (res) {
       $("div #modal-team").replaceWith(res);
       $("#modal-team").modal("show");
-   
     },
     error: function (error) {
       console.log(error);
     },
-  }); 
+  });
 });
 //adding comments
 $(document).on("click", ".comment", function () {
   console.log("comment");
   console.log($(this).data("id"));
-  $("#comment-form #PostId-comment").replaceWith(`<input type="hidden" id="PostId-comment" name="PostId-comment" value="${$(this).data("id")}"></input>`)
-  
+  $("#comment-form #PostId-comment").replaceWith(
+    `<input type="hidden" id="PostId-comment" name="PostId-comment" value="${$(
+      this
+    ).data("id")}"></input>`
+  );
 
   $.ajax({
     url: `posts/comments-data?postId=${$(this).data("id")}`,
@@ -358,8 +355,8 @@ $(document).on("click", ".comment", function () {
     success: function (res) {
       console.log(res);
       // $("div #modal-scrollable-comment").replaceWith(res);
-      $("#comment-list").html(res)
-      $("#modal-scrollable-comment").modal("show");  
+      $("#comment-list").html(res);
+      $("#modal-scrollable-comment").modal("show");
     },
     error: function (error) {
       console.log(error);
@@ -367,14 +364,24 @@ $(document).on("click", ".comment", function () {
   });
 });
 
-const socket = io("http://localhost:3000",{
-  query:{
-    "userId": $("#socket-userId").val() 
-  }
+const socket = io("http://localhost:3000", {
+  query: {
+    userId: $("#socket-userId").val(),
+  },
 });
 
-  socket.on("postSave", (arg) => {
-   console.log(socket.id);
-   console.log(arg);
-   toastr.info(arg + ' '+ "saved your post")
- });
+socket.on("postSave", (arg) => {
+  console.log(socket.id);
+  console.log(arg);
+  toastr.info(arg.name + " " + "saved your post");
+
+  $("#notifications-badge").replaceWith(
+    `<span class="badge bg-red" id="notifications-badge">${arg.notificationsCount}</span>`
+  );
+
+  $("#notification-description").replaceWith(
+    `<div class="d-block text-muted text-truncate mt-n1" id="notification-description">
+   Your Post Was liked by ${arg.name}
+  </div>`
+  );
+});

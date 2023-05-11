@@ -57,8 +57,9 @@
             `<span class="count" data-id="${postId}" id="count-${postId}"> Saved by ${res.data}</span>`
           );
           
-         
-
+          // $(".badge").replaceWith(
+          //   `<span class="badge bg-red" id="notifications-badge">${arg.notificationsCount}</span>`
+          // )
         }
       },
     });

@@ -7,10 +7,9 @@ const md5 = require("md5");
 const passport = require("passport");
 const savedPosts = require("../models/savedPosts");
 const statisticsModel = require("../models/statistics");
-const notificationsModel = require("../models/notifications")
+const notificationsModel = require("../models/notifications");
 const moment = require("moment");
-var nodemailer = require('nodemailer');
-
+var nodemailer = require("nodemailer");
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -108,7 +107,6 @@ router.get("/timeline", async function (req, res, next) {
           foreignField: "postId",
 
           pipeline: [
-           
             {
               $lookup: {
                 from: "users",
@@ -120,18 +118,17 @@ router.get("/timeline", async function (req, res, next) {
             {
               $group: {
                 _id: "$savedBy",
-                name: { 
-                  $push: "$usersData.firstName"
-               },
-                lastname : { 
-                $push: "$usersData.lastName"
-               }
+                name: {
+                  $push: "$usersData.firstName",
+                },
+                lastname: {
+                  $push: "$usersData.lastName",
+                },
               },
             },
             {
               $unwind: "$name",
             },
-            
           ],
           as: "postSaved",
         },
@@ -150,7 +147,7 @@ router.get("/timeline", async function (req, res, next) {
       {
         $sort: { createdOn: -1 },
       },
-      
+
       {
         $project: {
           postName: 1,
@@ -161,27 +158,47 @@ router.get("/timeline", async function (req, res, next) {
           data: 1,
           savedposts: 1,
           postId: 1,
-          postSaved : 1,
+          postSaved: 1,
           count: {
             $size: {
-              $ifNull: ["$postSaved", []],  
+              $ifNull: ["$postSaved", []],
             },
           },
         },
       },
     ]);
 
-    const total = await postModel.countDocuments({isDeleted: false})
-    const notificationsCount = await notificationsModel.countDocuments({isDeleted: false,isSeen: false, createdBy:req.user._id})
+    const total = await postModel.countDocuments({ isDeleted: false });
+    const notificationsCount = await notificationsModel.countDocuments({
+      isDeleted: false,
+      isSeen: false,
+      createdBy: req.user._id,
+    });
 
-    
+    const notificationsName = await notificationsModel.find({
+      isDeleted: false,
+      isSeen: false,
+      createdBy: req.user._id,
+    },{
+      savedByName : 1
+    }).lean();
+
+
     let totalPost = await postModel.countDocuments({ isDeleted: false });
     let pageCount = Math.round(totalPost / limit) + 1;
     let pageArray = [];
     for (let i = 1; i <= pageCount; i++) {
       pageArray.push(i);
     }
-    return res.render("timeline", { data: data, pageArray: pageArray, total: total, local:res.locals._id, notificationsCount : notificationsCount });
+
+    return res.render("timeline", {
+      data: data,
+      pageArray: pageArray,
+      total: total,
+      local: res.locals._id,
+      notificationsCount: notificationsCount,
+      notificationsName : notificationsName,
+    });
   }
 
   return res.redirect("/dashboard");
@@ -352,29 +369,29 @@ router.post("/register-post", async function (req, res, next) {
     const { firstName, lastName, email, gender, password, confirmPassword } =
       req.body;
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'mycircle10001@gmail.com',
-    pass: 'rhpsngylpltgqwxc'
-  }
-});
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "mycircle10001@gmail.com",
+        pass: "rhpsngylpltgqwxc",
+      },
+    });
 
-var mailOptions = {
-  from: 'mycircle10001@gmail.com',
-  to: email,
-  subject: `Welcome!!!`,
-  text: 'Welcome to Mycircle',
-  html: `<a href="/localhost">Verify Email.</a>`
-};
+    var mailOptions = {
+      from: "mycircle10001@gmail.com",
+      to: email,
+      subject: `Welcome!!!`,
+      text: "Welcome to Mycircle",
+      html: `<a href="/localhost">Verify Email.</a>`,
+    };
 
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
     if (password == confirmPassword) {
       await UserModel.create({
         firstName: firstName,

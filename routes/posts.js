@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const UserModel = require("../models/users");
 const postModel = require("../models/posts");
-const notificationsModel = require("../models/notifications")
+const notificationsModel = require("../models/notifications");
 const savedPostsModel = require("../models/savedPosts");
 const multer = require("multer");
 const path = require("path");
@@ -75,16 +75,17 @@ router.post("/savedPosts", async function (req, res, next) {
       const deletingExisting = await savedPostsModel.deleteOne({
         postId: new ObjectId(req.body.postId),
         savedBy: req.user._id,
-      },);
+      });
 
-      const  savedPostCount = await savedPosts.countDocuments({postId: new ObjectId(req.body.postId)})
+      const savedPostCount = await savedPosts.countDocuments({
+        postId: new ObjectId(req.body.postId),
+      });
       console.log(savedPostCount);
 
       res.send({
         type: "success",
-        data : savedPostCount
+        data: savedPostCount,
       });
-
     } else {
       const savingPosts = await savedPostsModel.create({
         postId: req.body.postId,
@@ -92,30 +93,38 @@ router.post("/savedPosts", async function (req, res, next) {
         savedBy: req.user._id,
       });
 
-      const  savedPostCount = await savedPosts.countDocuments({postId: new ObjectId(req.body.postId)})
+      const savedPostCount = await savedPosts.countDocuments({
+        postId: new ObjectId(req.body.postId),
+      });
       console.log(savedPostCount);
 
       const notifications = await notificationsModel.create({
         postId: req.body.postId,
         createdBy: req.body.createdBy,
         savedBy: req.user._id,
-        savedByName : `${req.user.firstName} ${req.user.lastName}`,
-
+        savedByName: `${req.user.firstName}_${req.user.lastName}`,
       });
-      const notificationsCount = await notificationsModel.countDocuments({isDeleted: false,isSeen: false, createdBy:req.user._id})
-      console.log(notificationsCount, "notificationsCount");
 
-      io.to(req.body.createdBy).emit("postSave", req.user.firstName)
+     
+      const notificationsCount = await notificationsModel.countDocuments({
+        isDeleted: false,
+        isSeen: false,
+        createdBy: new ObjectId(req.body.createdBy),
+      });
+     
 
-     return res.send({
+      io.to(req.body.createdBy).emit("postSave", {
+        name: req.user.firstName,
+        notificationsCount: notificationsCount,
+      }); //emitting post save event from here
+
+      return res.send({
         type: "successSave",
-        data : savedPostCount,
-        notificationsCount : notificationsCount
+        data: savedPostCount,
+        notificationsCount: notificationsCount,
       });
     }
 
-    
-   
   } catch (error) {
     console.log(error);
     res.send({
@@ -307,14 +316,13 @@ router.post("/:postId/create-comment", async function (req, res, next) {
 
 router.get("/comments-data", async function (req, res, next) {
   try {
-
-    console.log(req.query,"+++++++++++++++++++++++++++");
+    console.log(req.query, "+++++++++++++++++++++++++++");
     const commentData = await postModel.aggregate([
       {
-        $match: { 
+        $match: {
           isDeleted: false,
-          _id : new ObjectId(req.query.postId)
-         },
+          _id: new ObjectId(req.query.postId),
+        },
       },
       {
         $lookup: {
@@ -331,8 +339,8 @@ router.get("/comments-data", async function (req, res, next) {
               },
             },
             {
-                $unwind: { path: "$userdata", preserveNullAndEmptyArrays: true }
-           }
+              $unwind: { path: "$userdata", preserveNullAndEmptyArrays: true },
+            },
           ],
           as: "data",
         },
@@ -348,8 +356,11 @@ router.get("/comments-data", async function (req, res, next) {
     ]);
 
     console.log(commentData);
-    
-    res.render("partials/commentsList", { commentData: commentData, layout: "blank" });
+
+    res.render("partials/commentsList", {
+      commentData: commentData,
+      layout: "blank",
+    });
   } catch (err) {
     console.log(err);
   }
