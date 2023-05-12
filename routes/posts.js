@@ -106,6 +106,7 @@ router.post("/savedPosts", async function (req, res, next) {
         savedByName: `${req.user.firstName}_${req.user.lastName}`,
       });
 
+        console.log(notifications)
      
       const notificationsCount = await notificationsModel.countDocuments({
         isDeleted: false,
@@ -113,19 +114,24 @@ router.post("/savedPosts", async function (req, res, next) {
         createdBy: new ObjectId(req.body.createdBy),
       });
 
-      const notificationBy = await notificationsModel.findOne({
+      const notificationBy = await notificationsModel.find({
         isDeleted: false,
         isSeen: false,
         savedBy: new ObjectId(req.user._id),
-      },{
-        savedByName : 1
-      });
+      }).sort({'_id':-1}).limit(1);
      
+
+      const savedPost = notificationBy[0].postId
+
+      const image  = await postModel.findOne({_id : savedPost })
+
       console.log(notificationBy, "notificationBy");
       io.to(req.body.createdBy).emit("postSave", {
         name: req.user.firstName,
         notificationsCount: notificationsCount,
-        notificationBy : notificationBy
+        notificationBy : notificationBy,
+        image : image.postImg,
+        id : image._id
 
       }); //emitting post save event from here
 
@@ -395,10 +401,31 @@ try {
   console.log(error);
   
 }
+})
 
 
+router.post("/:postId/notification-posts-access", async function (req, res, next) {
 
+try {
 
+  const post = await postModel.findOne({_id : new ObjectId(req.params.postId) })
+
+  console.log("post =========>",post);
+  
+  // res.render("notificationPostModal", {
+  //   post: post,
+  //   layout: "blank",
+  // });
+
+  res.send({
+    type : "success",
+    data : post
+  })
+
+} catch (error) {
+  console.log(error);
+}
+  
 })
 
 

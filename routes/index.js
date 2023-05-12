@@ -193,12 +193,26 @@ router.get("/timeline", async function (req, res, next) {
         },
       },
       {
+        $lookup: {
+          from: "posts",
+          foreignField: "_id",
+          localField: "postId",
+          as: "Post",
+        },
+      },
+      {
         $unwind: "$notificationDetailUser",
+      },
+      {
+        $unwind: "$Post",
       },
       {
         $project: {
           savedByName: 1,
           "notificationDetailUser.firstName": 1,
+          "Post.postImg" : 1,
+          "Post._id" : 1,
+          
         },
       },
     ]);

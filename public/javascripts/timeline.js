@@ -383,19 +383,19 @@ socket.on("postSave", (arg) => {
   if(arg.notificationsCount <= 5)
   {
     $("#notifications-list").append(
-      `<div class="notification-item list-group-item" style="width: 500px;" data-id="${arg.notificationBy._id}">
+      `<div class="notification-item list-group-item" style="width: 500px;" data-id="${arg.notificationBy[0]._id}">
       <div class="row align-items-center">
         <div class="col-auto"><span class="status-dot status-dot-animated bg-red d-block"></span></div>
         <div class="col text-truncate">
-          <a href="javascript:void(0)" class="text-body d-block" id="notified-by" style="text-decoration: none;"><h4>@${arg.notificationBy.savedByName}</h4></a>
+          <a href="javascript:void(0)" class="text-body d-block" id="notified-by" style="text-decoration: none;"><h4>@${arg.notificationBy[0].savedByName}</h4></a>
           <div class="d-block text-mute d text-truncate mt-n1" id="notification-description">
             Your Post Was Saved by <b>${arg.name}</b> Just Now
           </div>
         </div>
         <div class="col-auto">
-          <a href="javascript:void(0)" class="list-group-item-actions">
+          <a href="javascript:void(0)">
             <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path></svg>
+            <span class="post-indicator avatar me-3 rounded" data-id="${arg.id}" style="background-image: url(/images/${arg.image})"></span>
           </a>
         </div>
       </div>
@@ -404,7 +404,8 @@ socket.on("postSave", (arg) => {
   }
 });
 
-$(document).on("click", ".notification-item",function () {
+$(document).on("click", ".notification-item",function () { //removing notification when user clicks the notification item and changing isSeen status to true
+
   const id = $(this).data("id");
   $(this).remove()
   $.ajax({
@@ -417,6 +418,31 @@ $(document).on("click", ".notification-item",function () {
       console.log(error);
     },
   });
+})
+
+
+
+$(document).on("click", ".post-indicator", function () {
+  const postId = $(this).data("id");
+console.log("clicked post-indicator");
+  console.log(postId);
+  $.ajax({
+    url: `posts/${postId}/notification-posts-access`,
+    type: "POST",
+    success: function (res) {
+      console.log(res.data.postImg);
+      $("#post-notification-image").replaceWith(`<img  style="300px" src="/images/${res.data.postImg}" id="post-notification-image"/>`)
+      $("#post-notification-title").replaceWith (`<h3 id="post-notification-title">${res.data.postName}</h3>`)
+     $('#post-notification-description').replaceWith(`<p id="post-notification-description">${res.data.description}</p>`) 
+
+
+      $("#modal-full-width").modal("show"); 
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+
 })
 
 socket.on("notificationSeen", (arg) =>{
