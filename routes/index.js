@@ -15,6 +15,7 @@ const users = require("../models/users");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /* GET home page. */
+//dashboard route, where users are not allowed to save posts as to do so, user need to login first
 router.get("/", async function (req, res, next) {
   const data = await postModel.aggregate([
     {
@@ -51,6 +52,7 @@ router.get("/", async function (req, res, next) {
   });
 });
 
+//route to render login page and if user is already logged in, he/she will be redirected to timeline
 router.get("/login", function (req, res, next) {
   if (req.isAuthenticated()) {
     return res.redirect("/timeline");
@@ -61,6 +63,7 @@ router.get("/login", function (req, res, next) {
   });
 });
 
+//API to render registration page
 router.get("/sign-up", function (req, res, next) {
   res.render("./authenticationProcess/sign-up", {
     title: "sign-up",
@@ -68,6 +71,7 @@ router.get("/sign-up", function (req, res, next) {
   });
 });
 
+//this API renders the landing page of application which is timeline, with all data
 router.get("/timeline", async function (req, res, next) {
   console.log("isAuhthenticated ===========>", req.isAuthenticated());
   let limit = 15;
@@ -239,6 +243,7 @@ router.get("/timeline", async function (req, res, next) {
   return res.redirect("/dashboard");
 });
 
+//this API controls filter according to the query it gets.
 router.get("/filter", async function (req, res, next) {
   let limit = 6;
   let page = req.query.page ? req.query.page : 1;
@@ -379,6 +384,7 @@ router.get("/filter", async function (req, res, next) {
   });
 });
 
+//this API checks credentials entered by the user to make them authenticated, using passport authentication
 router.post("/login", async function (req, res, next) {
   passport.authenticate("local", function (err, user, info) {
     if (err) {
@@ -399,6 +405,7 @@ router.post("/login", async function (req, res, next) {
   })(req, res, next);
 });
 
+// this API helps a user to get themselves registered on the application.
 router.post("/register-post", async function (req, res, next) {
   try {
     const { firstName, lastName, email, gender, password, confirmPassword } =
@@ -450,27 +457,34 @@ router.post("/register-post", async function (req, res, next) {
   }
 });
 
+//this states to user that if the email he/she is entering is available or not if email is already taken then user need to use any another and unique
 router.get("/email-validate", async function (req, res, next) {
   try {
     const check = await UserModel.countDocuments({ email: req.query.email });
     const emailCheck = check ? false : true;
     res.send(emailCheck);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 });
 
+//this API logouts a already signed in user.
 router.get("/logout", async function (req, res, next) {
   req.logout();
   res.redirect("/dashboard");
 });
 
+//render the account page of application, which contains logged in user details 
 router.get("/account", async function (req, res, next) {
   return res.render("./partials/account", { layout: "main" });
 });
 
+//this API renders a create post modal 
 router.get("/post-modal", async function (req, res, next) {
   return res.render("./partials/createPost", { layout: blank });
 });
 
+//this API renders a edit post modal
 router.get("/editpost", async function (req, res, next) {
   console.log(req.query.value);
   const getPost = await postModel.findOne({
@@ -485,12 +499,14 @@ router.get("/editpost", async function (req, res, next) {
   });
 });
 
+//this API renders the posts which we need to show on the dashboard side of application
 router.get("/dashboardSave", function (req, res, next) {
   res.render("./partials/saveError", {
     layout: dashboard,
   });
 });
 
+//this API generates data for the report of application
 router.get("/report", async function (req, res, next) {
   try {
     const statistics = await statisticsModel.find({});

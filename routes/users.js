@@ -20,6 +20,7 @@ const upload = multer({ storage: storage });
 
 /* GET users listing. */
 
+//this API allows user to edit their profile on application
 router.put("/edit", upload.single("file"), async function (req, res, next) {
   //editing user from the account section of profile
   try {
@@ -56,6 +57,7 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
   }
 });
 
+//this API gets registered users list
 router.get("/userslist", async function (req, res, next) {
   //editing user from the account section of profile
   try {

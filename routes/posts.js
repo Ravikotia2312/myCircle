@@ -34,6 +34,7 @@ const upload = multer({
 });
 /* GET users listing.*/
 
+//This API creates a post and saves the data inserted by a user to create particular post
 router.post("/create", upload.single("image"), async function (req, res, next) {
   req.body.name = req.body.name.trim();
   req.body.description = req.body.description.trim();
@@ -57,6 +58,7 @@ router.post("/create", upload.single("image"), async function (req, res, next) {
   }
 });
 
+//This API renders posts partials for each individual posts
 router.get("/posts", async function (req, res, next) {
   return res.render("./partials/posts", {
     layout: blank,
@@ -64,6 +66,7 @@ router.get("/posts", async function (req, res, next) {
   });
 });
 
+//This API saves the posts and creates a notification for a user by whom the post was created to let them acknowledge about a save of post
 router.post("/savedPosts", async function (req, res, next) {
   try {
    
@@ -150,6 +153,7 @@ router.post("/savedPosts", async function (req, res, next) {
   }
 });
 
+//This API allows users to edit a post created by him/her
 router.put(
   "/postsedit",
   upload.single("file"),
@@ -189,6 +193,7 @@ router.put(
   }
 );
 
+//This API filters out those posts which is saved by logged in user.
 router.get("/saved-posts", async function (req, res, next) {
   const data = await postModel.aggregate([
     {
@@ -241,6 +246,7 @@ router.get("/saved-posts", async function (req, res, next) {
   return res.render("./timeline", { data: data, layout: "blank" });
 });
 
+//This API is for archieving posts and to update isDeleted status from isDeleted false to isDeleted true
 router.delete("/:postsDelete", async function (req, res, next) {
   try {
     const deletingPost = await postModel.updateOne(
@@ -263,7 +269,8 @@ router.delete("/:postsDelete", async function (req, res, next) {
   }
 });
 
-//posts/123/saved-by
+//posts/123/saved-by 
+/**This  API gets the user list by whom that particular post is being saved*/
 router.get("/:postId/saved-by", async function (req, res, next) {
   try {
     console.log(req.params.postId);
@@ -297,6 +304,7 @@ router.get("/:postId/saved-by", async function (req, res, next) {
   }
 });
 
+//This helps user to zoom out post image for better view
 router.get("/:postId/image-zoom-out", async function (req, res, next) {
   try {
     console.log(req.params.postId, "req.params.postId");
@@ -311,6 +319,7 @@ router.get("/:postId/image-zoom-out", async function (req, res, next) {
   }
 });
 
+//This API posts a comment on a post  
 router.post("/:postId/create-comment", async function (req, res, next) {
   try {
     console.log(req.params.postId);
@@ -331,9 +340,10 @@ router.post("/:postId/create-comment", async function (req, res, next) {
   }
 });
 
+//if there are previous comments on a post, this API will make them list below create comment section
 router.get("/comments-data", async function (req, res, next) {
   try {
-    console.log(req.query, "+++++++++++++++++++++++++++");
+  
     const commentData = await postModel.aggregate([
       {
         $match: {
@@ -372,8 +382,6 @@ router.get("/comments-data", async function (req, res, next) {
       },
     ]);
 
-    console.log(commentData);
-
     res.render("partials/commentsList", {
       commentData: commentData,
       layout: "blank",
@@ -383,6 +391,7 @@ router.get("/comments-data", async function (req, res, next) {
   }
 });
 
+//this API updates notification panel when user clicks on a notification
 router.post("/:notificationId/notification-panel-update", async function (req, res, next) {
 
 try {
@@ -403,7 +412,7 @@ try {
 }
 })
 
-
+//this API allows user to access the post which was saved and indicated in notification panel
 router.post("/:postId/notification-posts-access", async function (req, res, next) {
 
 try {

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  //editing posts
+  //jquery for editing the post which are not archieved
   $("form#editPosts").validate({
     rules: {
       name: {
@@ -93,7 +93,7 @@ $(document).ready(function () {
   });
 });
 
-//archieving posts
+//makes post archieved
 $(document).on("click", "#archievePost", function () {
   console.log("clicked");
   let archieve = $(this);
@@ -127,7 +127,7 @@ function getUrl() {
   return url;
 }
 
-// filtering  posts
+//this click access the filter class which includes mine, others and all category
 $(document).on("change", ".common-filter", function () {
   console.log(getUrl());
   console.log($(this).val());
@@ -144,7 +144,7 @@ $(document).on("change", ".common-filter", function () {
   });
 });
 
-// filtering  posts
+//this click access the filter class which includes mine, others and all category
 $(document).on("click", ".common-filter", function () {
   console.log(getUrl());
   console.log($("#search").val());
@@ -161,7 +161,7 @@ $(document).on("click", ".common-filter", function () {
   });
 });
 
-// filtering  posts
+//this click access the filter class which includes mine, others and all category
 $(document).on("click", ".common-filter", function () {
   console.log(getUrl());
   console.log($(this).data("id"));
@@ -184,7 +184,7 @@ $(document).on("click", ".common-filter", function () {
   });
 });
 
-// filtering  posts
+//this click access the filter class which includes mine, others and all category
 $(document).on("click", ".user-filter", function () {
   console.log($(this).data("id"));
   let value = $(this).data("id");
@@ -206,7 +206,7 @@ $(document).on("click", ".user-filter", function () {
   });
 });
 
-// saved  posts
+// this click navigates to the savedposts section of the application in which user can access those posts which was saved by him/her 
 $(document).on("click", "#savedPosts", function () {
   console.log("clicked savedPosts");
 
@@ -222,7 +222,7 @@ $(document).on("click", "#savedPosts", function () {
   });
 });
 
-// getting users list
+// getting list of registered users
 $(document).on("click", "#users", function () {
   console.log("clicked users");
 
@@ -238,11 +238,12 @@ $(document).on("click", "#users", function () {
   });
 });
 
-//opening create post modal
+//this click help user in generating a post as this click opens a modal for creating a post
 $(document).on("click", "#create", function () {
   $("#create-post-modal").modal("show");
 });
 
+//this clicks navigates the user to a chart which shows the overall activity of the application which includes total uploaded posts and total saved posts
 $(document).on("click", "#report", function () {
   console.log("clicked report");
   $.ajax({
@@ -291,7 +292,7 @@ $(document).on("click", "#registerdateSort", function () {
   });
 });
 
-// user search
+// to search a user who has been already registered
 $(document).on("click", "#userSearch", function () {
   console.log("clicked userSearch");
   console.log($("#usersearchValue").val());
@@ -310,7 +311,7 @@ $(document).on("click", "#userSearch", function () {
   });
 });
 
-//saves count
+//shows the overall users who saved the particular
 $(document).on("click", ".count", function () {
   $.ajax({
     url: `posts/${$(this).data("id")}/saved-by`,
@@ -325,7 +326,7 @@ $(document).on("click", ".count", function () {
   });
 });
 
-//image popup
+//image popup for detailed view of image once user double clicks the post image
 $(document).on("dblclick", ".imagePop", function () {
   $.ajax({
     url: `posts/${$(this).data("id")}/image-zoom-out`,
@@ -365,12 +366,14 @@ $(document).on("click", ".comment", function () {
   });
 });
 
+//declaring socket to listen on localhost 3000
 const socket = io("http://localhost:3000", {
   query: {
     userId: $("#socket-userId").val(),
   },
-}); 
+});
 
+//event for a user saving a post 
 socket.on("postSave", (arg) => {
   console.log(socket.id);
   console.log(arg);
@@ -380,8 +383,7 @@ socket.on("postSave", (arg) => {
     `<span class="badge bg-red" id="notifications-badge">${arg.notificationsCount}</span>`
   );
 
-  if(arg.notificationsCount <= 5)
-  {
+  if (arg.notificationsCount <= 5) {
     $("#notifications-list").append(
       `<div class="notification-item list-group-item" style="width: 500px;" data-id="${arg.notificationBy[0]._id}">
       <div class="row align-items-center">
@@ -404,10 +406,12 @@ socket.on("postSave", (arg) => {
   }
 });
 
-$(document).on("click", ".notification-item",function () { //removing notification when user clicks the notification item and changing isSeen status to true
+//making notification clear once user has noticed it.
+$(document).on("click", ".notification-item", function () {
+  //removing notification when user clicks the notification item and changing isSeen status to true
 
   const id = $(this).data("id");
-  $(this).remove()
+  $(this).remove();
   $.ajax({
     url: `posts/${id}/notification-panel-update`,
     type: "POST",
@@ -418,38 +422,41 @@ $(document).on("click", ".notification-item",function () { //removing notificati
       console.log(error);
     },
   });
-})
+});
 
-
-
+//this click will open a modal for more details of post which was being saved
 $(document).on("click", ".post-indicator", function () {
   const postId = $(this).data("id");
-console.log("clicked post-indicator");
+  console.log("clicked post-indicator");
   console.log(postId);
   $.ajax({
     url: `posts/${postId}/notification-posts-access`,
     type: "POST",
     success: function (res) {
       console.log(res.data.postImg);
-      $("#post-notification-image").replaceWith(`<img  style="300px" src="/images/${res.data.postImg}" id="post-notification-image"/>`)
-      $("#post-notification-title").replaceWith (`<h3 id="post-notification-title">${res.data.postName}</h3>`)
-     $('#post-notification-description').replaceWith(`<p id="post-notification-description">${res.data.description}</p>`) 
-
-
-      $("#modal-full-width").modal("show"); 
+      $("#post-notification-image").replaceWith(
+        `<img  style="width:300px; height:300px" src="/images/${res.data.postImg}" id="post-notification-image"/>`
+      );
+      $("#post-notification-title").replaceWith(
+        `<h3 id="post-notification-title">${res.data.postName}</h3>`
+      );
+      $("#post-notification-description").replaceWith(
+        `<p id="post-notification-description">${res.data.description}</p>`
+      );
+      $("#modal-full-width").modal("show");
     },
     error: function (error) {
       console.log(error);
     },
   });
+});
 
-})
-
-socket.on("notificationSeen", (arg) =>{
+//updating the count of badge once notification is removed from the list
+socket.on("notificationSeen", (arg) => {
   console.log(arg);
   console.log(socket.id);
 
   $("#notifications-badge").replaceWith(
     `<span class="badge bg-red" id="notifications-badge">${arg}</span>`
   );
-})
+});
