@@ -479,11 +479,6 @@ router.get("/account", async function (req, res, next) {
   return res.render("./partials/account", { layout: "main" });
 });
 
-//this API renders a create post modal 
-router.get("/post-modal", async function (req, res, next) {
-  return res.render("./partials/createPost", { layout: blank });
-});
-
 //this API renders a edit post modal
 router.get("/editpost", async function (req, res, next) {
   console.log(req.query.value);
@@ -497,7 +492,7 @@ router.get("/editpost", async function (req, res, next) {
     image: getPost.postImg,
     id: getPost._id,
   });
-});
+});   
 
 //this API renders the posts which we need to show on the dashboard side of application
 router.get("/dashboardSave", function (req, res, next) {

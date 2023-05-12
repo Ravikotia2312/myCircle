@@ -32,7 +32,9 @@ router.put("/edit", upload.single("file"), async function (req, res, next) {
           {
             _id: req.user._id,
           },
-          { profilePic: profile }
+          { 
+            profilePic: profile 
+          }
         );
         req.user.profilePic = profile;
       }
