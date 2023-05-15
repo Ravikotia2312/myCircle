@@ -406,7 +406,7 @@ router.post("/login", async function (req, res, next) {
 });
 
 // this API helps a user to get themselves registered on the application.
-router.post("/register-post", async function (req, res, next) {
+router.post("/register-post", async function (req, res, next) { 
   try {
     const { firstName, lastName, email, gender, password, confirmPassword } =
       req.body;
@@ -524,4 +524,17 @@ router.get("/report", async function (req, res, next) {
   }
 });
 
-module.exports = router;
+router.get("/chats", async function (req, res, next) {
+  
+  console.log("reached================>");
+
+  const users = await UserModel.find({isDeleted:false})
+
+  res.render("./partials/chatModal",{
+    layout : "blank",
+    chatUsers : users,
+  })
+
+});
+
+module.exports = router;  

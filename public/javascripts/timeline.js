@@ -460,3 +460,21 @@ socket.on("notificationSeen", (arg) => {
     `<span class="badge bg-red" id="notifications-badge">${arg}</span>`
   );
 });
+
+
+$(document).on("click", "#chat-icon", function() {
+  console.log("clicked chat-icon");
+  $.ajax({
+    url: `/chats`,
+    type: "GET",
+    success: function (res) {
+      console.log(res);
+      // $("#chat-modal").html(res) 
+      $("#chat-modal").modal("show")
+      
+    },
+    error: function (error) { 
+      console.log(error);
+    },
+  });
+}) 

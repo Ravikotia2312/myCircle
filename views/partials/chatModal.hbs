@@ -1,0 +1,53 @@
+
+{{log chatUsers}}
+{{!-- {{#each ./chatUsers}}
+{{/each}} --}}
+{{log email}}
+
+{{#each chatUsers}}
+{{log firstName}}
+{{/each}}
+
+<div class="modal modal-blur fade" id="chat-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title p-s">Chat</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+           <div class="d-flex">
+            <div style="border-right: solid grey 2px; width: 500px; " >
+              <h3>Chats</h3>
+           <div class="row row-0">
+            {{!-- {{#each chatUsers}} --}}
+                    <div class="col-3">
+                      <!-- Photo -->
+                      {{#if profilePic}}
+                      <img src="/uploads/{{profilePic}}" class="w-100 h-100 object-cover card-img-start" alt="Beautiful blonde woman relaxing with a can of coke on a tree stump by the beach">
+                      {{else}}
+                      <img src="/uploads/blank-profile-picture-973460_640.jpg" class="w-100 h-100 object-cover card-img-start" alt="Beautiful blonde woman relaxing with a can of coke on a tree stump by the beach">
+                      {{/if}}
+                    </div>
+                    <div class="col">
+                      <div class="card-body" style="padding : 20px">
+                        <h3 class="card-title">firstName</h3>
+                      </div>
+                    </div>
+           {{!-- {{/each}} --}}
+           </div><br>
+           <hr style="2px solid black">
+          </div>
+          <div style="margin-left: 10px;">
+            <h3>Messages</h3>
+          </div>
+          </div>
+
+          </div>
+          <div class="modal-footer">
+            {{!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button> --}}
+          </div>
+        </div>
+      </div>
+    </div>
