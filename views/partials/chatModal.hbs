@@ -1,12 +1,14 @@
 
 {{log chatUsers}}
-{{!-- {{#each ./chatUsers}}
-{{/each}} --}}
 {{log email}}
 
 {{#each chatUsers}}
-{{log firstName}}
+{{log this}}
 {{/each}}
+
+{{!-- {{#each chatUsers}}
+{{log ../this}}
+{{/each}} --}}
 
 <div class="modal modal-blur fade" id="chat-modal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
@@ -19,8 +21,8 @@
            <div class="d-flex">
             <div style="border-right: solid grey 2px; width: 500px; " >
               <h3>Chats</h3>
+
            <div class="row row-0">
-            {{!-- {{#each chatUsers}} --}}
                     <div class="col-3">
                       <!-- Photo -->
                       {{#if profilePic}}
@@ -34,7 +36,6 @@
                         <h3 class="card-title">firstName</h3>
                       </div>
                     </div>
-           {{!-- {{/each}} --}}
            </div><br>
            <hr style="2px solid black">
           </div>

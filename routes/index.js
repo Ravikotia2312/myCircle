@@ -180,13 +180,16 @@ router.get("/timeline", async function (req, res, next) {
       createdBy: req.user._id,
     });
 
-
     const notificationDetails = await notificationsModel.aggregate([
       {
-          $match : {createdBy : new ObjectId(req.user._id),isSeen:false,isDeleted: false}
+        $match: {
+          createdBy: new ObjectId(req.user._id),
+          isSeen: false,
+          isDeleted: false,
+        },
       },
       {
-          $limit : 5
+        $limit: 5,
       },
       {
         $lookup: {
@@ -214,9 +217,8 @@ router.get("/timeline", async function (req, res, next) {
         $project: {
           savedByName: 1,
           "notificationDetailUser.firstName": 1,
-          "Post.postImg" : 1,
-          "Post._id" : 1,
-          
+          "Post.postImg": 1,
+          "Post._id": 1,
         },
       },
     ]);
@@ -406,7 +408,7 @@ router.post("/login", async function (req, res, next) {
 });
 
 // this API helps a user to get themselves registered on the application.
-router.post("/register-post", async function (req, res, next) { 
+router.post("/register-post", async function (req, res, next) {
   try {
     const { firstName, lastName, email, gender, password, confirmPassword } =
       req.body;
@@ -464,7 +466,7 @@ router.get("/email-validate", async function (req, res, next) {
     const emailCheck = check ? false : true;
     res.send(emailCheck);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
 
@@ -474,7 +476,7 @@ router.get("/logout", async function (req, res, next) {
   res.redirect("/dashboard");
 });
 
-//render the account page of application, which contains logged in user details 
+//render the account page of application, which contains logged in user details
 router.get("/account", async function (req, res, next) {
   return res.render("./partials/account", { layout: "main" });
 });
@@ -492,7 +494,7 @@ router.get("/editpost", async function (req, res, next) {
     image: getPost.postImg,
     id: getPost._id,
   });
-});   
+});
 
 //this API renders the posts which we need to show on the dashboard side of application
 router.get("/dashboardSave", function (req, res, next) {
@@ -525,16 +527,14 @@ router.get("/report", async function (req, res, next) {
 });
 
 router.get("/chats", async function (req, res, next) {
-  
   console.log("reached================>");
 
-  const users = await UserModel.find({isDeleted:false})
+  const users = await UserModel.find({ isDeleted: false }); 
 
-  res.render("./partials/chatModal",{
-    layout : "blank",
-    chatUsers : users,
-  })
-
+  res.render("./partials/chatModal", {
+    layout: "blank",
+    chatUsers: users,
+  });
 });
 
-module.exports = router;  
+module.exports = router;
