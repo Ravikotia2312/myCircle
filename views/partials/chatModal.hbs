@@ -1,53 +1,143 @@
-
-{{log chatUsers}}
-{{log email}}
-
-{{#each chatUsers}}
-{{log this}}
-{{/each}}
-
-{{!-- {{#each chatUsers}}
-{{log ../this}}
-{{/each}} --}}
-
 <div class="modal modal-blur fade" id="chat-modal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title p-s">Chat</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            {{!-- <h5 class="modal-title">Messages</h5> --}}
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>    
           </div>
-          <div class="modal-body">
-           <div class="d-flex">
-            <div style="border-right: solid grey 2px; width: 500px; " >
-              <h3>Chats</h3>
-
-           <div class="row row-0">
+          <div class="modal-body" >
+              <h3>Users</h3>
+           <div class="d-flex" >
+            <div style=" overflow:scroll; width:350px; height:900px;" >
+            {{#each chatUsers}}
+            <div class="card">
+           <div class="user row row-0 p-3" data-id="{{_id}}">
                     <div class="col-3">
                       <!-- Photo -->
                       {{#if profilePic}}
-                      <img src="/uploads/{{profilePic}}" class="w-100 h-100 object-cover card-img-start" alt="Beautiful blonde woman relaxing with a can of coke on a tree stump by the beach">
+                      <img src="/uploads/{{profilePic}}" class = "rounded-circle" height="63" width="63" >
                       {{else}}
-                      <img src="/uploads/blank-profile-picture-973460_640.jpg" class="w-100 h-100 object-cover card-img-start" alt="Beautiful blonde woman relaxing with a can of coke on a tree stump by the beach">
+                      <img src="/uploads/blank-profile-picture-973460_640.jpg" class = "rounded-circle" height="63" width="63"  >
                       {{/if}}
                     </div>
                     <div class="col">
                       <div class="card-body" style="padding : 20px">
-                        <h3 class="card-title">firstName</h3>
+                        <h2 class="card-title">{{firstName}} {{lastName}}</h2>
                       </div>
                     </div>
+           </div>
            </div><br>
-           <hr style="2px solid black">
-          </div>
-          <div style="margin-left: 10px;">
-            <h3>Messages</h3>
-          </div>
-          </div>
+       
+            {{/each}}
+          </div>  
+          
+            <div style="background-image: url(/images/2048343.jpg);width: 60%; margin-left:10%">
+  
+             <div class="card  rounded-0 bg-primary-subtle">
+           <div class="user row p-3" data-id="{{_id}}">
 
+                    <div id="chat-margin">
+                      <h2>Welcome to Chat</h2>
+                      <h4>start Conversation</h4>
+                    </div>
+
+                    <div id="user-name">
+                    </div>
+                    
+           </div>
+           </div>
+           <br>
+  
+ <div style="overflow: scroll; height: 800px;">
+           <div class="card w-50">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+
+         <div class="card w-50 " style="margin-left: 50%;">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+
+          <div class="card w-50">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+
+          <div class="card w-50 " style="margin-left: 50%;">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+
+          <div class="card w-50">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+
+         <div class="card w-50 " style="margin-left: 50%;">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+
+          <div class="card w-50">
+                      <div class="card-header">
+                        <h3 class="card-title">Card title</h3>
+                      </div>
+                      <div class="card-body">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</div>
+                      <div class="card-footer">
+                        Last updated 3 mins ago
+                      </div>
+                    </div>
+</div> 
+          </div>
+        
+          </div><br>
+            <div class="input-group " style="width: 63%;margin-left:24%" >
+            <input type="text" class="form-control ms-5" placeholder="Your message here" aria-label="Your message here" aria-describedby="basic-addon2" id="message-input">
+             <div class="input-group-append">
+             <button class="input-group-text ms-2 btn" id="send-button"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
+            </svg>Send</button>
+             </div>
+            </div>
+            </div>
+
+           </div>
           </div>
           <div class="modal-footer">
-            {{!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button> --}}
+
           </div>
         </div>
       </div>

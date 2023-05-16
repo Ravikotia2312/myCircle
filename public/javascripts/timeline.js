@@ -468,13 +468,63 @@ $(document).on("click", "#chat-icon", function() {
     url: `/chats`,
     type: "GET",
     success: function (res) {
-      console.log(res);
-      // $("#chat-modal").html(res) 
-      $("#chat-modal").modal("show")
       
+      $("#chat-modal").replaceWith(res)
+      $("#chat-modal").modal("show")
     },
     error: function (error) { 
       console.log(error);
     },
   });
+}) 
+
+$(document).on("click", ".user", function() { 
+  console.log("clicked user");
+  const userId = $(this).data("id")
+  $.ajax({
+    url: `chats-current-user?userId=${userId}`,
+    type: "GET",
+    success: function (res) {
+      console.log(res.chatCurrentUser.profilePic);
+      if(res.chatCurrentUser.profilePic){
+        $("#chat-margin").replaceWith(`<div class="col-1" id="chat-margin">
+        <!-- Photo -->
+        
+        <img src="/uploads/${res.chatCurrentUser.profilePic}" class = "rounded-circle" height="63" width="63" >
+       
+      </div>`)
+      $("#user-name").replaceWith(` <div class="col" id="user-name">
+      <div class="card-body" style="padding : 20px">
+        <h2 class="card-title">${res.chatCurrentUser.firstName} ${res.chatCurrentUser.lastName}</h2>
+      </div>
+    </div>`)
+      }
+      else{
+        $("#chat-margin").replaceWith(`<div class="col-1" id="chat-margin">
+        <!-- Photo -->
+        <img src="/uploads/blank-profile-picture-973460_640.jpg" class = "rounded-circle" height="63" width="63" >
+      </div>`)
+
+      $("#user-name").replaceWith(` <div class="col" id="user-name">
+      <div class="card-body" style="padding : 20px">
+        <h2 class="card-title">${res.chatCurrentUser.firstName} ${res.chatCurrentUser.lastName}</h2>
+      </div>
+    </div>`)
+      }
+
+     
+    },
+    error: function (error) { 
+      console.log(error);
+    },
+  });
+  
+ 
+}) 
+
+$(document).on("click", "#send-button", function() {
+  console.log("clicked send-button");
+  console.log($("#message-input").val());
+  $("#message-input").val('')
+ 
 }) 

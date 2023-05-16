@@ -529,12 +529,30 @@ router.get("/report", async function (req, res, next) {
 router.get("/chats", async function (req, res, next) {
   console.log("reached================>");
 
-  const users = await UserModel.find({ isDeleted: false }); 
+ 
+
+  const users = await UserModel.find({ isDeleted: false }).lean(); 
 
   res.render("./partials/chatModal", {
     layout: "blank",
     chatUsers: users,
   });
+
+  
+});
+
+router.get("/chats-current-user", async function (req, res, next) {
+  console.log("reached================>");
+
+  const chatCurrentUser = await UserModel.findOne({ isDeleted: false,_id:req.query.userId }).lean(); 
+  console.log(chatCurrentUser);
+
+  res.send({
+    type: "success",
+    chatCurrentUser: chatCurrentUser,
+  });
+
+  
 });
 
 module.exports = router;
