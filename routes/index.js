@@ -11,7 +11,8 @@ const notificationsModel = require("../models/notifications");
 const moment = require("moment");
 var nodemailer = require("nodemailer");
 const users = require("../models/users");
-
+const messagesModel  = require("../models/messages");
+const { log } = require("handlebars/runtime");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /* GET home page. */
@@ -529,30 +530,62 @@ router.get("/report", async function (req, res, next) {
 router.get("/chats", async function (req, res, next) {
   console.log("reached================>");
 
- 
-
-  const users = await UserModel.find({ isDeleted: false }).lean(); 
+  const users = await UserModel.find({ 
+    isDeleted: false,
+    _id : {$ne : req.user._id}
+  }).lean(); 
 
   res.render("./partials/chatModal", {
     layout: "blank",
     chatUsers: users,
   });
-
-  
 });
 
 router.get("/chats-current-user", async function (req, res, next) {
   console.log("reached================>");
+  console.log(req.query.userId);
 
   const chatCurrentUser = await UserModel.findOne({ isDeleted: false,_id:req.query.userId }).lean(); 
   console.log(chatCurrentUser);
 
+    const chatCurrentUserData = await messagesModel.aggregate([
+{
+  $match : {
+    $or : [
+          {$and : [{ sentTo:new ObjectId(req.query.userId)},{createdBy:new ObjectId(req.user._id)}] },
+          {$and : [{ sentTo:new ObjectId(req.user._id)},{createdBy:new ObjectId(req.query.userId)}] }        
+          ]
+  }
+},
+{
+  $sort : {_id : 1}
+}
+])
+
   res.send({
     type: "success",
     chatCurrentUser: chatCurrentUser,
+    chatCurrentUserData : chatCurrentUserData,
+    loginUser : req.user._id
   });
+});
 
-  
+router.post("/conversation", async function (req, res, next) {
+  console.log("reached================>");
+  const{currentChatTo, message} = req.body
+
+ const storingMessage = await messagesModel.create({
+  createdBy : new ObjectId(req.user._id),
+  sentTo : new ObjectId(currentChatTo),
+  message : message
+ })
+
+ io.to(currentChatTo).emit("message",{message, name : req.user.firstName,} ); 
+  console.log(storingMessage);
+
+  res.send({
+    type : "success",
+    data : message })  
 });
 
 module.exports = router;
