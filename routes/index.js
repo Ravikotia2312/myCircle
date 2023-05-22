@@ -11,8 +11,9 @@ const notificationsModel = require("../models/notifications");
 const moment = require("moment");
 var nodemailer = require("nodemailer");
 const users = require("../models/users");
-const messagesModel  = require("../models/messages");
+const messagesModel = require("../models/messages");
 const { log } = require("handlebars/runtime");
+
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /* GET home page. */
@@ -224,7 +225,10 @@ router.get("/timeline", async function (req, res, next) {
       },
     ]);
 
-    console.log(notificationDetails, "notificationDetails");
+    const unNotifiedMsgCount = await messagesModel.countDocuments({
+      sentTo: new ObjectId(req.user._id),
+      isNotified: false,
+    });
 
     let totalPost = await postModel.countDocuments({ isDeleted: false });
     let pageCount = Math.round(totalPost / limit) + 1;
@@ -240,6 +244,7 @@ router.get("/timeline", async function (req, res, next) {
       local: res.locals._id,
       notificationsCount: notificationsCount,
       notificationDetails: notificationDetails,
+      unNotifiedMsgCount: unNotifiedMsgCount,
     });
   }
 
@@ -530,11 +535,51 @@ router.get("/report", async function (req, res, next) {
 router.get("/chats", async function (req, res, next) {
   console.log("reached================>");
 
-  const users = await UserModel.find({ 
-    isDeleted: false,
-    _id : {$ne : req.user._id}
-  }).lean(); 
+  const msgNotified = await messagesModel.updateMany(
+    { sentTo: req.user._id },
+    { isNotified: true }
+  );
+  console.log(msgNotified);
 
+  const users = await UserModel.aggregate([
+    {
+      $match: {
+        _id: { $ne: new ObjectId(req.user._id) },
+      },
+    },
+    {
+      $lookup: {
+        from: "messages",
+        let: {
+          userId: "$_id",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$$userId", "$createdBy"] },
+                  { $eq: ["$sentTo", new ObjectId(req.user._id)] },
+                  { $eq: ["$isSeen", false] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "users",
+      },
+    },
+    {
+      $project: {
+        firstName: 1,
+        lastName: 1,
+        profilePic: 1,
+        pendingUsersMsg: { $size: "$users" },
+      },
+    },
+  ]);
+
+  console.log(users);
   res.render("./partials/chatModal", {
     layout: "blank",
     chatUsers: users,
@@ -545,47 +590,81 @@ router.get("/chats-current-user", async function (req, res, next) {
   console.log("reached================>");
   console.log(req.query.userId);
 
-  const chatCurrentUser = await UserModel.findOne({ isDeleted: false,_id:req.query.userId }).lean(); 
+  const chatCurrentUser = await UserModel.findOne({
+    isDeleted: false,
+    _id: req.query.userId,
+  }).lean();
   console.log(chatCurrentUser);
 
-    const chatCurrentUserData = await messagesModel.aggregate([
-{
-  $match : {
-    $or : [
-          {$and : [{ sentTo:new ObjectId(req.query.userId)},{createdBy:new ObjectId(req.user._id)}] },
-          {$and : [{ sentTo:new ObjectId(req.user._id)},{createdBy:new ObjectId(req.query.userId)}] }        
-          ]
-  }
-},
-{
-  $sort : {_id : 1}
-}
-])
+  const msgSeen = await messagesModel.updateMany(
+    {
+    createdBy: new ObjectId(req.query.userId), 
+    sentTo: new ObjectId(req.user._id) 
+    },
+    {isSeen : true}
+  );
 
+  console.log(msgSeen);
+  const chatCurrentUserData = await messagesModel.aggregate([
+    {
+      $match: { 
+        $or: [
+          {
+            $and: [
+              { sentTo: new ObjectId(req.query.userId) },
+              { createdBy: new ObjectId(req.user._id) },
+            ],
+          },
+          {
+            $and: [
+              { sentTo: new ObjectId(req.user._id) },
+              { createdBy: new ObjectId(req.query.userId) },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      $sort: { _id: 1 },
+    },
+  ]);
   res.send({
     type: "success",
     chatCurrentUser: chatCurrentUser,
-    chatCurrentUserData : chatCurrentUserData,
-    loginUser : req.user._id
+    chatCurrentUserData: chatCurrentUserData,
+    loginUser: req.user._id,
   });
 });
 
 router.post("/conversation", async function (req, res, next) {
   console.log("reached================>");
-  const{currentChatTo, message} = req.body
+  const { currentChatTo, message } = req.body;
 
- const storingMessage = await messagesModel.create({
-  createdBy : new ObjectId(req.user._id),
-  sentTo : new ObjectId(currentChatTo),
-  message : message
- })
+  const storingMessage = await messagesModel.create({
+    createdBy: new ObjectId(req.user._id),
+    sentTo: new ObjectId(currentChatTo),
+    message: message,
+  });
 
- io.to(currentChatTo).emit("message",{message, name : req.user.firstName,} ); 
+  console.log(currentChatTo);
+  console.log(req.user._id);
+  const unNotifiedMsgCount = await messagesModel.countDocuments({
+    sentTo: new ObjectId(currentChatTo),
+    isNotified: false,
+  });
+  console.log(unNotifiedMsgCount);
+
+  io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
+  console.log(storingMessage);
+
+  io.to(currentChatTo).emit("unNotifiedMsgCount", unNotifiedMsgCount);
   console.log(storingMessage);
 
   res.send({
-    type : "success",
-    data : message })  
+    type: "success",
+    data: message,
+    count: unNotifiedMsgCount,
+  });
 });
 
 module.exports = router;

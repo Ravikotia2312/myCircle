@@ -27,6 +27,14 @@ const messagesSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    isNotified: {
+        type: Boolean,
+        default: false,
+    },
+    isSeen: {
+        type: Boolean,
+        default: false,
+    },
 },
 options
 );

@@ -468,7 +468,7 @@ $(document).on("click", "#chat-icon", function() {
     url: `/chats`,
     type: "GET",
     success: function (res) {
-      
+      // $("#chat-badge").replaceWith(`<span class="badge bg-red" id="chat-badge">0</span>`)
       $("#chat-modal").replaceWith(res)
       $("#chat-modal").modal("show")
     },
@@ -480,7 +480,8 @@ $(document).on("click", "#chat-icon", function() {
 
 $(document).on("click", ".user", function() { 
   console.log("clicked user");
-  
+  console.log($(this).find("span #chat-badge-chatbox"));
+  $(this).find("#chat-badge-chatbox").remove()
   const userId = $(this).data("id")
   $("#chat-list").empty()
   $.ajax({
@@ -579,13 +580,16 @@ $(document).on("click", "#send-button", function() {
    
       `<div class="card w-50" style="margin-left: 50%; margin-top: 10px">
                         <div class="card-body">${res.data}</div>
-                        
+    
                       </div>`
     );
+    
+
     },
     error: function (error) { 
       console.log(error);
     },
+    
   });
 
   $("#message-input").val('')
@@ -602,7 +606,21 @@ socket.on("message", (arg) => {
                     
                     </div>`
   );
+
 });
+
+
+socket.on("unNotifiedMsgCount", (arg) => {
+  console.log(socket.id);
+  console.log(arg);
+ $("#chat-badge").replaceWith(`<span class="badge bg-red" id="chat-badge">${arg}</span>`)
+ if(arg == 1)
+ toastr.info(`you have ${arg} message in Chat`);
+ else{
+  toastr.info(`you have ${arg} messages in Chat`);
+ }
+ 
+ });
 
 // socket.on("UserMessage", (arg) => {
 //   console.log(socket.id);

@@ -21,17 +21,22 @@
                       <img src="/uploads/blank-profile-picture-973460_640.jpg" class = "rounded-circle" height="63" width="63"  >
                       {{/if}}
                     </div>
+                    
                     <div class="col">
-                      <div class="card-body" style="padding : 20px">
-                        <h2 class="card-title">{{firstName}} {{lastName}}</h2>
+                      <div class="card-body">
+                        <b><span>{{firstName}} {{lastName}}</span></b>
+                        {{#if (checkMath  pendingUsersMsg '==' 0 )}}
+                        <span class="badge bg-red ms-3" id="chat-badge-chatbox" hidden  >{{pendingUsersMsg}}</span>
+                        {{else}}
+                         <span class="badge bg-red ms-3" id="chat-badge-chatbox">{{pendingUsersMsg}}</span>
+                         {{/if}}
                       </div>
                     </div>
+                    
            </div>
-           </div><br>
-       
+           </div><br>       
             {{/each}}
           </div>  
-          
             <div style="background-image: url(/images/2048343.jpg);width: 55%; margin-left:10%">
   
              <div class="card  rounded-0 bg-primary-subtle">
