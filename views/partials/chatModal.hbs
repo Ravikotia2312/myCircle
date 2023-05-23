@@ -1,75 +1,105 @@
-<div class="modal modal-blur fade" id="chat-modal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title p-s">Chat</h5>
-            {{!-- <h5 class="modal-title">Messages</h5> --}}
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>    
-          </div>
-          <div class="modal-body" >
-              <h3>Users</h3>
-           <div class="d-flex" >
-            <div style=" overflow:scroll; width:350px; height:900px;" >
+<div
+  class="modal modal-blur fade"
+  id="chat-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-full-width modal-dialog-centered"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title p-s">Chat</h5>
+        {{! <h5 class="modal-title">Messages</h5> }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h3>Users</h3>
+        <div class="d-flex">
+          <div style=" overflow:scroll; width:350px; height:900px;">
             {{#each chatUsers}}
-            <div class="card">
-           <div class="user row row-0 p-3" data-id="{{_id}}">
-                    <div class="col-3">
-                      <!-- Photo -->
-                      {{#if profilePic}}
-                      <img src="/uploads/{{profilePic}}" class = "rounded-circle" height="63" width="63" >
+              <div class="card">
+                <div class="user row row-0 p-3" data-id="{{_id}}">
+                  <div class="col-3">
+                    <!-- Photo -->
+                    {{#if profilePic}}
+                      <img
+                        src="/uploads/{{profilePic}}"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                    {{else}}
+                      <img
+                        src="/uploads/blank-profile-picture-973460_640.jpg"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                    {{/if}}
+                  </div>
+
+                  <div class="col">
+                    <div class="card-body">
+                      <b><span>{{firstName}} {{lastName}}</span></b>
+                      {{#if (checkMath pendingUsersMsg "==" 0)}}
+                        <span
+                          class="badge bg-red ms-3"
+                          id="chat-badge-chatbox"
+                          hidden
+                        >{{pendingUsersMsg}}</span>
                       {{else}}
-                      <img src="/uploads/blank-profile-picture-973460_640.jpg" class = "rounded-circle" height="63" width="63"  >
+                        <span
+                          class="badge bg-red ms-3"
+                          id="chat-badge-chatbox"
+                        >{{pendingUsersMsg}}</span>
                       {{/if}}
                     </div>
-                    
-                    <div class="col">
-                      <div class="card-body">
-                        <b><span>{{firstName}} {{lastName}}</span></b>
-                        {{#if (checkMath  pendingUsersMsg '==' 0 )}}
-                        <span class="badge bg-red ms-3" id="chat-badge-chatbox" hidden  >{{pendingUsersMsg}}</span>
-                        {{else}}
-                         <span class="badge bg-red ms-3" id="chat-badge-chatbox">{{pendingUsersMsg}}</span>
-                         {{/if}}
-                      </div>
-                    </div>
-                    
-           </div>
-           </div><br>       
+                  </div>
+
+                </div>
+              </div><br />
             {{/each}}
-          </div>  
-            <div style="background-image: url(/images/2048343.jpg);width: 55%; margin-left:10%">
-  
-             <div class="card  rounded-0 bg-primary-subtle">
-           <div class="user row p-3" data-id="{{_id}}">
+          </div>
+          <div
+            style="background-image: url(/images/2048343.jpg);width: 77%;margin-left: 2%;"
+          >
 
-                    <div id="chat-margin">
-                      <h2>Welcome to Chat..!!</h2>
-                      <h4>start conversation...</h4>
-                    </div>
+            <div class="card rounded-0 bg-primary-subtle">
+              <div class="row p-3" data-id={{_id}}>
 
-                    <div id="user-name">
-                    </div>
-           </div>
-           </div>
-           <br>
- <div style="overflow: scroll; height: 800px;" id="chat-list">
-</div> 
-          </div>
-          </div><br>
-            <div class="input-group " style="width: 58%;margin-left:24%" >
-            <input type="text" class="form-control ms-3" placeholder="Your message here" aria-label="Your message here" aria-describedby="basic-addon2" id="message-input">
-             <div class="input-group-append">
-             <button class="input-group-text ms-2 btn" id="send-button" data-id=""><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
-            </svg>Send</button>
-             </div>
+                <div id="chat-margin">
+                  <h2>Welcome to Chat..!!</h2>
+                  <h4>start conversation...</h4>
+                </div>
+                <div id="user-name">
+                </div>
+              </div>
             </div>
+            <br />
+
+            <div class="chat-listing">
+              {{! <div style="overflow: scroll; height: 800px;" id="chat-list">
+          </div>  }}
             </div>
-           </div>
+
           </div>
-          <div class="modal-footer">
-          </div>
+        </div><br />
+        <div class="input-group" style="width: 77%;margin-left:16%;">
+          {{! input for sending messages would be fitted here once user selects an user to start chat }}
         </div>
       </div>
     </div>
+  </div>
+  <div class="modal-footer">
+  </div>
+</div>
+ </div> 
+ </div> 
