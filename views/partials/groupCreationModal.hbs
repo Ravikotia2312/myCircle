@@ -1,0 +1,121 @@
+ <div class="modal modal-blur fade" id="modal-group-creation" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-success"></div>
+          <div class="modal-body text-center py-4">
+            <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
+           <div class="input-group mb-4 mt-3">
+            <input type="text" class="form-control p-3 shadow-lg p-3 mb-4 bg-white rounded" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+            <button class="input-group-text bg-success btn p-3 shadow-lg p-3 mb-4  rounded" id="basic-addon2">Add</button>
+        </div>
+            </div>
+            <hr>
+             
+          <div style=" overflow:scroll; width:auto; height:500px;">
+            {{#each chatUsers}}
+            {{log "thiss" this }}
+              <div class="card shadow-lg p-3 mb-4 bg-white rounded">
+                <div class=" row row-cols-auto p-3" data-id="{{_id}}">
+                  <div class="col-3">
+                    <!-- Photo -->
+                    {{#if profilePic}}
+                      <img
+                        src="/uploads/{{profilePic}}"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                    {{else}}
+                      <img
+                        src="/uploads/blank-profile-picture-973460_640.jpg"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                    {{/if}}
+                  </div>
+
+                  <div class="col">
+                    <div class="card-body"> 
+                        <div class="d-flex ">
+                        <div>
+                             <h2><span>{{firstName}} {{lastName}}</span></h2>
+                        </div>
+                        <div >
+                            <div class="form-check form-switch ">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" style="margin-left: 191px;">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div><br />
+            {{/each}}
+          </div>
+         
+        
+          <div class="modal-footer">
+            {{!-- <div class="w-100">
+              <div class="row">
+                <div class="col"><a href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
+                   Ok
+                  </a></div>
+              </div>
+            </div> --}}
+            {{!-- <div >
+          <div style=" overflow:scroll; width:350px; height:900px;">
+            {{#each chatUsers}}
+              <div class="card">
+                <div class="user row row-0 p-3" data-id="{{_id}}">
+                  <div class="col-3">
+                    <!-- Photo -->
+                    {{#if profilePic}}
+                      <img
+                        src="/uploads/{{profilePic}}"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                    {{else}}
+                      <img
+                        src="/uploads/blank-profile-picture-973460_640.jpg"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                    {{/if}}
+                  </div>
+
+                  <div class="col">
+                    <div class="card-body">
+                      <b><span>{{firstName}} {{lastName}}</span></b>
+                      {{#if (checkMath pendingUsersMsg "==" 0)}}
+                        <span
+                          class="badge bg-red ms-3"
+                          id="chat-badge-chatbox"
+                          hidden
+                        >{{pendingUsersMsg}}</span>
+                      {{else}}
+                        <span
+                          class="badge bg-red ms-3"
+                          id="chat-badge-chatbox"
+                        >{{pendingUsersMsg}}</span>
+                      {{/if}}
+                    </div>
+                  </div>
+
+                </div>
+              </div><br />
+            {{/each}}
+          </div>
+         
+        </div> --}}
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>

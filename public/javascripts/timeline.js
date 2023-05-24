@@ -71,7 +71,6 @@ $(document).ready(function () {
       },
     },
     submitHandler: function (form) {
-      console.log("++++++++++++++++reached++++++++++++++++");
       var $form = $(form);
       // const value = $("#comment-input").val();
       $.ajax({
@@ -332,8 +331,9 @@ $(document).on("dblclick", ".imagePop", function () {
     url: `posts/${$(this).data("id")}/image-zoom-out`,
     type: "GET",
     success: function (res) {
-      $("div #modal-team").replaceWith(res);
-      $("#modal-team").modal("show");
+      console.log(res);
+      $("#modal-team").replaceWith(res); 
+      $("#modal-team").modal("show"); 
     },
     error: function (error) {
       console.log(error);
@@ -462,15 +462,14 @@ socket.on("notificationSeen", (arg) => {
 });
 
 $(document).on("click", "#chat-icon", function () {
-  console.log("clicked chat-icon");
   $.ajax({
     url: `/chats`,
     type: "GET",
     success: function (res) {
-      // $("#chat-badge").replaceWith(`<span class="badge bg-red" id="chat-badge">0</span>`)
+      $("#chat-badge").replaceWith(`<span class="badge bg-red" id="chat-badge" hidden></span>`)
       $("#chat-modal").replaceWith(res);
       $("#chat-modal").modal("show");
-    },
+    },        
     error: function (error) {
       console.log(error);
     },
@@ -478,8 +477,6 @@ $(document).on("click", "#chat-icon", function () {
 });
 
 $(document).on("click", ".user", function () {
-  console.log("clicked user");
-  console.log($(this).find("span #chat-badge-chatbox"));
   $(this).find("#chat-badge-chatbox").remove();
   const userId = $(this).data("id");
   // $("#chat-list").empty();
@@ -515,23 +512,18 @@ $(document).on("click", ".user", function () {
         <h2 class="card-title">${res.chatCurrentUser.firstName} ${res.chatCurrentUser.lastName}</h2>
       </div>
       </div>`);
-
-     
-          // console.log($(".chat-listing"),"++++++++++++++++++++==");
+       
         $("#send-button")
           .replaceWith(`<button class="input-group-text ms-2 btn" id="send-button" data-id=${res.chatCurrentUser._id}><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
-            </svg>Send</button>`);
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
+          </svg>Send</button>`);
       }
 
         $(".chat-listing").html(`<div style="overflow: scroll; height: 800px;" id="chat-list">
        </div>`)
 
       for (let value of res.chatCurrentUserData) {
-        console.log(value.createdBy == res.loginUser);  
-        console.log(value);
-        console.log(res.loginUser);
         if (value.createdBy == res.loginUser) {
           $("#chat-list").append(
             `<div class="bg-dark  m-3 p-2 text-light"style="float:right; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word; clear:both; border-radius: 15px; border-top-right-radius: 1px;"><b>${value.message}</b><div style="float:right;margin:10px 0px 0px 10px">${moment(value.createdOn).format('h:mm')}</div></div>`);
@@ -585,6 +577,7 @@ $(document).on("click", "#send-button", function () {
 
   $("#message-input").val("");
 });
+
 socket.on("message", (arg) => {
   console.log(socket.id);
   console.log(arg);
@@ -594,8 +587,6 @@ socket.on("message", (arg) => {
     <div style="float:right;margin:10px 0px 0px 10px">${moment(arg.createdOn).format('h:mm')}
    </div>`
   );
-
-  
 });
 
 socket.on("unNotifiedMsgCount", (arg) => {
@@ -604,11 +595,27 @@ socket.on("unNotifiedMsgCount", (arg) => {
   $("#chat-badge").replaceWith(
     `<span class="badge bg-red" id="chat-badge">${arg}</span>`
   );
-  // $("#chat-badge-chatbox").replaceWith(`<span class="badge bg-red ms-3" id="chat-badge-chatbox">${arg}</span>`)
 
+  // $("#chat-badge-chatbox").replaceWith(`<span class="badge bg-red ms-3" id="chat-badge-chatbox">${arg}</span>`)
   if (arg == 1) toastr.info(`you have ${arg} message in Chat`);
   else {
     toastr.info(`you have ${arg} messages in Chat`);
   }
 });
 
+$(document).on("click", "#create-group-button", function () {
+  console.log("clicked create group button");
+  $.ajax({
+    url: `/group-users-listing`,
+    type: "GET",
+    success: function (res) {
+    console.log(res);
+    $("#modal-group-creation").replaceWith(res)
+      $("#modal-group-creation").modal("show")
+    },        
+    error: function (error) {
+      console.log(error);
+    },
+  });
+ 
+})

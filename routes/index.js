@@ -604,19 +604,19 @@ router.get("/chats-current-user", async function (req, res, next) {
     {isSeen : true}
   );
 
-  console.log(msgSeen);
+  console.log(msgSeen, "msgSeen");
   const chatCurrentUserData = await messagesModel.aggregate([
     {
       $match: { 
-        $or: [
+        $or:[
           {
-            $and: [
+            $and:[
               { sentTo: new ObjectId(req.query.userId) },
               { createdBy: new ObjectId(req.user._id) },
             ],
           },
           {
-            $and: [
+            $and:[
               { sentTo: new ObjectId(req.user._id) },
               { createdBy: new ObjectId(req.query.userId) },
             ],
@@ -636,7 +636,7 @@ router.get("/chats-current-user", async function (req, res, next) {
   });
 });
 
-router.post("/conversation", async function (req, res, next) {
+router.post("/conversation", async function (req, res, next) {      
   console.log("reached================>");
   const { currentChatTo, message } = req.body;
 
@@ -652,6 +652,7 @@ router.post("/conversation", async function (req, res, next) {
     sentTo: new ObjectId(currentChatTo),
     isNotified: false,
   });
+
   console.log(unNotifiedMsgCount);
 
   io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
@@ -666,5 +667,51 @@ router.post("/conversation", async function (req, res, next) {
     count: unNotifiedMsgCount,
   });
 });
+
+router.get("/group-users-listing", async function (req, res, next){
+  const users = await UserModel.aggregate([
+    {
+      $match: {
+        _id: { $ne: new ObjectId(req.user._id) },
+      },
+    },
+    {
+      $lookup: {
+        from: "messages",
+        let: {
+          userId: "$_id",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$$userId", "$createdBy"] },
+                  { $eq: ["$sentTo", new ObjectId(req.user._id)] },
+                  { $eq: ["$isSeen", false] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "users",
+      },
+    },
+    {
+      $project: {
+        firstName: 1,
+        lastName: 1,
+        profilePic: 1,
+        pendingUsersMsg: { $size: "$users" },
+      },
+    },
+  ]);
+
+  // console.log(users);
+  res.render("./partials/groupCreationModal", {
+    layout: "blank",
+    chatUsers: users,
+  });
+})
 
 module.exports = router;
