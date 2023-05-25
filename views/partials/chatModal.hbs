@@ -37,7 +37,7 @@
       <div class="modal-body">
         <h3>Users</h3>
         <div class="d-flex">
-          <div style=" overflow:scroll; width:350px; height:900px;">
+          <div style=" overflow:scroll; width:350px; height:900px; ">
             {{#each chatUsers}}
               <div class="card">
                 <div class="user row row-0 p-3" data-id="{{_id}}">
@@ -79,13 +79,52 @@
                   </div>
 
                 </div>
+
+               
               </div><br />
             {{/each}}
-          </div>
-          <div
-            style="background-image: url(/images/2048343.jpg);width: 77%;margin-left: 2%;"
-          >
+      
+      {{#each chatUsers}}
+           {{#each groups}}
+            <div class="card mb-3">
+             <div class="user row row-0 p-3 " data-id="{{_id}}">
+                  <div class="col-3">
+                    <!-- Photo -->
+                      <img
+                        src="/uploads/blank-profile-picture-973460_640.jpg"
+                        class="rounded-circle"
+                        height="63"
+                        width="63"
+                      />
+                  </div>
+                  <div class="col">
+                    <div class="card-body">
+                      <b><span>{{groupName}}</span></b>
+                      {{#if (checkMath pendingUsersMsg "==" 0)}}
+                        <span
+                          class="badge bg-red ms-3"
+                          id="chat-badge-chatbox"
+                          hidden
+                        >{{pendingUsersMsg}}</span>
+                      {{else}}
+                        <span
+                          class="badge bg-red ms-3"
+                          id="chat-badge-chatbox"
+                        >{{pendingUsersMsg}}</span>
+                      {{/if}}
+                    </div>
+                  </div>
 
+                </div>
+                </div>
+              {{/each}}
+              {{/each}}
+
+
+
+
+          </div>
+          <div style="background-image: url(/images/2048343.jpg);width: 77%;margin-left: 2%;">
             <div class="card rounded-0 bg-primary-subtle">
               <div class="row p-3" data-id={{_id}}>
 

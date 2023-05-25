@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
   //jquery for editing the post which are not archieved
   $("form#editPosts").validate({
@@ -608,7 +609,7 @@ $(document).on("click", "#create-group-button", function () {
   $.ajax({
     url: `/group-users-listing`,
     type: "GET",
-    success: function (res) {
+    success: function ( ) {
     console.log(res);
     $("#modal-group-creation").replaceWith(res)
       $("#modal-group-creation").modal("show")
@@ -618,4 +619,32 @@ $(document).on("click", "#create-group-button", function () {
     },
   });
  
+})
+
+$(document).on("click", "#group-creation-button", function () {
+  let userId = []
+  $('input[name="add-users-toggle"]:checked').each(function() {
+    let users = $(this).data("id");
+    userId.push(users)
+;
+  });
+  console.log(userId);
+  let groupName = $('#group-name-input').val();
+  $.ajax({
+    url: `/creating-groups`,
+    type: "POST",
+    data :{
+     group : groupName,
+      members : JSON.stringify(userId)
+    },
+    success: function (res) {
+    toastr.success("group successfully Created")
+    $("#modal-group-creation").modal("hide")
+
+    },        
+    error: function (error) {
+      console.log(error);
+    },
+  });
+
 })

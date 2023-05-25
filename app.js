@@ -55,9 +55,9 @@ const hbs = expHbs.create({
       }
       return new Handlebars.SafeString(str);
     },
-    checkMath: function (val1, comparision, val2) {
+    checkMath: function (val1, comparison, val2) {
 
-      switch (comparision) {
+      switch (comparison) {
         case "==":
           return val1 == val2 ? true : false;
         case "!=":
@@ -66,8 +66,10 @@ const hbs = expHbs.create({
           return parseFloat(val1) > parseFloat(val2) ? true : false;
         case "<":
           return val1 < val2 ? true : false;
+        
       }
     },
+
     Date: function (createdOn, format) {
       // var mmt = moment(createdOn);
       // return mmt.format(format);

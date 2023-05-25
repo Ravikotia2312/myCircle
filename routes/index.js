@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const UserModel = require("../models/users");
 const postModel = require("../models/posts");
+const groupsModel = require("../models/groups");
 const mongoose = require("mongoose");
 const md5 = require("md5");
 const passport = require("passport");
@@ -10,7 +11,6 @@ const statisticsModel = require("../models/statistics");
 const notificationsModel = require("../models/notifications");
 const moment = require("moment");
 var nodemailer = require("nodemailer");
-const users = require("../models/users");
 const messagesModel = require("../models/messages");
 const { log } = require("handlebars/runtime");
 
@@ -570,19 +570,56 @@ router.get("/chats", async function (req, res, next) {
       },
     },
     {
-      $project: {
-        firstName: 1,
-        lastName: 1,
-        profilePic: 1,
-        pendingUsersMsg: { $size: "$users" },
+      $lookup: {
+      from: "groups",
+      let: {
+        userId: "$_id",
       },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [{
+                $or:[
+                  {$in: ["$$userId","$members"]}
+                ],
+              },{
+                $in: [new ObjectId(req.user._id),"$members"]
+              }],
+            },
+          },
+        },
+      ],
+      as: "groups",
+    },   
+  },
+  // {
+  //   $unwind  : "$groups"
+  // },
+  {
+    $project: {
+      firstName: 1,
+      lastName: 1,
+      profilePic: 1,
+      groups : 1,
+      pendingUsersMsg: { $size: "$users" },
     },
+  },
   ]);
 
-  console.log(users);
+  for (let i = 0; i < users.length; i++) {
+    console.log(users[i]);
+    
+  }
+// for(let value of users.groups)
+// {
+//   console.log(value,"+++++++++++++++>")
+//   console.log("inside");
+// }
   res.render("./partials/chatModal", {
     layout: "blank",
     chatUsers: users,
+    loginUser : new ObjectId(req.user._id)
   });
 });
 
@@ -596,27 +633,27 @@ router.get("/chats-current-user", async function (req, res, next) {
   }).lean();
   console.log(chatCurrentUser);
 
-  const msgSeen = await messagesModel.updateMany(
-    {
-    createdBy: new ObjectId(req.query.userId), 
-    sentTo: new ObjectId(req.user._id) 
-    },
-    {isSeen : true}
+    const msgSeen = await messagesModel.updateMany(
+      {
+        createdBy: new ObjectId(req.query.userId),
+        sentTo: new ObjectId(req.user._id),
+      },
+      { isSeen: true }
   );
 
   console.log(msgSeen, "msgSeen");
   const chatCurrentUserData = await messagesModel.aggregate([
     {
-      $match: { 
-        $or:[
+      $match: {
+        $or: [
           {
-            $and:[
+            $and: [
               { sentTo: new ObjectId(req.query.userId) },
               { createdBy: new ObjectId(req.user._id) },
             ],
           },
           {
-            $and:[
+            $and: [
               { sentTo: new ObjectId(req.user._id) },
               { createdBy: new ObjectId(req.query.userId) },
             ],
@@ -636,7 +673,7 @@ router.get("/chats-current-user", async function (req, res, next) {
   });
 });
 
-router.post("/conversation", async function (req, res, next) {      
+router.post("/conversation", async function (req, res, next) {
   console.log("reached================>");
   const { currentChatTo, message } = req.body;
 
@@ -668,50 +705,37 @@ router.post("/conversation", async function (req, res, next) {
   });
 });
 
-router.get("/group-users-listing", async function (req, res, next){
-  const users = await UserModel.aggregate([
-    {
-      $match: {
-        _id: { $ne: new ObjectId(req.user._id) },
-      },
-    },
-    {
-      $lookup: {
-        from: "messages",
-        let: {
-          userId: "$_id",
-        },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ["$$userId", "$createdBy"] },
-                  { $eq: ["$sentTo", new ObjectId(req.user._id)] },
-                  { $eq: ["$isSeen", false] },
-                ],
-              },
-            },
-          },
-        ],
-        as: "users",
-      },
-    },
-    {
-      $project: {
-        firstName: 1,
-        lastName: 1,
-        profilePic: 1,
-        pendingUsersMsg: { $size: "$users" },
-      },
-    },
-  ]);
+router.get("/group-users-listing", async function (req, res, next) {
+  const users = await UserModel.find({_id : {$ne : new ObjectId(req.user._id)}}).lean()
 
-  // console.log(users);
   res.render("./partials/groupCreationModal", {
     layout: "blank",
     chatUsers: users,
   });
-})
+});
+
+router.post("/creating-groups", async function (req, res, next) {
+  try {
+    const members = JSON.parse(req.body.members);
+    const groupName = req.body.group;
+    console.log(groupName, members);
+
+
+    members.push(new ObjectId(req.user._id))
+
+    console.log(members, "members");  
+    const creatingGroups = await groupsModel.create({
+      createdBy : new ObjectId(req.user._id),
+      members : members,
+      groupName : groupName
+    })
+
+    console.log(creatingGroups);
+      
+    res.send({ type: "success" });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;
