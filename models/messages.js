@@ -35,6 +35,15 @@ const messagesSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    messageType: {
+        type: String,
+        enum :['personal','group'],
+        default: 'personal',
+    },
+    groupId : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"groups",
+    }
 },
 options
 );

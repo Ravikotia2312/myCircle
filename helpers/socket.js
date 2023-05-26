@@ -4,7 +4,7 @@ module.exports = function (server) {
     io.on("connection", async(socket) => {
         
         socket.join(socket.handshake.query.userId);
-            
+        socket.join(socket.handshake.query.groupId)    
             socket.on("test", (arg) => {          
                console.log(io.to(arg).emit(arg, "Kotia"),"+++++++++++++++++++++++++++++++++++++++++====");
                 console.log(arg, "arg"); // world

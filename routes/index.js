@@ -236,12 +236,25 @@ router.get("/timeline", async function (req, res, next) {
     for (let i = 1; i <= pageCount; i++) {
       pageArray.push(i);
     }
+    const groups = await groupsModel // getting groups created by login user or in which he is as a member
+    .find({
+      $or: [
+        { createdBy: new ObjectId(req.user._id) },
+        { members: { $in: [new ObjectId(req.user._id)] } },
+      ],
+    })
+    .lean();
+    
+    const groupId  = groups.map((group)=> group._id)
+    console.log(JSON.stringify(groupId,null,2))
+
 
     return res.render("timeline", {
       data: data,
       pageArray: pageArray,
       total: total,
-      local: res.locals._id,
+      local: req.user._id, 
+      groupId: groupId,
       notificationsCount: notificationsCount,
       notificationDetails: notificationDetails,
       unNotifiedMsgCount: unNotifiedMsgCount,
@@ -541,7 +554,7 @@ router.get("/chats", async function (req, res, next) {
   );
   console.log(msgNotified);
 
-  const users = await UserModel.aggregate([
+  const users = await UserModel.aggregate([ // getting all users instead login user
     {
       $match: {
         _id: { $ne: new ObjectId(req.user._id) },
@@ -570,56 +583,29 @@ router.get("/chats", async function (req, res, next) {
       },
     },
     {
-      $lookup: {
-      from: "groups",
-      let: {
-        userId: "$_id",
+      $project: {
+        firstName: 1,
+        lastName: 1,
+        profilePic: 1,
+        pendingUsersMsg: { $size: "$users" },
       },
-      pipeline: [
-        {
-          $match: {
-            $expr: {
-              $and: [{
-                $or:[
-                  {$in: ["$$userId","$members"]}
-                ],
-              },{
-                $in: [new ObjectId(req.user._id),"$members"]
-              }],
-            },
-          },
-        },
-      ],
-      as: "groups",
-    },   
-  },
-  // {
-  //   $unwind  : "$groups"
-  // },
-  {
-    $project: {
-      firstName: 1,
-      lastName: 1,
-      profilePic: 1,
-      groups : 1,
-      pendingUsersMsg: { $size: "$users" },
     },
-  },
   ]);
 
-  for (let i = 0; i < users.length; i++) {
-    console.log(users[i]);
-    
-  }
-// for(let value of users.groups)
-// {
-//   console.log(value,"+++++++++++++++>")
-//   console.log("inside");
-// }
+  const groups = await groupsModel // getting groups created by login user or in which he is as a member
+    .find({
+      $or: [
+        { createdBy: new ObjectId(req.user._id) },
+        { members: { $in: [new ObjectId(req.user._id)] } },
+      ],
+    })
+    .lean();
+
   res.render("./partials/chatModal", {
     layout: "blank",
     chatUsers: users,
-    loginUser : new ObjectId(req.user._id)
+    groups: groups,
+    loginUser: new ObjectId(req.user._id),
   });
 });
 
@@ -631,17 +617,15 @@ router.get("/chats-current-user", async function (req, res, next) {
     isDeleted: false,
     _id: req.query.userId,
   }).lean();
-  console.log(chatCurrentUser);
 
-    const msgSeen = await messagesModel.updateMany(
-      {
-        createdBy: new ObjectId(req.query.userId),
-        sentTo: new ObjectId(req.user._id),
-      },
-      { isSeen: true }
+  const msgSeen = await messagesModel.updateMany(
+    {
+      createdBy: new ObjectId(req.query.userId),
+      sentTo: new ObjectId(req.user._id),
+    },
+    { isSeen: true }
   );
 
-  console.log(msgSeen, "msgSeen");
   const chatCurrentUserData = await messagesModel.aggregate([
     {
       $match: {
@@ -674,39 +658,75 @@ router.get("/chats-current-user", async function (req, res, next) {
 });
 
 router.post("/conversation", async function (req, res, next) {
-  console.log("reached================>");
-  const { currentChatTo, message } = req.body;
 
-  const storingMessage = await messagesModel.create({
-    createdBy: new ObjectId(req.user._id),
-    sentTo: new ObjectId(currentChatTo),
-    message: message,
-  });
+  if(req.query.userid){
+    console.log("reached================>");
+    const {  message } = req.body;
+    const currentChatTo = req.query.userid
+    const storingMessage = await messagesModel.create({
+      createdBy: new ObjectId(req.user._id),
+      sentTo: new ObjectId(currentChatTo),
+      message: message,
+    });
+  
+    const unNotifiedMsgCount = await messagesModel.countDocuments({
+      sentTo: new ObjectId(currentChatTo),
+      isNotified: false,
+    });
+  
+  
+    io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
+    console.log(storingMessage);
+  
+    io.to(currentChatTo).emit("unNotifiedMsgCount", unNotifiedMsgCount);
+    console.log(storingMessage);
+  
+    res.send({
+      type: "success",
+      data: message,
+      count: unNotifiedMsgCount,
+    });
+  }
 
-  console.log(currentChatTo);
-  console.log(req.user._id);
-  const unNotifiedMsgCount = await messagesModel.countDocuments({
-    sentTo: new ObjectId(currentChatTo),
-    isNotified: false,
-  });
 
-  console.log(unNotifiedMsgCount);
+  if(req.query.groupid){
+    console.log("reached================>");
+    const {  message } = req.body;
+    const currentChatTo = req.query.groupid
+    const storingMessage = await messagesModel.create({
+      createdBy: new ObjectId(req.user._id),
+      sentTo: new ObjectId(currentChatTo),
+      message: message,
+      messageType : 'group',
+      groupId : new ObjectId(currentChatTo)
+    });
+  
 
-  io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
-  console.log(storingMessage);
-
-  io.to(currentChatTo).emit("unNotifiedMsgCount", unNotifiedMsgCount);
-  console.log(storingMessage);
-
-  res.send({
-    type: "success",
-    data: message,
-    count: unNotifiedMsgCount,
-  });
+    console.log(req.user._id);
+    const unNotifiedMsgCount = await messagesModel.countDocuments({
+      sentTo: new ObjectId(currentChatTo),
+      isNotified: false,
+    });
+  
+  
+    io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
+    console.log(storingMessage);
+  
+    io.to(currentChatTo).emit("unNotifiedMsgCount", unNotifiedMsgCount);
+    console.log(storingMessage);
+  
+    res.send({
+      type: "success",
+      data: message,
+      count: unNotifiedMsgCount,
+    });
+  }
 });
 
 router.get("/group-users-listing", async function (req, res, next) {
-  const users = await UserModel.find({_id : {$ne : new ObjectId(req.user._id)}}).lean()
+  const users = await UserModel.find({
+    _id: { $ne: new ObjectId(req.user._id) },
+  }).lean();
 
   res.render("./partials/groupCreationModal", {
     layout: "blank",
@@ -720,22 +740,85 @@ router.post("/creating-groups", async function (req, res, next) {
     const groupName = req.body.group;
     console.log(groupName, members);
 
+    members.push(new ObjectId(req.user._id));
 
-    members.push(new ObjectId(req.user._id))
-
-    console.log(members, "members");  
+    console.log(members, "members");
     const creatingGroups = await groupsModel.create({
-      createdBy : new ObjectId(req.user._id),
-      members : members,
-      groupName : groupName
-    })
+      createdBy: new ObjectId(req.user._id),
+      members: members,
+      groupName: groupName,
+    });
 
-    console.log(creatingGroups);
-      
+
     res.send({ type: "success" });
   } catch (error) {
     console.log(error);
   }
+});
+
+router.get("/chats-current-group", async function (req, res, next) {
+  console.log("reached================>");
+
+  try {
+    console.log(req.query.groupId);
+    const chatCurrentGroup = await groupsModel.findOne({
+      _id: new ObjectId(req.query.groupId),
+      isDeleted: false,
+    }).lean();
+
+    // const msgSeen = await messagesModel.updateMany(
+    //   {
+    //     createdBy: new ObjectId(req.query.groupId),
+    //     sentTo: new ObjectId(req.user._id),
+    //   },
+    //   { isSeen: true }
+    // );
+  
+    // console.log(msgSeen, "msgSeen");
+
+    const chatCurrentGroupData = await messagesModel.aggregate([
+      {
+        $match : {
+          "sentTo" : new ObjectId(req.query.groupId)
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          let: {
+            userId: "$createdBy",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq : ["$$userId","$_id"]
+                },
+              },
+            },
+          ],
+          as: "users",
+        },
+      },
+      {
+        $unwind : "$users"
+      }
+    ]);
+
+    console.log(chatCurrentGroupData);
+    res.send({  
+      type: "success",
+      chatCurrentGroup : chatCurrentGroup,
+      chatCurrentGroupData : chatCurrentGroupData,
+      loginUser: req.user._id,
+    });
+    
+  } catch (error) {
+    
+    console.log(error);
+  }
+  
+ 
 });
 
 module.exports = router;

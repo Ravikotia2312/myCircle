@@ -35,7 +35,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <h3>Users</h3>
+        <h2>Chats</h2>
         <div class="d-flex">
           <div style=" overflow:scroll; width:350px; height:900px; ">
             {{#each chatUsers}}
@@ -84,14 +84,15 @@
               </div><br />
             {{/each}}
       
-      {{#each chatUsers}}
+          <h2>Your Groups</h2>
+
            {{#each groups}}
             <div class="card mb-3">
-             <div class="user row row-0 p-3 " data-id="{{_id}}">
+             <div class="group-chat row row-0 p-3 " data-group-id="{{_id}}">
                   <div class="col-3">
                     <!-- Photo -->
                       <img
-                        src="/uploads/blank-profile-picture-973460_640.jpg"
+                        src="/images/groupIcon.jpg"
                         class="rounded-circle"
                         height="63"
                         width="63"
@@ -118,11 +119,6 @@
                 </div>
                 </div>
               {{/each}}
-              {{/each}}
-
-
-
-
           </div>
           <div style="background-image: url(/images/2048343.jpg);width: 77%;margin-left: 2%;">
             <div class="card rounded-0 bg-primary-subtle">

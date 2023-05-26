@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
   //jquery for editing the post which are not archieved
   $("form#editPosts").validate({
@@ -333,8 +332,8 @@ $(document).on("dblclick", ".imagePop", function () {
     type: "GET",
     success: function (res) {
       console.log(res);
-      $("#modal-team").replaceWith(res); 
-      $("#modal-team").modal("show"); 
+      $("#modal-team").replaceWith(res);
+      $("#modal-team").modal("show");
     },
     error: function (error) {
       console.log(error);
@@ -371,6 +370,7 @@ $(document).on("click", ".comment", function () {
 const socket = io({
   query: {
     userId: $("#socket-userId").val(),
+    groupId: $("#socket-userId").data("group")
   },
 });
 
@@ -467,10 +467,12 @@ $(document).on("click", "#chat-icon", function () {
     url: `/chats`,
     type: "GET",
     success: function (res) {
-      $("#chat-badge").replaceWith(`<span class="badge bg-red" id="chat-badge" hidden></span>`)
+      $("#chat-badge").replaceWith(
+        `<span class="badge bg-red" id="chat-badge" hidden></span>`
+      );
       $("#chat-modal").replaceWith(res);
       $("#chat-modal").modal("show");
-    },        
+    },
     error: function (error) {
       console.log(error);
     },
@@ -487,10 +489,12 @@ $(document).on("click", ".user", function () {
     success: function (res) {
       // console.log(res.chatCurrentUser._id);
       if (res.chatCurrentUser.profilePic) {
-        $("#chat-margin").replaceWith(`<div class="col-1" id="chat-margin" style="display:contents">
+        $("#chat-margin")
+          .replaceWith(`<div class="col-1" id="chat-margin" style="display:contents">
         <!-- Photo -->
         <img src="/uploads/${res.chatCurrentUser.profilePic}" class = "rounded-circle" height="63" width="63" > 
       </div>`);
+
         $("#user-name").replaceWith(`<div class="col" id="user-name">
       <div class="card-body" style="padding : 20px">
       <h2 class="card-title">${res.chatCurrentUser.firstName} ${res.chatCurrentUser.lastName}</h2>
@@ -513,7 +517,7 @@ $(document).on("click", ".user", function () {
         <h2 class="card-title">${res.chatCurrentUser.firstName} ${res.chatCurrentUser.lastName}</h2>
       </div>
       </div>`);
-       
+
         $("#send-button")
           .replaceWith(`<button class="input-group-text ms-2 btn" id="send-button" data-id=${res.chatCurrentUser._id}><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -521,58 +525,79 @@ $(document).on("click", ".user", function () {
           </svg>Send</button>`);
       }
 
-        $(".chat-listing").html(`<div style="overflow: scroll; height: 800px;" id="chat-list">
-       </div>`)
+      $(".chat-listing")
+        .html(`<div style="overflow: scroll; height: 800px;" id="chat-list">
+       </div>`);
 
       for (let value of res.chatCurrentUserData) {
         if (value.createdBy == res.loginUser) {
           $("#chat-list").append(
-            `<div class="bg-dark  m-3 p-2 text-light"style="float:right; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word; clear:both; border-radius: 15px; border-top-right-radius: 1px;"><b>${value.message}</b><div style="float:right;margin:10px 0px 0px 10px">${moment(value.createdOn).format('h:mm')}</div></div>`);
+            `<div class="bg-dark  m-3 p-2 text-light"style="float:right; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word; clear:both; border-radius: 15px; border-top-right-radius: 1px;"><b>${
+              value.message
+            }</b><div style="float:right;margin:10px 0px 0px 10px">${moment(
+              value.createdOn
+            ).format("h:mm")}</div></div>`
+          );
         } else {
           $("#chat-list").append(
-            `<div class="bg-light m-3 p-2 text-dark" style="float:left; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word;clear:both; border-radius: 15px; border-top-left-radius: 1px;"><b>${value.message}</b><div style="float:right;margin:10px 0px 0px 10px">${moment(value.createdOn).format('h:mm')}</div></div>`);
+            `<div class="bg-light m-3 p-2 text-dark" style="float:left; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word;clear:both; border-radius: 15px; border-top-left-radius: 1px;"><b>${
+              value.message
+            }</b><div style="float:right;margin:10px 0px 0px 10px">${moment(
+              value.createdOn
+            ).format("h:mm")}</div></div>`
+          );
         }
       }
 
-      $(".input-group").html(`<input type="text" class="form-control ms-3" placeholder="Your message here" aria-label="Your message here" aria-describedby="basic-addon2" id="message-input">
+      $(".input-group")
+        .html(`<input type="text" class="form-control ms-3" placeholder="Your message here" aria-label="Your message here" aria-describedby="basic-addon2" id="message-input">
       <div class="input-group-append">
       <button class="shadow input-group-text ms-2 btn bg-blue" id="send-button" data-id=${res.chatCurrentUser._id}><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
      <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
      </svg>Send</button>
-      </div>`)
+      </div>`);
     },
     error: function (error) {
       console.log(error);
     },
   });
-}); 
+});
 $(document).on("click", "#send-button", function () {
   console.log("clicked send-button");
   // console.log();
   const message = $("#message-input").val();
-  const currentChatTo = $(this).data("id");
-  console.log(currentChatTo);
+  let url = `/conversation`;
+  if ($(this).data("id")) {
+    const userId = $(this).data("id");
+    url += `?userid=${userId}`;
+    console.log("inside userId");
+  }
+  if ($(this).data("group-id")) {
+    const groupId = $(this).data("group-id");
+    url += `?groupid=${groupId}`;
+    console.log("inside GroupId");
+  }
+  console.log(url);
 
   $.ajax({
-    url: `/conversation`,
+    url: url,
     type: "POST",
     data: {
       message,
-      currentChatTo,
     },
     success: function (res) {
       console.log(res);
       $("#chat-list").append(
         `<div class="bg-dark m-3 p-2 text-light"style="float:right; margin-top: 10px; max-width: 500px; clear:both; overflow-wrap: break-word; border-radius: 15px; border-top-right-radius: 1px;" >
+        <h2>You</h2>
         <b>${res.data}</b><br>
-        <div style="float : right">${moment(Date.now()).format('h:mm')}
+        <div style="float : right">${moment(Date.now()).format("h:mm")}
       </div>`
       );
     },
     error: function (error) {
       console.log(error);
-   
     },
   });
 
@@ -585,7 +610,9 @@ socket.on("message", (arg) => {
   $("#chat-list").append(
     `<div class="bg-light m-3 p-2 text-dark" style="float:left; margin-top: 10px; max-width: 500px; clear:both; border-radius: 15px; border-top-left-radius: 1px;">
     <b>${arg.message}</b><br>
-    <div style="float:right;margin:10px 0px 0px 10px">${moment(arg.createdOn).format('h:mm')}
+    <div style="float:right;margin:10px 0px 0px 10px">${moment(
+      arg.createdOn
+    ).format("h:mm")}
    </div>`
   );
 });
@@ -609,42 +636,99 @@ $(document).on("click", "#create-group-button", function () {
   $.ajax({
     url: `/group-users-listing`,
     type: "GET",
-    success: function ( ) {
-    console.log(res);
-    $("#modal-group-creation").replaceWith(res)
-      $("#modal-group-creation").modal("show")
-    },        
+    success: function (res) {
+      console.log(res);
+      $("#modal-group-creation").replaceWith(res);
+      $("#modal-group-creation").modal("show");
+    },
     error: function (error) {
       console.log(error);
     },
   });
- 
-})
+});
 
 $(document).on("click", "#group-creation-button", function () {
-  let userId = []
-  $('input[name="add-users-toggle"]:checked').each(function() {
+  let userId = [];
+  $('input[name="add-users-toggle"]:checked').each(function () {
     let users = $(this).data("id");
-    userId.push(users)
-;
+    userId.push(users);
   });
   console.log(userId);
-  let groupName = $('#group-name-input').val();
+  let groupName = $("#group-name-input").val();
   $.ajax({
     url: `/creating-groups`,
     type: "POST",
-    data :{
-     group : groupName,
-      members : JSON.stringify(userId)
+    data: {
+      group: groupName,
+      members: JSON.stringify(userId),
     },
     success: function (res) {
-    toastr.success("group successfully Created")
-    $("#modal-group-creation").modal("hide")
-
-    },        
+      toastr.success("group successfully Created");
+      $("#modal-group-creation").modal("hide");
+    },
     error: function (error) {
       console.log(error);
     },
   });
+});
 
-})
+$(document).on("click", ".group-chat", function () {
+  let groupId = $(this).data("group-id");
+
+  $.ajax({
+    url: `chats-current-group?groupId=${groupId}`,
+    type: "GET",
+    success: function (res) {
+      console.log(res);
+
+      $("#chat-margin")
+        .replaceWith(`<div class="col-1" id="chat-margin" style="display:contents">
+        <!-- Photo -->
+        <img src="/images/groupIcon.jpg" class = "rounded-circle" height="63" width="63" > 
+      </div>`);
+      $("#user-name").replaceWith(`<div class="col" id="user-name">
+      <div class="card-body" style="padding : 20px">
+      <h2 class="card-title">${res.chatCurrentGroup.groupName}</h2>
+      </div>
+      </div>`);
+
+      $(".input-group")
+        .html(`<input type="text" class="form-control ms-3" placeholder="Your message here" aria-label="Your message here" aria-describedby="basic-addon2" id="message-input">
+      <div class="input-group-append">
+      <button class="shadow input-group-text ms-2 btn bg-blue" id="send-button" data-group-id=${res.chatCurrentGroup._id}><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+     <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
+     </svg>Send</button>
+      </div>`);
+
+      $(".chat-listing")
+        .html(`<div style="overflow: scroll; height: 800px;" id="chat-list">
+     </div>`);
+
+      for (let value of res.chatCurrentGroupData) {
+        if (value.createdBy == res.loginUser) {
+          $("#chat-list").append(
+            `<div class="bg-dark  m-3 p-2 text-light"style="float:right; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word; clear:both; border-radius: 15px; border-top-right-radius: 1px;">
+            <h2>You</h2>
+            <b>${value.message}</b>
+            <div style="float:right;margin:10px 0px 0px 10px">${moment(
+              value.createdOn
+            ).format("h:mm")}</div></div>`
+          );
+        } else {
+          $("#chat-list").append(
+            `<div class="bg-light m-3 p-2 text-dark" style="float:left; margin-top: 10px; max-width: 500px; min-height : auto; overflow-wrap: break-word;clear:both; border-radius: 15px; border-top-left-radius: 1px;">
+            <h2>${value.users.firstName}</h2>
+            <b>${value.message}</b>
+            <div style="float:right;margin:10px 0px 0px 10px">${moment(
+              value.createdOn
+            ).format("h:mm")}</div></div>`
+          );
+        }
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+});
