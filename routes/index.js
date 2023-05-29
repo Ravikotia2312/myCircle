@@ -154,7 +154,6 @@ router.get("/timeline", async function (req, res, next) {
       {
         $sort: { createdOn: -1 },
       },
-
       {
         $project: {
           postName: 1,
@@ -237,23 +236,25 @@ router.get("/timeline", async function (req, res, next) {
       pageArray.push(i);
     }
     const groups = await groupsModel // getting groups created by login user or in which he is as a member
-    .find({
-      $or: [
-        { createdBy: new ObjectId(req.user._id) },
-        { members: { $in: [new ObjectId(req.user._id)] } },
-      ],
-    })
-    .lean();
+      .find({
+        $or: [
+          { createdBy: new ObjectId(req.user._id) },
+          { members: { $in: [new ObjectId(req.user._id)] } },
+        ],
+      })
+      .lean();
     
-    const groupId  = groups.map((group)=> group._id)
-    console.log(JSON.stringify(groupId,null,2))
 
+
+    const groupId = groups.map((group) => group._id);
+    console.log(JSON.stringify(groupId, null, 2));
+    console.log(groupId);
 
     return res.render("timeline", {
       data: data,
       pageArray: pageArray,
       total: total,
-      local: req.user._id, 
+      local: req.user._id,
       groupId: groupId,
       notificationsCount: notificationsCount,
       notificationDetails: notificationDetails,
@@ -554,7 +555,8 @@ router.get("/chats", async function (req, res, next) {
   );
   console.log(msgNotified);
 
-  const users = await UserModel.aggregate([ // getting all users instead login user
+  const users = await UserModel.aggregate([
+    // getting all users instead login user
     {
       $match: {
         _id: { $ne: new ObjectId(req.user._id) },
@@ -658,29 +660,27 @@ router.get("/chats-current-user", async function (req, res, next) {
 });
 
 router.post("/conversation", async function (req, res, next) {
-
-  if(req.query.userid){
+  if (req.query.userid) {
     console.log("reached================>");
-    const {  message } = req.body;
-    const currentChatTo = req.query.userid
+    const { message } = req.body;
+    const currentChatTo = req.query.userid;
     const storingMessage = await messagesModel.create({
       createdBy: new ObjectId(req.user._id),
       sentTo: new ObjectId(currentChatTo),
       message: message,
     });
-  
+
     const unNotifiedMsgCount = await messagesModel.countDocuments({
       sentTo: new ObjectId(currentChatTo),
       isNotified: false,
     });
-  
-  
+
     io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
     console.log(storingMessage);
-  
+
     io.to(currentChatTo).emit("unNotifiedMsgCount", unNotifiedMsgCount);
     console.log(storingMessage);
-  
+
     res.send({
       type: "success",
       data: message,
@@ -688,33 +688,35 @@ router.post("/conversation", async function (req, res, next) {
     });
   }
 
-
-  if(req.query.groupid){
+  if (req.query.groupid) {
     console.log("reached================>");
-    const {  message } = req.body;
-    const currentChatTo = req.query.groupid
+    const { message } = req.body;
+    const currentChatTo = req.query.groupid;
     const storingMessage = await messagesModel.create({
       createdBy: new ObjectId(req.user._id),
       sentTo: new ObjectId(currentChatTo),
       message: message,
-      messageType : 'group',
-      groupId : new ObjectId(currentChatTo)
+      messageType: "group",
+      groupId: new ObjectId(currentChatTo),
     });
-  
 
     console.log(req.user._id);
+    
     const unNotifiedMsgCount = await messagesModel.countDocuments({
       sentTo: new ObjectId(currentChatTo),
       isNotified: false,
     });
-  
-  
-    io.to(currentChatTo).emit("message", { message, name: req.user.firstName });
+
+    console.log(currentChatTo, "currentChatTo");
+    io.to(currentChatTo).emit("groupMessage", {
+      message,
+      name: req.user.firstName,
+    });
     console.log(storingMessage);
-  
+
     io.to(currentChatTo).emit("unNotifiedMsgCount", unNotifiedMsgCount);
     console.log(storingMessage);
-  
+
     res.send({
       type: "success",
       data: message,
@@ -749,7 +751,6 @@ router.post("/creating-groups", async function (req, res, next) {
       groupName: groupName,
     });
 
-
     res.send({ type: "success" });
   } catch (error) {
     console.log(error);
@@ -761,10 +762,12 @@ router.get("/chats-current-group", async function (req, res, next) {
 
   try {
     console.log(req.query.groupId);
-    const chatCurrentGroup = await groupsModel.findOne({
-      _id: new ObjectId(req.query.groupId),
-      isDeleted: false,
-    }).lean();
+    const chatCurrentGroup = await groupsModel
+      .findOne({
+        _id: new ObjectId(req.query.groupId),
+        isDeleted: false,
+      })
+      .lean();
 
     // const msgSeen = await messagesModel.updateMany(
     //   {
@@ -773,14 +776,14 @@ router.get("/chats-current-group", async function (req, res, next) {
     //   },
     //   { isSeen: true }
     // );
-  
+
     // console.log(msgSeen, "msgSeen");
 
     const chatCurrentGroupData = await messagesModel.aggregate([
       {
-        $match : {
-          "sentTo" : new ObjectId(req.query.groupId)
-        }
+        $match: {
+          sentTo: new ObjectId(req.query.groupId),
+        },
       },
       {
         $lookup: {
@@ -792,7 +795,7 @@ router.get("/chats-current-group", async function (req, res, next) {
             {
               $match: {
                 $expr: {
-                  $eq : ["$$userId","$_id"]
+                  $eq: ["$$userId", "$_id"],
                 },
               },
             },
@@ -801,24 +804,19 @@ router.get("/chats-current-group", async function (req, res, next) {
         },
       },
       {
-        $unwind : "$users"
-      }
+        $unwind: "$users",
+      },
     ]);
 
-    console.log(chatCurrentGroupData);
-    res.send({  
+    res.send({
       type: "success",
-      chatCurrentGroup : chatCurrentGroup,
-      chatCurrentGroupData : chatCurrentGroupData,
+      chatCurrentGroup: chatCurrentGroup,
+      chatCurrentGroupData: chatCurrentGroupData,
       loginUser: req.user._id,
     });
-    
   } catch (error) {
-    
     console.log(error);
   }
-  
- 
 });
 
 module.exports = router;

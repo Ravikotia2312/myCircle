@@ -370,7 +370,7 @@ $(document).on("click", ".comment", function () {
 const socket = io({
   query: {
     userId: $("#socket-userId").val(),
-    groupId: $("#socket-userId").data("group")
+    groupId: $("#socket-userId").data("group"),
   },
 });
 
@@ -607,6 +607,20 @@ $(document).on("click", "#send-button", function () {
 socket.on("message", (arg) => {
   console.log(socket.id);
   console.log(arg);
+  $("#chat-list").append(
+    `<div class="bg-light m-3 p-2 text-dark" style="float:left; margin-top: 10px; max-width: 500px; clear:both; border-radius: 15px; border-top-left-radius: 1px;">
+    <b>${arg.message}</b><br>
+    <div style="float:right;margin:10px 0px 0px 10px">${moment(
+      arg.createdOn
+    ).format("h:mm")}
+   </div>`
+  );
+});
+
+socket.on("groupMessage", (arg) => {
+  console.log(socket.id);
+  console.log(arg); 
+
   $("#chat-list").append(
     `<div class="bg-light m-3 p-2 text-dark" style="float:left; margin-top: 10px; max-width: 500px; clear:both; border-radius: 15px; border-top-left-radius: 1px;">
     <b>${arg.message}</b><br>
